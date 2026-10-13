@@ -14,12 +14,14 @@ No JavaScript, external libraries, analytics or remote assets are used. See [sec
 Before uploading, run:
 
 ```text
-python tools/check_public.py
+python tools/check_public.py --history
 python -m unittest discover -s tests -v
 ```
 
 Set Git's local core.hooksPath to .githooks to run the export check before pushing. A working Python 3 interpreter is required. On Windows, PORTFOLIO_PYTHON can point to the existing Python executable. Local hooks can be bypassed, so repository administrators must also follow this policy for direct web edits.
 
 The current GitHub login lacks workflow scope, so no Actions deployment gate was uploaded. Pages uses ordinary branch publication after local checks. Do not describe this as server-enforced CI security.
+
+The pre-push check scans outgoing Git commits as well as the working tree, so deleting a secret before pushing does not silently publish it in an earlier commit.
 
 For a new component, register its ID and version in the private source manifest, review its public contents, export it through the approved publisher, and push the checked export here. Put the GitHub Pages URL in Notion as an ordinary link. Root index is current; versioned components are never overwritten.

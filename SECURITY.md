@@ -18,6 +18,8 @@ This repository and its complete commit history are public. Client-side hiding, 
 
 Do not copy a private repository into this one or reuse its Git history. Export only the reviewed files. Treat all comments, hidden elements and metadata as public content.
 
+The pre-push gate also checks unpublished Git commits, including files and values deleted from the current tree. A failed check stops the upload; rewriting local unpublished history must not be confused with erasing information already made public.
+
 ## Checks and updates
 
 Generation → source review → checked export → regression tests → local pre-push check → branch upload → Pages deployment → verify the HTTPS page → attach its URL in Notion.

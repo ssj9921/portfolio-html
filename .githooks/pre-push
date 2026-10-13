@@ -1,10 +1,10 @@
 #!/bin/sh
 if [ -n "${PORTFOLIO_PYTHON:-}" ]; then
-  exec "$PORTFOLIO_PYTHON" tools/check_public.py
+  exec "$PORTFOLIO_PYTHON" tools/check_public.py --history
 elif python3 --version >/dev/null 2>&1; then
-  exec python3 tools/check_public.py
+  exec python3 tools/check_public.py --history
 elif python --version >/dev/null 2>&1; then
-  exec python tools/check_public.py
+  exec python tools/check_public.py --history
 else
   echo "A working Python 3 interpreter is required for the public export check." >&2
   exit 1

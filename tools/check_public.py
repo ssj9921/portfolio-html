@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -162,11 +163,49 @@ def validate_repository(root):
     return {"files": len(files), "html_pages": len(entries), "valid": True}
 
 
+def validate_outgoing_history(root):
+    """Check unpublished commits too, including data deleted in the current tree."""
+    root = Path(root).resolve()
+    if not (root / ".git").exists():
+        return {"outgoing_commits_checked": 0}
+    def git(*args):
+        return subprocess.run(["git", "-c", "safe.directory=" + root.as_posix(), *args],
+                              cwd=root, check=True, capture_output=True).stdout
+    commits = git("rev-list", "HEAD", "--not", "--remotes").decode().splitlines()
+    for commit in commits:
+        policy = json.loads(git("show", commit + ":policy.json").decode("utf-8"))
+        blobs = {}
+        for line in git("ls-tree", "-r", "--format=%(objectmode) %(objectname) %(path)", commit).decode().splitlines():
+            mode, sha, name = line.split(" ", 2)
+            if mode not in {"100644", "100755"} or (name not in PUBLIC_FILES and not COMPONENT_PATH.fullmatch(name)):
+                raise SecurityError("Unexpected file or link in outgoing Git history")
+            data = git("cat-file", "blob", sha)
+            if len(data) > 250 * 1024:
+                raise SecurityError("Oversized file in outgoing Git history")
+            text = data.decode("utf-8")
+            check_text(text)
+            if name.endswith(".html"):
+                validate_html(text, policy)
+            blobs[name] = data
+        catalog = json.loads(blobs["docs/catalog.json"])
+        routes = {p["path"] for p in catalog["pages"]}
+        if routes != {name.removeprefix("docs/") for name in blobs if name.endswith(".html")}:
+            raise SecurityError("Unregistered HTML in outgoing Git history")
+        for entry in catalog["pages"]:
+            if hashlib.sha256(blobs["docs/" + entry["path"]]).hexdigest() != entry["sha256"]:
+                raise SecurityError("HTML hash mismatch in outgoing Git history")
+    return {"outgoing_commits_checked": len(commits)}
+
+
 if __name__ == "__main__":
     cli = argparse.ArgumentParser()
     cli.add_argument("--root", default=str(Path(__file__).resolve().parents[1]))
+    cli.add_argument("--history", action="store_true")
     args = cli.parse_args()
     try:
-        print(json.dumps(validate_repository(args.root), ensure_ascii=False))
-    except (SecurityError, ValueError, OSError) as exc:
+        result = validate_repository(args.root)
+        if args.history:
+            result.update(validate_outgoing_history(args.root))
+        print(json.dumps(result, ensure_ascii=False))
+    except (SecurityError, ValueError, OSError, subprocess.CalledProcessError) as exc:
         raise SystemExit("Public export stopped: " + str(exc))

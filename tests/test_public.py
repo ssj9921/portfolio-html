@@ -1,11 +1,12 @@
 import hashlib
 import json
 import sys
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from check_public import CSP, SecurityError, validate_html, validate_repository
+from check_public import CSP, SecurityError, validate_html, validate_repository, validate_outgoing_history
 
 POLICY = {"approved_external_links": ["https://example.com/public"], "approved_contacts": []}
 
@@ -79,6 +80,29 @@ class PublicPolicyTests(unittest.TestCase):
             (root / "outside.html").write_text(page(), encoding="utf-8")
             with self.assertRaises(SecurityError):
                 validate_html(page('<a href="../outside.html">x</a>'), POLICY, site / "index.html", site)
+
+    def test_secret_removed_from_working_tree_still_blocks_outgoing_history(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / "docs").mkdir()
+            (root / "policy.json").write_text(json.dumps(POLICY), encoding="utf-8")
+            def git(*args):
+                subprocess.run(["git", "-c", "safe.directory=" + root.as_posix(), *args],
+                               cwd=root, check=True, capture_output=True)
+            def commit_html(body):
+                data = page(body).encode()
+                (root / "docs/index.html").write_bytes(data)
+                (root / "docs/catalog.json").write_text(json.dumps({"pages": [{"path": "index.html", "sha256": hashlib.sha256(data).hexdigest()}]}), encoding="utf-8")
+                git("add", ".")
+                git("commit", "-m", "Test history")
+            git("init", "--initial-branch=main")
+            git("config", "user.name", "Security test")
+            git("config", "user.email", "public-test" + "@example.invalid")
+            commit_html("ghp" + "_" + "x" * 30)
+            commit_html("Safe current page")
+            self.assertTrue(validate_repository(root)["valid"])
+            with self.assertRaises(SecurityError):
+                validate_outgoing_history(root)
 
 
 if __name__ == "__main__":
