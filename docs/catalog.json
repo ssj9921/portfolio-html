@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "pages": [
+    {
+      "id": "homepage",
+      "name": "Selected Work",
+      "version": "1.0.0",
+      "path": "index.html",
+      "sha256": "e5a2c1d256a7958358cc36d5af561e67fe1e1a36a0fb8b9a9dd295c124a81178",
+      "source_sha256": "3540de1d67e0f2410d9d8fd2b5b939ed3b6a5d781737c199451347f2bb19a78c"
+    },
+    {
+      "id": "editorial-hero",
+      "name": "Editorial Hero",
+      "version": "1.0.0",
+      "path": "components/editorial-hero/v1.0.0/index.html",
+      "sha256": "9a236c5839e1af4b2a9f1bdf98d946faaf2ef0ba82950e52b6a86e6f249d6de8",
+      "source_sha256": "83a7fe41f733e6a13e4a043f729946c425c4698b08d50ddf0ab2dc8ee760aca4"
+    },
+    {
+      "id": "selected-work-intro",
+      "name": "Selected Work Intro",
+      "version": "1.1.0",
+      "path": "components/selected-work-intro/v1.1.0/index.html",
+      "sha256": "9aebd02fc09bb215b88e2a539a85c51ec2a8d69dd7f1d63f1850dba1363e35cc",
+      "source_sha256": "f9a5083140a4c62f9a87049b98ced7e7b03f84ecdf9f78385a6aa175da16b916"
+    },
+    {
+      "id": "product-retrospective-tabs",
+      "name": "Product / Retrospective Tabs",
+      "version": "1.1.0",
+      "path": "components/product-retrospective-tabs/v1.1.0/index.html",
+      "sha256": "78cbbf8144c5d45c8588c5bd65f66385c0cf34bb1dd0981f1b7f5cd8ebb55606",
+      "source_sha256": "e4941e71ee3c1b3c6de464f090aa0949f230c3e98dc784ede490345650504bcb"
+    },
+    {
+      "id": "editorial-footer",
+      "name": "Editorial Footer",
+      "version": "1.0.0",
+      "path": "components/editorial-footer/v1.0.0/index.html",
+      "sha256": "9ee80e3a66bece73fa15b13a814b2a66cd885e30ec6b83bfd38894100e57e2f8",
+      "source_sha256": "06abcad23b04065dd786efb0cba93d58476d193de6890f1055e8ead419d384b0"
+    },
+    {
+      "id": "project-card",
+      "name": "Project Card",
+      "version": "1.0.0",
+      "path": "components/project-card/v1.0.0/index.html",
+      "sha256": "6331cdbf6ca6d237709d0c02e5eabae5d95f0d43f0a5ec2a2a20038880c7203c",
+      "source_sha256": "a7c7786ff681ce3f23ea5382453db2eda0231ef09c6f95120941050ac31e05af"
+    },
+    {
+      "id": "timeline",
+      "name": "Decision Timeline",
+      "version": "1.1.0",
+      "path": "components/timeline/v1.1.0/index.html",
+      "sha256": "22082939c5f726a2d77df7316d622c1f2dda2427381a4747a96411b7da080065",
+      "source_sha256": "145a29fbdd06e0a235ef3b0fb4aae771c7f45ed86fa160b7a1edad2a8c194074"
+    }
+  ]
+}

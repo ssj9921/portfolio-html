@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko">
+<head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'unsafe-inline'; img-src 'none'; font-src 'none'; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'"><meta name="referrer" content="no-referrer">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product / Retrospective · 문서 읽는 방법</title>
+<style>
+:root{color-scheme:light;--paper:#f4f3ed;--ink:#252d29;--muted:#606962;--line:#d7ddd3;--green:#345745}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Malgun Gothic",sans-serif}
+.wrap{max-width:1120px;margin:auto;padding:40px 44px}.eyebrow{font-size:11px;letter-spacing:.15em;color:var(--green);font-weight:600}
+.heading{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:24px}h1{font:normal 35px Georgia,"Batang",serif;letter-spacing:-.035em;margin:12px 0 0}.heading p{font-size:12px;line-height:1.8;color:var(--muted);margin:0;word-break:keep-all}
+.reader{margin:0;border:1px solid var(--line);border-radius:4px;background:#fafbf7;padding:28px;min-width:0;position:relative;display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
+legend{font-size:11px;letter-spacing:.12em;color:var(--green);padding:0 8px}
+.choice{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);clip-path:inset(50%);white-space:nowrap;border:0}
+.tab{display:flex;justify-content:center;align-items:center;min-height:48px;padding:12px 8px;font-size:12px;color:var(--muted);border-bottom:2px solid var(--line);cursor:pointer;text-align:center}
+.choice:checked+.tab{color:var(--green);border-bottom-color:var(--green);font-weight:700;background:#e6ecdf}
+.choice:focus-visible+.tab{outline:3px solid var(--green);outline-offset:3px}
+.panels{grid-column:1/-1;margin-top:26px}.panel{display:none;grid-template-columns:.85fr 1.15fr;gap:24px}
+#view-product:checked~.panels #panel-product,#view-retro:checked~.panels #panel-retro{display:grid}
+h2{font:normal 25px Georgia,"Batang",serif;margin:0 0 13px}.panel p{font-size:12px;line-height:1.9;color:var(--muted);margin:0;word-break:keep-all}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.step{border-top:1px solid var(--line);padding-top:14px}.step span{font:italic 18px Georgia,serif;color:#6e866e}.step strong{display:block;font-size:12px;font-weight:500;margin:12px 0 8px}.step small{display:block;font-size:10px;line-height:1.7;color:var(--muted);word-break:keep-all}
+@media(max-width:600px){.wrap{padding:28px 20px}.heading{flex-direction:column;align-items:start;gap:14px}h1{font-size:30px}.reader{padding:20px 16px}.panel{grid-template-columns:1fr}.steps{gap:10px}}
+</style>
+</head>
+<body>
+<section class="wrap" aria-label="문서 읽는 방법">
+<div class="heading"><div><div class="eyebrow">02 / Two perspectives</div><h1>Beyond the outcome.</h1></div><p>완성된 결과와 쌓여온 과정.<br>두 기록을 함께 보면 더 선명해집니다.</p></div>
+<fieldset class="reader">
+<legend>문서 유형 선택</legend>
+<input class="choice" type="radio" name="perspective" id="view-product" checked>
+<label class="tab" for="view-product">01 · Product</label>
+<input class="choice" type="radio" name="perspective" id="view-retro">
+<label class="tab" for="view-retro">02 · Retrospective</label>
+<div class="panels">
+<section class="panel" id="panel-product" aria-labelledby="product-title">
+<div><h2 id="product-title">무엇을 만들었는가.</h2><p>문제 정의에서 설계, 구현과 검증까지.<br>결과물의 구조와 선택의 근거를 정리합니다.</p></div>
+<div class="steps"><div class="step"><span>01</span><strong>문제</strong><small>누구의 어떤 문제인가</small></div><div class="step"><span>02</span><strong>설계</strong><small>무엇을 선택했는가</small></div><div class="step"><span>03</span><strong>결과</strong><small>어떻게 확인했는가</small></div></div>
+</section>
+<section class="panel" id="panel-retro" aria-labelledby="retro-title">
+<div><h2 id="retro-title">어떻게 배웠는가.</h2><p>진행 중 마주친 제약과 시행착오.<br>다음 프로젝트로 가져갈 배움을 정리합니다.</p></div>
+<div class="steps"><div class="step"><span>01</span><strong>과정</strong><small>무엇이 달라졌는가</small></div><div class="step"><span>02</span><strong>판단</strong><small>왜 방향을 바꿨는가</small></div><div class="step"><span>03</span><strong>배움</strong><small>다음에는 어떻게 할까</small></div></div>
+</section>
+</div>
+</fieldset>
+</section>
+</body>
+</html>
