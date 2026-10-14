@@ -27,4 +27,4 @@ The current GitHub login lacks workflow scope, so no Actions deployment gate was
 
 The pre-push check scans outgoing Git commits as well as the working tree, so deleting a secret before pushing does not silently publish it in an earlier commit.
 
-For a new component, register its ID and version in the private source manifest, review its public contents, export it through the approved publisher, and push the checked export here. Put the GitHub Pages URL in Notion as an ordinary link. Root index is current; versioned components are never overwritten.
+Keep unfinished authoring, private evidence and the approval manifest in a separate local workspace outside this repository. No second repository is required. For a new component, register its ID and version in that locally retained manifest, review its public contents, export it through the approved publisher, and push only the reviewed, completed export here. Put the GitHub Pages URL in Notion as an ordinary link. Root index is current; versioned components are never overwritten.

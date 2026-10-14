@@ -1,8 +1,8 @@
 # Public HTML repository
 
-This repository is public, including every Git commit. Publish only reviewed HTML, public policy, security tools and deployment configuration. Never copy the private authoring repository, its Git history, research files, drafts, internal references, personal career records or credentials here.
+This repository is public, including every Git commit. Publish only reviewed HTML, public policy, security tools and deployment configuration. Never copy the local authoring workspace, any private Git history, research files, drafts, internal references, personal career records or credentials here.
 
-All future generated portfolio HTML is routed here after the security checks. Canonical authoring and private evidence stay in the separate private portfolio repository. Use GitHub Pages URLs in Notion as ordinary links; do not attach raw HTML files.
+All future generated portfolio HTML is routed here after the security checks. Use this single public repository for reviewed, completed exports. Unfinished authoring, private evidence and the approval manifest stay in a separate local workspace outside this repository. Use GitHub Pages URLs in Notion as ordinary links; do not attach raw HTML files.
 
 Keep JavaScript, external libraries, remote assets, forms, analytics and browser storage disabled. Use only reviewed HTTPS navigation links. New career, personal role and outcome statements still require the owner's approval of the wording.
 
