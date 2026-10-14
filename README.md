@@ -3,10 +3,11 @@
 Public portfolio and profile pages, served by GitHub Pages.
 
 - [Open portfolio](https://ssj9921.github.io/portfolio-html/)
-- [용사의 쉐프 · Project](https://ssj9921.github.io/portfolio-html/components/heros-chef-project/v1.0.1/index.html)
-- [Profile](https://ssj9921.github.io/portfolio-html/components/profile/v1.0.1/index.html)
+- [Projects](https://ssj9921.github.io/portfolio-html/components/projects/v1.0.0/index.html)
+- [용사의 쉐프 · Project](https://ssj9921.github.io/portfolio-html/components/heros-chef-project/v1.0.2/index.html)
+- [Profile](https://ssj9921.github.io/portfolio-html/components/profile/v1.0.2/index.html)
 
-The index lists projects and links to a separate Profile. Project pages follow five sections: idea, what was made, environment (personal role and AI use), deliverable, and comments. The current project keeps comments reserved for the author. Six existing design components remain available and unchanged. New Project and Profile pages use the same immutable, versioned route convention. The catalog records the SHA256 of every published HTML page, separately from the source-copy hash.
+The index provides an overview and links to separate Projects and Profile pages. Projects uses a responsive card list, with introduction slots reserved for the author. Project pages follow five sections: idea, what was made, environment (personal role and AI use), deliverable, and comments. The current project keeps comments reserved for the author. Six existing design components remain available and unchanged. New Project and Profile pages use the same immutable, versioned route convention. The catalog records the SHA256 of every published HTML page, separately from the source-copy hash.
 
 Personal and career details in Profile are limited to the owner-approved name, IT-related work history, education, qualifications and award. Expected education is labeled as expected. No personal contact data or raw supporting documents are published. Project submission results, historical checks and AI contribution are described within their verified scope. Primary navigation stays within this site; the approved Google Drive submission link is retained.
 

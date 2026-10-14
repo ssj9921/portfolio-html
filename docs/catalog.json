@@ -4,10 +4,10 @@
     {
       "id": "homepage",
       "name": "Selected Work",
-      "version": "1.1.1",
+      "version": "1.2.0",
       "path": "index.html",
-      "sha256": "25339e0ffed68519f6e1fcb1c7821ebb561d20fcc5a99a5c11157b705cc1fef8",
-      "source_sha256": "25339e0ffed68519f6e1fcb1c7821ebb561d20fcc5a99a5c11157b705cc1fef8"
+      "sha256": "bbfa5a1ec138847f39c98b86f16f3681dcd039aa10280ac56c065902fc984010",
+      "source_sha256": "bbfa5a1ec138847f39c98b86f16f3681dcd039aa10280ac56c065902fc984010"
     },
     {
       "id": "editorial-hero",
@@ -88,6 +88,30 @@
       "path": "components/profile/v1.0.1/index.html",
       "sha256": "2ace29474e9cd090659864bf6886121a3c70d205b9b3e0349b6b22c55ce5b9e6",
       "source_sha256": "2ace29474e9cd090659864bf6886121a3c70d205b9b3e0349b6b22c55ce5b9e6"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "version": "1.0.0",
+      "path": "components/projects/v1.0.0/index.html",
+      "sha256": "8a85133b4da1c701c530e7af51cdb405d42668f9bb0105e466e43ab1fbd7e0f5",
+      "source_sha256": "8a85133b4da1c701c530e7af51cdb405d42668f9bb0105e466e43ab1fbd7e0f5"
+    },
+    {
+      "id": "profile",
+      "name": "SEUNGJIN SONG · Profile",
+      "version": "1.0.2",
+      "path": "components/profile/v1.0.2/index.html",
+      "sha256": "cd83c601d1877ba274fae21d04e36ffab3d6f0fd4e12f8c6edd6782307fbf1f6",
+      "source_sha256": "cd83c601d1877ba274fae21d04e36ffab3d6f0fd4e12f8c6edd6782307fbf1f6"
+    },
+    {
+      "id": "heros-chef-project",
+      "name": "용사의 쉐프 · Project",
+      "version": "1.0.2",
+      "path": "components/heros-chef-project/v1.0.2/index.html",
+      "sha256": "5a65a0c1f32e3473ff1a04593a2cc5f826b8e305c97e5ac52dfa85dfa5195107",
+      "source_sha256": "5a65a0c1f32e3473ff1a04593a2cc5f826b8e305c97e5ac52dfa85dfa5195107"
     }
   ]
 }

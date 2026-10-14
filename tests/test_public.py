@@ -110,19 +110,20 @@ class PublicPolicyTests(unittest.TestCase):
 
 class PortfolioMigrationTests(unittest.TestCase):
     root = Path(__file__).resolve().parents[1]
-    project = "components/heros-chef-project/v1.0.1/index.html"
-    profile = "components/profile/v1.0.1/index.html"
+    project = "components/heros-chef-project/v1.0.2/index.html"
+    profile = "components/profile/v1.0.2/index.html"
+    projects = "components/projects/v1.0.0/index.html"
 
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 11)
+        self.assertEqual(result["html_pages"], 14)
 
-    def test_three_primary_pages_use_internal_navigation(self):
+    def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        for route in (self.project, self.profile):
+        for route in (self.project, self.profile, self.projects):
             self.assertIn('href="' + route + '"', home)
-        for route in ("index.html", self.project, self.profile):
+        for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertNotIn("notion.site", text)
         project = (self.root / "docs" / self.project).read_text(encoding="utf-8")
@@ -133,7 +134,7 @@ class PortfolioMigrationTests(unittest.TestCase):
         header_rules = re.findall(r"(?<![\w.-])header\{([^}]+)\}", home)
         wrap_rules = re.findall(r"\.wrap\{([^}]+)\}", home)
         self.assertEqual(len(header_rules), 2)
-        for route in (self.project, self.profile):
+        for route in (self.project, self.profile, self.projects):
             detail = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertEqual(header_rules, re.findall(r"(?<![\w.-])header\{([^}]+)\}", detail))
             self.assertEqual(wrap_rules, re.findall(r"\.wrap\{([^}]+)\}", detail))
@@ -144,18 +145,46 @@ class PortfolioMigrationTests(unittest.TestCase):
                 self.assertRegex(text, r"@media\(max-width:580px\)\{[^@]*\.hero\{padding-top:32px\}")
                 self.assertIn("min-height:44px", re.search(r"\.brand\{([^}]+)\}", text)[1])
 
-    def test_profile_project_navigation_uses_home_listing(self):
+    def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        profile = (self.root / "docs" / self.profile).read_text(encoding="utf-8")
-        listing = re.search(r'<a href="(#[^"]+)"[^>]*>Projects</a>', home)[1]
-        target = "../../../index.html" + listing
-        self.assertIn('href="' + target + '">Project</a>', profile)
-        self.assertIn('href="' + target + '">Project 보기 →</a>', profile)
-        self.assertIn('href="' + target + '">← 프로젝트 목록</a>', profile)
-        self.assertNotIn('href="../../heros-chef-project/', profile)
-        project = (self.root / "docs" / self.project).read_text(encoding="utf-8")
-        self.assertIn('href="../../profile/v1.0.1/index.html"', project)
-        self.assertNotIn('href="../../profile/v1.0.0/index.html"', project)
+        self.assertIn('href="' + self.projects + '">Projects</a>', home)
+        for route in (self.profile, self.project):
+            text = (self.root / "docs" / route).read_text(encoding="utf-8")
+            self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
+            self.assertIn('href="../../projects/v1.0.0/index.html">← 프로젝트 목록</a>', text)
+        projects = (self.root / "docs" / self.projects).read_text(encoding="utf-8")
+        self.assertIn('href="../../heros-chef-project/v1.0.2/index.html"', projects)
+        for route in ("index.html", self.projects, self.profile, self.project):
+            text = (self.root / "docs" / route).read_text(encoding="utf-8")
+            self.assertNotIn('/profile/v1.0.0/', text)
+            self.assertNotIn('/profile/v1.0.1/', text)
+            self.assertNotIn('index.html#selected-title', text)
+
+    def test_projects_cards_reserve_intro_and_omit_unpublished_work(self):
+        text = (self.root / "docs" / self.projects).read_text(encoding="utf-8")
+        self.assertEqual(text.count('class="project-card"'), 1)
+        self.assertEqual(text.count('소개 문구 작성 예정'), 2)
+        for phrase in ('용사의 쉐프', '공모전 제출 완료', '용량 제한 충족'):
+            self.assertIn(phrase, text)
+        self.assertIn('grid-template-columns:repeat(2,minmax(0,1fr))', text)
+        self.assertIn('.project-grid{grid-template-columns:1fr;', text)
+        self.assertNotIn('CityOfRubble', text)
+        self.assertNotIn('상세 페이지 준비 중', text)
+        self.assertNotIn('aria-disabled', text)
+        self.assertNotIn('href="#"', text)
+
+    def test_new_detail_versions_only_update_navigation(self):
+        for component in ("profile", "heros-chef-project"):
+            folder = self.root / "docs/components" / component
+            old = (folder / "v1.0.1/index.html").read_text(encoding="utf-8")
+            expected = old.replace("../../profile/v1.0.1/", "../../profile/v1.0.2/")
+            if component == "profile":
+                expected = expected.replace("../../../index.html#selected-title", "../../projects/v1.0.0/index.html")
+                expected = expected.replace(">Project</a>", ">Projects</a>").replace(">Project 보기 →</a>", ">Projects 보기 →</a>")
+            else:
+                expected = expected.replace('../../heros-chef-project/v1.0.1/index.html" aria-current="page">Project', '../../projects/v1.0.0/index.html" aria-current="location">Projects')
+                expected = expected.replace('href="../../../index.html">← 프로젝트 목록', 'href="../../projects/v1.0.0/index.html">← 프로젝트 목록')
+            self.assertEqual((folder / "v1.0.2/index.html").read_text(encoding="utf-8"), expected)
 
     def test_patch_pages_only_change_navigation(self):
         for component in ("profile", "heros-chef-project"):
@@ -231,6 +260,8 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_existing_component_bytes_remain_unchanged(self):
         expected = {
+            "profile/v1.0.1": "2ace29474e9cd090659864bf6886121a3c70d205b9b3e0349b6b22c55ce5b9e6",
+            "heros-chef-project/v1.0.1": "474a2302f7445c26983813301308159be29fb51951d05ded97988563016be49a",
             "profile/v1.0.0": "255c731b619d0d40de9e5f897b6f589eb22c4608d9060eb85892ece6d0a21520",
             "heros-chef-project/v1.0.0": "7c6c01c56ec2940738ea7f2ec29db18cd1f1ecc24142f5f014cc84daccbdb5b5",
             "editorial-hero/v1.0.0": "9a236c5839e1af4b2a9f1bdf98d946faaf2ef0ba82950e52b6a86e6f249d6de8",
