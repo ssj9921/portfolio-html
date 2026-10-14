@@ -9,7 +9,7 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import unquote, urlsplit
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from check_public import CSP, IFRAME_ATTRIBUTES, page_csp, script_hash, SecurityError, validate_html, validate_repository, validate_outgoing_history, validate_image
+from check_public import CSP, IFRAME_ATTRIBUTES, page_csp, script_hash, SecurityError, validate_html, validate_repository, validate_outgoing_history, validate_image, font_css
 
 POLICY = {"approved_external_links": ["https://example.com/public"], "approved_contacts": []}
 
@@ -244,12 +244,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 32)
+        self.assertEqual(result["html_pages"], 37)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.8.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.1.0/').replace('profile/v1.0.3/','profile/v1.1.0/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.9.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.2.0/').replace('profile/v1.0.3/','profile/v1.2.0/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -275,7 +275,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.8.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.9.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
@@ -551,7 +551,7 @@ class ReviewedImageTests(unittest.TestCase):
         for changed in (self.html.replace('../../../assets/heros-chef/v1.0.0/main.png','https://example.com/main.png'),self.html.replace('../../../assets/heros-chef/v1.0.0/main.png','../../../assets/heros-chef/v1.0.0/unreviewed.png'),self.html.replace('width="1280"','width="1279"'),self.html.replace('decoding="async"','onload="alert(1)"'),re.sub(r'alt="[^"]*"','alt=""',self.html),self.html.replace("img-src 'self'","img-src *")):
             with self.subTest(changed=changed[:20]),self.assertRaises(SecurityError):validate_html(changed,self.policy,route=self.route)
         with self.assertRaises(SecurityError):validate_html(self.html,self.policy,route='index.html')
-        self.assertEqual(page_csp(self.policy,'index.html'),CSP)
+        self.assertIn("img-src 'none'",page_csp(self.policy,'index.html'))
 
     def test_binary_hash_and_private_metadata_are_checked(self):
         import struct,zlib
@@ -627,3 +627,24 @@ class VarcoSubtitleTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ScopedWebfontTests(unittest.TestCase):
+    route = 'components/font-review/v1.0.0/index.html'
+    def policy(self):
+        return {**POLICY, 'approved_webfonts': {self.route: ['chosun-bold', 'chosun-shin']}}
+    def html(self):
+        return page(style=font_css('chosun-bold')+font_css('chosun-shin')).replace(CSP,page_csp(self.policy(),self.route))
+    def test_exact_fonts_and_unchanged_legacy_csp(self):
+        validate_html(self.html(),self.policy(),route=self.route)
+        self.assertEqual(page_csp(self.policy(),'components/old/v1.0.0/index.html'),CSP)
+    def test_font_source_and_route_changes_rejected(self):
+        for html in [self.html().replace('ChosunKm.woff','Other.woff'),self.html().replace('ChosunKm.woff','ChosunKm.woff?x=1'),self.html().replace('font-display:swap','font-display:block')]:
+            with self.assertRaises(SecurityError):validate_html(html,self.policy(),route=self.route)
+        with self.assertRaises(SecurityError):validate_html(self.html(),self.policy(),route='components/other/v1.0.0/index.html')
+    def test_missing_duplicate_and_extra_resource_rejected(self):
+        for html in [self.html().replace(font_css('chosun-bold'),''),self.html().replace('</style>',font_css('chosun-bold')+'</style>'),self.html().replace('</style>','p{background:url(https://example.com/x)}</style>')]:
+            with self.assertRaises(SecurityError):validate_html(html,self.policy(),route=self.route)
+    def test_broad_csp_rejected(self):
+        html=self.html().replace('font-src https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunKm.woff https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.1/ChosunSm.woff','font-src https:')
+        with self.assertRaises(SecurityError):validate_html(html,self.policy(),route=self.route)

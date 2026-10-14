@@ -12,4 +12,6 @@ The owner approved three Chef screenshots on 2026-10-14. Only immutable PNG/JPEG
 
 The owner also approved three City Of Rubble screenshots and the Projects card redesign on 2026-10-14. Projects v1.6.0 and VARCO v1.1.0 receive only their exact assigned images and the reviewed hash of the image fallback script. Stock uses a title panel without an image. Preserve earlier immutable versions and the route-scoped YouTube permission.
 
+The owner separately approved two original CDN WOFFs: ChosunKm and ChosunSm. Only routes in approved_webfonts may include the checker-defined exact font-face declarations and font-src URLs. Do not permit other CSS resources, broad font origins, modified/subset font files, TTF uploads or OS installation. Preserve legacy font-src none pages. New font versions retain the existing sans-serif body, lists, buttons and demo styles.
+
 Use the existing repository and main branch, publishing the docs/ directory through GitHub Pages. Run checks before any push; no CI deployment gate is installed because the current login lacks workflow scope. Do not change visibility, attach private data sources, disable the local security gate or weaken the policy. Never print tokens or store them in source, logs or Git.

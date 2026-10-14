@@ -48,12 +48,41 @@ def check_text(text):
         raise SecurityError("Private reference or local address; do not publish")
 
 
-def css_check(text):
+WEBFONTS = {
+    'chosun-bold': ('ChosunKm', 'https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunKm.woff'),
+    'chosun-shin': ('ChosunSm', 'https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.1/ChosunSm.woff'),
+}
+
+
+def font_css(name):
+    family, url = WEBFONTS[name]
+    return '@font-face{font-family:"'+family+'";src:url("'+url+'") format("woff");font-style:normal;font-weight:400;font-display:swap;}'
+
+
+def approved_fonts(policy, route):
+    approved = policy.get('approved_webfonts', {})
+    if not isinstance(approved, dict):
+        raise SecurityError('Webfont approvals must map exact page routes')
+    for key, names in approved.items():
+        if key != 'index.html' and (not isinstance(key,str) or not COMPONENT_PATH.fullmatch('docs/'+key)):
+            raise SecurityError('Webfonts require an exact public page route')
+        if not isinstance(names,list) or not names or any(n not in WEBFONTS for n in names) or len(names)!=len(set(names)):
+            raise SecurityError('Only the two reviewed original WOFF fonts are permitted')
+    return approved.get(route, [])
+
+
+def css_check(text, fonts=()):
+    used=[]
+    for name in fonts:
+        declaration=font_css(name)
+        used.extend([name]*text.count(declaration))
+        text=text.replace(declaration,'')
     text = re.sub(r"/\*[\s\S]*?\*/", "", text)
     text = re.sub(r"\\([0-9a-fA-F]{1,6})\s?", lambda m: chr(int(m[1], 16)), text)
     text = re.sub(r"\\(.)", r"\1", text)
-    if re.search(r"@import\b|\bexpression\s*\(|url\s*\(", text, re.I):
+    if re.search(r"@import\b|@font-face\b|\bexpression\s*\(|url\s*\(", text, re.I):
         raise SecurityError("External or executable CSS assets are prohibited")
+    return used
 
 
 def approved_embeds(policy, route):
@@ -170,6 +199,9 @@ def page_csp(policy, route=None):
         csp = csp.replace("script-src 'none'", "script-src " + " ".join("'" + h + "'" for h in hashes) + "; script-src-attr 'none'")
     if approved_images(policy,route)[1]:
         csp = csp.replace("img-src 'none'", "img-src 'self'")
+    fonts = approved_fonts(policy, route)
+    if fonts:
+        csp = csp.replace("font-src 'none'", 'font-src '+' '.join(WEBFONTS[name][1] for name in fonts))
     return csp
 
 
@@ -180,6 +212,7 @@ def validate_html(text, policy, path=None, site=None, route=None):
     embed_urls = approved_embeds(policy, route)
     script_hashes = approved_scripts(policy, route)
     image_assets, image_paths = approved_images(policy,route)
+    font_names = approved_fonts(policy, route)
     expected_csp = page_csp(policy, route)
     for value in EMAIL.findall(text) + PHONE.findall(text):
         if value not in policy.get("approved_contacts", []):
@@ -200,6 +233,7 @@ def validate_html(text, policy, path=None, site=None, route=None):
             self.script_open = False
             self.script_text = ""
             self.scripts = []
+            self.fonts = []
 
         def handle_starttag(self, tag, attrs):
             if self.iframe_open:
@@ -324,7 +358,7 @@ def validate_html(text, policy, path=None, site=None, route=None):
             if self.iframe_open and text.strip():
                 raise SecurityError("Embedded frames must not contain fallback markup")
             if self.styles:
-                css_check(text)
+                self.fonts.extend(css_check(text, font_names))
 
     page = StaticPage()
     page.feed(text)
@@ -337,6 +371,8 @@ def validate_html(text, policy, path=None, site=None, route=None):
         raise SecurityError("An embed exception must contain exactly its approved video frames")
     if page.images != set(image_paths):
         raise SecurityError('Image page must include exactly its reviewed assets')
+    if sorted(page.fonts) != sorted(font_names):
+        raise SecurityError('Page must include exactly its reviewed font declarations')
     if any(youtube_watch_url(url) not in page.links for url in page.frames):
         raise SecurityError("Every embedded video requires an ordinary watch-on-YouTube fallback")
     if not all((page.csp, page.referrer, page.charset, page.viewport)):

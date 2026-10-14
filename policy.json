@@ -26,6 +26,15 @@
     ],
     "components/projects/v1.8.0/index.html": [
       "sha256-oES5gQS54Oue7T+uLoueAOp00+3x5wQxisnDcrGd/58="
+    ],
+    "components/projects/v1.9.0/index.html": [
+      "sha256-oES5gQS54Oue7T+uLoueAOp00+3x5wQxisnDcrGd/58="
+    ],
+    "components/stock-project/v1.2.0/index.html": [
+      "sha256-qKMR9KiKmg/+IBpJmPtBHTlgo1q5NlHYHoLC2TRPQhI="
+    ],
+    "components/varco-project/v1.2.0/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
     ]
   },
   "approved_youtube_embeds": {
@@ -37,6 +46,35 @@
     ],
     "components/varco-project/v1.1.0/index.html": [
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
+    ],
+    "components/varco-project/v1.2.0/index.html": [
+      "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
+    ]
+  },
+  "approved_webfonts": {
+    "index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/projects/v1.9.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/profile/v1.2.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/heros-chef-project/v1.2.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/stock-project/v1.2.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/varco-project/v1.2.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
     ]
   },
   "approved_image_assets": {
@@ -95,6 +133,20 @@
     "components/projects/v1.8.0/index.html": [
       "assets/heros-chef/v1.0.0/main.png",
       "assets/city-of-rubble/v1.0.0/main.jpg"
+    ],
+    "components/projects/v1.9.0/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/city-of-rubble/v1.0.0/main.jpg"
+    ],
+    "components/heros-chef-project/v1.2.0/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/heros-chef/v1.0.0/battle.jpg",
+      "assets/heros-chef/v1.0.0/recipe.jpg"
+    ],
+    "components/varco-project/v1.2.0/index.html": [
+      "assets/city-of-rubble/v1.0.0/main.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-01.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-02.jpg"
     ]
   }
 }

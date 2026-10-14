@@ -4,10 +4,10 @@
     {
       "id": "homepage",
       "name": "Selected Work",
-      "version": "1.9.0",
+      "version": "2.0.0",
       "path": "index.html",
-      "sha256": "5e7505073392bcccf7ef9a13e5b51a4567c900012755cfe7a566aba1084ec245",
-      "source_sha256": "5e7505073392bcccf7ef9a13e5b51a4567c900012755cfe7a566aba1084ec245"
+      "sha256": "3336d1ba13122c81627af75d8bef5ebe99fce2fbbde12b550b01938d2e769ab3",
+      "source_sha256": "3336d1ba13122c81627af75d8bef5ebe99fce2fbbde12b550b01938d2e769ab3"
     },
     {
       "id": "editorial-hero",
@@ -256,6 +256,46 @@
       "path": "components/projects/v1.8.0/index.html",
       "sha256": "d853a41efe61dc1b0b64d82b4dd34abae5be9e6625f8c1a64911f2dcd642f285",
       "source_sha256": "d853a41efe61dc1b0b64d82b4dd34abae5be9e6625f8c1a64911f2dcd642f285"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "version": "1.9.0",
+      "path": "components/projects/v1.9.0/index.html",
+      "sha256": "e34d109c0b14baba2d6458f2d5e260b40ccd87986a0db8a55e915351bd3635bd",
+      "source_sha256": "e34d109c0b14baba2d6458f2d5e260b40ccd87986a0db8a55e915351bd3635bd"
+    },
+    {
+      "id": "profile",
+      "name": "SEUNGJIN SONG · Profile",
+      "version": "1.2.0",
+      "path": "components/profile/v1.2.0/index.html",
+      "sha256": "fb038db5ccc28824d469d199111be0f67cd9b258902280e815af175b72a5c877",
+      "source_sha256": "fb038db5ccc28824d469d199111be0f67cd9b258902280e815af175b72a5c877"
+    },
+    {
+      "id": "heros-chef-project",
+      "name": "용사의 쉐프 · Project",
+      "version": "1.2.0",
+      "path": "components/heros-chef-project/v1.2.0/index.html",
+      "sha256": "640a8a08b811660e9cbafcebf12f241ecda6dcd04690891025f23302c2f4b00d",
+      "source_sha256": "640a8a08b811660e9cbafcebf12f241ecda6dcd04690891025f23302c2f4b00d"
+    },
+    {
+      "id": "stock-project",
+      "name": "그때 샀다면? · Project",
+      "version": "1.2.0",
+      "path": "components/stock-project/v1.2.0/index.html",
+      "sha256": "80509477b8bfe1c378b88afaedb67e807e678213c4b54adc5f7881eaa90c83c7",
+      "source_sha256": "80509477b8bfe1c378b88afaedb67e807e678213c4b54adc5f7881eaa90c83c7"
+    },
+    {
+      "id": "varco-project",
+      "name": "City Of Rubble — Project",
+      "version": "1.2.0",
+      "path": "components/varco-project/v1.2.0/index.html",
+      "sha256": "e7eaa9751442d264e4007840ded2151d20e644436e63e732f40a1ea48456f7f1",
+      "source_sha256": "e7eaa9751442d264e4007840ded2151d20e644436e63e732f40a1ea48456f7f1"
     }
   ]
 }
