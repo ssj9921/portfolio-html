@@ -244,12 +244,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 37)
+        self.assertEqual(result["html_pages"], 43)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.9.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.2.0/').replace('profile/v1.0.3/','profile/v1.2.0/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.0.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.2.1/').replace('profile/v1.0.3/','profile/v1.2.1/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -275,7 +275,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.9.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.0.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
@@ -482,7 +482,7 @@ class StockReleaseTests(unittest.TestCase):
             expected = old.replace('../../projects/v1.0.0/','../../projects/v1.1.0/').replace('../../profile/v1.0.2/','../../profile/v1.0.3/').replace('../../heros-chef-project/v1.0.2/','../../heros-chef-project/v1.0.3/')
             self.assertEqual((self.root/f'components/{name}/v1.0.3/index.html').read_text(encoding='utf-8'),expected)
         self.assertNotIn('../../varco-project/',projects)
-        self.assertFalse((self.root/'components/visual-novel-template').exists())
+        self.assertTrue((self.root/'components/visual-novel-template/v1.0.0/index.html').is_file())
 
     def test_stock_keeps_source_boundaries_and_five_sections(self):
         project = (self.root/'components/stock-project/v1.0.0/index.html').read_text(encoding='utf-8')

@@ -35,6 +35,18 @@
     ],
     "components/varco-project/v1.2.0/index.html": [
       "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/projects/v2.0.0/index.html": [
+      "sha256-oES5gQS54Oue7T+uLoueAOp00+3x5wQxisnDcrGd/58="
+    ],
+    "components/visual-novel-template/v1.0.0/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/stock-project/v1.2.1/index.html": [
+      "sha256-qKMR9KiKmg/+IBpJmPtBHTlgo1q5NlHYHoLC2TRPQhI="
+    ],
+    "components/varco-project/v1.2.1/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
     ]
   },
   "approved_youtube_embeds": {
@@ -48,6 +60,9 @@
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ],
     "components/varco-project/v1.2.0/index.html": [
+      "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
+    ],
+    "components/varco-project/v1.2.1/index.html": [
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ]
   },
@@ -73,6 +88,30 @@
       "chosun-shin"
     ],
     "components/varco-project/v1.2.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/projects/v2.0.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/visual-novel-template/v1.0.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/profile/v1.2.1/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/heros-chef-project/v1.2.1/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/stock-project/v1.2.1/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/varco-project/v1.2.1/index.html": [
       "chosun-bold",
       "chosun-shin"
     ]
@@ -113,6 +152,54 @@
       "media_type": "image/jpeg",
       "width": 1920,
       "height": 1080
+    },
+    "assets/visual-novel-template/v1.0.0/editor-01.png": {
+      "sha256": "708bde220c79de40154016e7a6b1f407c414d2b60799aa397dbccc5948070d41",
+      "media_type": "image/png",
+      "width": 1920,
+      "height": 1040
+    },
+    "assets/visual-novel-template/v1.0.0/editor-02.png": {
+      "sha256": "d9afda88a7066d2c34893c50a49029d9f25ba5908dc3d7e3459e0bd5e98f9767",
+      "media_type": "image/png",
+      "width": 1920,
+      "height": 1040
+    },
+    "assets/visual-novel-template/v1.0.0/editor-03.png": {
+      "sha256": "464c0f02893d1aa0deced19a4a51ebd4a31305c7ae8b25ac2846a846d74be076",
+      "media_type": "image/png",
+      "width": 1920,
+      "height": 1040
+    },
+    "assets/visual-novel-template/v1.0.0/editor-04.png": {
+      "sha256": "10fd4025285895ecb238d74ba9784dfcbe2bda35aab5d63a2308e8770cfa2c66",
+      "media_type": "image/png",
+      "width": 1920,
+      "height": 1040
+    },
+    "assets/visual-novel-template/v1.0.0/editor-05.png": {
+      "sha256": "f9ecf841a69f19789946c5c9dc14deb59f52e7b902f3e101af0d5b5a43310076",
+      "media_type": "image/png",
+      "width": 1920,
+      "height": 1040
+    },
+    "assets/visual-novel-template/v1.0.0/ingame.jpg": {
+      "sha256": "f3cde442a813957fc3dd38682c97702ffaa0e844543df3674bdd2cd13749bd08",
+      "media_type": "image/jpeg",
+      "width": 1920,
+      "height": 1080
+    },
+    "assets/visual-novel-template/v1.0.0/text-spec.png": {
+      "sha256": "f09d9534dc050b6b8d0cf307c836afe686818405e1d664b43cd707537a94d3ab",
+      "media_type": "image/png",
+      "width": 1640,
+      "height": 680
+    },
+    "assets/visual-novel-template/v1.0.0/event-spec.png": {
+      "sha256": "a94b82924e4828f6e8375aa9ef6d0b10d4c54697b8e522cfc37959d0c442b5f6",
+      "media_type": "image/png",
+      "width": 1620,
+      "height": 234
     }
   },
   "approved_page_images": {
@@ -144,6 +231,30 @@
       "assets/heros-chef/v1.0.0/recipe.jpg"
     ],
     "components/varco-project/v1.2.0/index.html": [
+      "assets/city-of-rubble/v1.0.0/main.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-01.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-02.jpg"
+    ],
+    "components/projects/v2.0.0/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/city-of-rubble/v1.0.0/main.jpg",
+      "assets/visual-novel-template/v1.0.0/editor-04.png"
+    ],
+    "components/visual-novel-template/v1.0.0/index.html": [
+      "assets/visual-novel-template/v1.0.0/editor-01.png",
+      "assets/visual-novel-template/v1.0.0/editor-02.png",
+      "assets/visual-novel-template/v1.0.0/editor-03.png",
+      "assets/visual-novel-template/v1.0.0/editor-05.png",
+      "assets/visual-novel-template/v1.0.0/ingame.jpg",
+      "assets/visual-novel-template/v1.0.0/text-spec.png",
+      "assets/visual-novel-template/v1.0.0/event-spec.png"
+    ],
+    "components/heros-chef-project/v1.2.1/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/heros-chef/v1.0.0/battle.jpg",
+      "assets/heros-chef/v1.0.0/recipe.jpg"
+    ],
+    "components/varco-project/v1.2.1/index.html": [
       "assets/city-of-rubble/v1.0.0/main.jpg",
       "assets/city-of-rubble/v1.0.0/ingame-01.jpg",
       "assets/city-of-rubble/v1.0.0/ingame-02.jpg"
