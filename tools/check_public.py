@@ -19,6 +19,14 @@ PUBLIC_FILES = {".gitignore", ".gitattributes", "AGENTS.md", "README.md", "SECUR
                 "tools/check_public.py", "tests/test_public.py", "docs/.nojekyll",
                 "docs/index.html", "docs/catalog.json"}
 COMPONENT_PATH = re.compile(r"docs/components/[a-z0-9][a-z0-9-]*/v\d+\.\d+\.\d+/index\.html")
+YOUTUBE_EMBED = re.compile(r"https://www\.youtube-nocookie\.com/embed/[A-Za-z0-9_-]{11}")
+IFRAME_ATTRIBUTES = {
+    "width": "560", "height": "315", "loading": "lazy",
+    "referrerpolicy": "strict-origin-when-cross-origin",
+    "allow": "autoplay 'none'; encrypted-media; picture-in-picture; fullscreen",
+    "sandbox": "allow-scripts allow-same-origin allow-presentation",
+    "class": "video-frame",
+}
 
 
 class SecurityError(ValueError):
@@ -43,8 +51,39 @@ def css_check(text):
         raise SecurityError("External or executable CSS assets are prohibited")
 
 
-def validate_html(text, policy, path=None, site=None):
+def approved_embeds(policy, route):
+    """Only explicit immutable routes may opt into exact privacy-enhanced URLs."""
+    approved = policy.get("approved_youtube_embeds", {})
+    if not isinstance(approved, dict):
+        raise SecurityError("YouTube approvals must map component routes to exact URLs")
+    for key, urls in approved.items():
+        if not isinstance(key, str) or not COMPONENT_PATH.fullmatch("docs/" + key):
+            raise SecurityError("YouTube approvals require an immutable component route")
+        if (not isinstance(urls, list) or not urls
+                or any(not isinstance(url, str) or not YOUTUBE_EMBED.fullmatch(url) for url in urls)
+                or len(urls) != len(set(urls))):
+            raise SecurityError("Only exact privacy-enhanced YouTube video URLs are permitted")
+        for url in urls:
+            if youtube_watch_url(url) not in policy["approved_external_links"]:
+                raise SecurityError("Every approved embed requires its approved watch URL")
+    return approved.get(route, [])
+
+
+def youtube_watch_url(url):
+    return "https://www.youtube.com/watch?v=" + url.rsplit("/", 1)[1]
+
+
+def page_csp(policy, route=None):
+    urls = approved_embeds(policy, route)
+    return CSP.replace("frame-src 'none'", "frame-src " + " ".join(urls)) if urls else CSP
+
+
+def validate_html(text, policy, path=None, site=None, route=None):
     check_text(text)
+    if path is not None and site is not None:
+        route = Path(path).resolve().relative_to(Path(site).resolve()).as_posix()
+    embed_urls = approved_embeds(policy, route)
+    expected_csp = page_csp(policy, route)
     for value in EMAIL.findall(text) + PHONE.findall(text):
         if value not in policy.get("approved_contacts", []):
             raise SecurityError("Unapproved personal contact information")
@@ -57,15 +96,38 @@ def validate_html(text, policy, path=None, site=None):
             self.referrer = False
             self.charset = False
             self.viewport = False
+            self.frames = set()
+            self.links = set()
+            self.iframe_open = False
 
         def handle_starttag(self, tag, attrs):
+            if self.iframe_open:
+                raise SecurityError("Embedded frames must be empty and explicitly closed")
             names = [name for name, _ in attrs]
             if len(names) != len(set(names)):
                 raise SecurityError("Duplicate HTML attributes")
             values = dict(attrs)
-            if tag in {"script", "iframe", "object", "embed", "base", "link", "form", "foreignobject"}:
+            if tag in {"script", "object", "embed", "base", "link", "form", "foreignobject"}:
                 raise SecurityError("Scripts, frames, forms and external resources are prohibited")
+            if tag == "iframe":
+                if not self.csp:
+                    raise SecurityError("CSP must precede embedded resources")
+                allowed_names = set(IFRAME_ATTRIBUTES) | {"src", "title", "allowfullscreen"}
+                if set(values) != allowed_names:
+                    raise SecurityError("YouTube iframe requires only the reviewed attributes")
+                if any(values.get(key) != value for key, value in IFRAME_ATTRIBUTES.items()):
+                    raise SecurityError("YouTube iframe permissions must match the reviewed limits")
+                title = values.get("title") or ""
+                if not title.strip() or len(title) > 120 or values.get("allowfullscreen") not in {None, ""}:
+                    raise SecurityError("YouTube iframe requires a short title and boolean fullscreen")
+                src = values.get("src")
+                if src not in embed_urls or src in self.frames:
+                    raise SecurityError("Unapproved or duplicate YouTube iframe for this component")
+                self.frames.add(src)
+                self.iframe_open = True
             for name, value in attrs:
+                if tag == "iframe" and name == "src":
+                    continue
                 if name.startswith("on") or name in {"srcdoc", "src", "srcset", "poster", "data", "xlink:href"}:
                     raise SecurityError("Executable attributes and remote resources are prohibited")
                 if name == "style":
@@ -75,10 +137,12 @@ def validate_html(text, policy, path=None, site=None):
                 if equiv and equiv != "content-security-policy":
                     raise SecurityError("Meta refresh and other HTTP-equivalent directives are prohibited")
                 if equiv == "content-security-policy":
-                    if values.get("content") != CSP:
+                    if self.csp or values.get("content") != expected_csp:
                         raise SecurityError("Missing or weakened static-page CSP")
                     self.csp = True
-                if values.get("name") == "referrer" and values.get("content") == "no-referrer":
+                if values.get("name") == "referrer":
+                    if self.referrer or values.get("content") != "no-referrer":
+                        raise SecurityError("Page navigation must retain a single no-referrer policy")
                     self.referrer = True
                 if values.get("charset", "").lower() == "utf-8":
                     self.charset = True
@@ -86,6 +150,7 @@ def validate_html(text, policy, path=None, site=None):
                     self.viewport = True
             if tag == "a":
                 href = values.get("href") or ""
+                self.links.add(href)
                 parsed = urlsplit(href)
                 if not href or "\\" in href or re.search(r"[\x00-\x20]", href):
                     raise SecurityError("Unsafe or empty hyperlink")
@@ -111,19 +176,39 @@ def validate_html(text, policy, path=None, site=None):
                 raise SecurityError("CSP must be in the head before the body")
 
         def handle_startendtag(self, tag, attrs):
+            if tag == "iframe":
+                raise SecurityError("Embedded frames require an explicit closing tag")
             self.handle_starttag(tag, attrs)
 
         def handle_endtag(self, tag):
+            if tag == "iframe":
+                if not self.iframe_open:
+                    raise SecurityError("Unexpected iframe closing tag")
+                self.iframe_open = False
+            elif self.iframe_open:
+                raise SecurityError("Embedded frames must be explicitly closed")
             if tag == "style":
                 self.styles = False
 
+        def handle_comment(self, text):
+            if self.iframe_open:
+                raise SecurityError("Embedded frames must not contain comments")
+
         def handle_data(self, text):
+            if self.iframe_open and text.strip():
+                raise SecurityError("Embedded frames must not contain fallback markup")
             if self.styles:
                 css_check(text)
 
     page = StaticPage()
     page.feed(text)
     page.close()
+    if page.iframe_open:
+        raise SecurityError("Embedded frame is not closed")
+    if page.frames != set(embed_urls):
+        raise SecurityError("An embed exception must contain exactly its approved video frames")
+    if any(youtube_watch_url(url) not in page.links for url in page.frames):
+        raise SecurityError("Every embedded video requires an ordinary watch-on-YouTube fallback")
     if not all((page.csp, page.referrer, page.charset, page.viewport)):
         raise SecurityError("Page requires CSP, no-referrer, UTF-8 and viewport metadata")
 
@@ -185,7 +270,7 @@ def validate_outgoing_history(root):
             text = data.decode("utf-8")
             check_text(text)
             if name.endswith(".html"):
-                validate_html(text, policy)
+                validate_html(text, policy, route=name.removeprefix("docs/"))
             blobs[name] = data
         catalog = json.loads(blobs["docs/catalog.json"])
         routes = {p["path"] for p in catalog["pages"]}

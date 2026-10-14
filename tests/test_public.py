@@ -9,7 +9,7 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import unquote, urlsplit
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from check_public import CSP, SecurityError, validate_html, validate_repository, validate_outgoing_history
+from check_public import CSP, IFRAME_ATTRIBUTES, page_csp, SecurityError, validate_html, validate_repository, validate_outgoing_history
 
 POLICY = {"approved_external_links": ["https://example.com/public"], "approved_contacts": []}
 
@@ -104,6 +104,133 @@ class PublicPolicyTests(unittest.TestCase):
             commit_html("ghp" + "_" + "x" * 30)
             commit_html("Safe current page")
             self.assertTrue(validate_repository(root)["valid"])
+            with self.assertRaises(SecurityError):
+                validate_outgoing_history(root)
+
+
+class YouTubeEmbedPolicyTests(unittest.TestCase):
+    route = "components/varco-project/v1.0.0/index.html"
+    src = "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
+    watch = "https://www.youtube.com/watch?v=QewprwQ5BGc"
+
+    def setUp(self):
+        self.policy = {**POLICY, "approved_external_links": [*POLICY["approved_external_links"], self.watch],
+                       "approved_youtube_embeds": {self.route: [self.src]}}
+        attrs = " ".join(key + '="' + value + '"' for key, value in IFRAME_ATTRIBUTES.items())
+        self.iframe = '<iframe src="' + self.src + '" title="CityOfRubble 영상" ' + attrs + ' allowfullscreen></iframe>'
+        self.fallback = '<a href="' + self.watch + '" target="_blank" rel="noopener noreferrer">YouTube에서 보기</a>'
+        self.html = page(self.iframe + self.fallback).replace(CSP, page_csp(self.policy, self.route))
+
+    def validate(self, html, **kwargs):
+        validate_html(html, self.policy, route=self.route, **kwargs)
+
+    def test_exact_approved_video_passes_only_on_its_component(self):
+        self.validate(self.html)
+        with tempfile.TemporaryDirectory() as folder:
+            site = Path(folder) / "docs"
+            validate_html(self.html, self.policy, site / self.route, site)
+        for route in (None, "index.html", "components/varco-project/v1.0.1/index.html"):
+            with self.subTest(route=route), self.assertRaises(SecurityError):
+                validate_html(self.html, self.policy, route=route)
+        validate_html(page(), self.policy)
+        self.assertEqual(page_csp(self.policy, "index.html"), CSP)
+
+    def test_external_origins_urls_and_parameters_fail(self):
+        for src in ("https://example.com/frame", "https://www.youtube.com/embed/QewprwQ5BGc",
+                    "https://www.youtube-nocookie.com.evil.test/embed/QewprwQ5BGc",
+                    "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ",
+                    self.src + "?autoplay=1", self.src + "?enablejsapi=1", self.src + "#fragment",
+                    "http://www.youtube-nocookie.com/embed/QewprwQ5BGc", "//www.youtube-nocookie.com/embed/QewprwQ5BGc"):
+            with self.subTest(src=src), self.assertRaises(SecurityError):
+                self.validate(self.html.replace('src="' + self.src + '"', 'src="' + src + '"'))
+
+    def test_scoped_csp_cannot_allow_other_resources_or_broader_frames(self):
+        for old, new in ((self.src, "https://www.youtube-nocookie.com"),
+                         ("script-src 'none'", "script-src 'unsafe-inline'"),
+                         ("object-src 'none'", "object-src 'self'"),
+                         ("img-src 'none'", "img-src https:"),
+                         ("frame-src " + self.src, "frame-src https://example.com " + self.src)):
+            with self.subTest(new=new), self.assertRaises(SecurityError):
+                self.validate(self.html.replace(old, new, 1))
+        with self.assertRaises(SecurityError):
+            self.validate(self.html.replace(page_csp(self.policy, self.route), CSP))
+
+    def test_iframe_permissions_and_attributes_are_fixed(self):
+        for attr, value in IFRAME_ATTRIBUTES.items():
+            for replacement in ("", attr + '="unexpected"'):
+                with self.subTest(attr=attr, replacement=replacement), self.assertRaises(SecurityError):
+                    self.validate(self.html.replace(attr + '="' + value + '"', replacement))
+        for extra in ('srcdoc="hello"', 'onload="alert(1)"', 'allow="autoplay"',
+                      'credentialless', 'style="display:none"', 'name="target"'):
+            with self.subTest(extra=extra), self.assertRaises(SecurityError):
+                self.validate(self.html.replace('<iframe ', '<iframe ' + extra + ' '))
+        for old, new in (('title="CityOfRubble 영상"', 'title=""'),
+                         (' allowfullscreen', ''), (' allowfullscreen', ' allowfullscreen="yes"')):
+            with self.subTest(new=new), self.assertRaises(SecurityError):
+                self.validate(self.html.replace(old, new))
+
+    def test_missing_duplicate_or_malformed_frames_and_fallback_fail(self):
+        cases = [self.html.replace(self.fallback, ''), self.html.replace(self.iframe, ''),
+                 self.html.replace(self.iframe, self.iframe * 2),
+                 self.html.replace('</iframe>', ''), self.html.replace('></iframe>', '/>'),
+                 self.html.replace('</iframe>', self.fallback + '</iframe>'),
+                 self.html.replace('</iframe>', '<!-- frame content --></iframe>'),
+                 self.html.replace('<style>', self.iframe + '<style>')]
+        for html in cases:
+            with self.subTest(html=html), self.assertRaises(SecurityError):
+                self.validate(html)
+        with self.assertRaises(SecurityError):
+            self.validate(self.html.replace('<meta charset="utf-8">', self.iframe + '<meta charset="utf-8">'))
+
+    def test_other_executable_features_stay_blocked_on_embed_page(self):
+        for body in ('<script></script>', '<object></object>', '<embed>', '<form></form>',
+                     '<img src="https://example.com/a.png">', '<div onclick="alert(1)"></div>',
+                     '<iframe src="https://example.com"></iframe>'):
+            with self.subTest(body=body), self.assertRaises(SecurityError):
+                self.validate(self.html.replace('</body>', body + '</body>'))
+
+    def test_approval_configuration_is_fail_closed(self):
+        for approved in ([], {"index.html": [self.src]}, {self.route: []}, {self.route: self.src},
+                         {self.route: [self.src, self.src]}, {self.route: [self.src + '?autoplay=1']},
+                         {self.route: ['https://example.com/embed/QewprwQ5BGc']}, {self.route: [None]}):
+            with self.subTest(approved=approved), self.assertRaises(SecurityError):
+                validate_html(page(), {**self.policy, "approved_youtube_embeds": approved})
+        with self.assertRaises(SecurityError):
+            validate_html(page(), {**self.policy, "approved_external_links": []})
+
+    def test_navigation_referrer_policy_remains_private(self):
+        for html in (self.html.replace('content="no-referrer"', 'content="origin"'),
+                     self.html.replace('</head>', '<meta name="referrer" content="origin"></head>')):
+            with self.subTest(html=html), self.assertRaises(SecurityError):
+                self.validate(html)
+
+    def test_repository_and_outgoing_history_apply_the_same_route_scope(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            target = root / "docs" / self.route
+            target.parent.mkdir(parents=True)
+            target.write_text(self.html, encoding="utf-8")
+            (root / "policy.json").write_text(json.dumps(self.policy), encoding="utf-8")
+            catalog = {"pages": [{"path": self.route, "sha256": hashlib.sha256(target.read_bytes()).hexdigest()}]}
+            (root / "docs/catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
+            self.assertTrue(validate_repository(root)["valid"])
+            def git(*args):
+                subprocess.run(["git", "-c", "safe.directory=" + root.as_posix(), *args],
+                               cwd=root, check=True, capture_output=True)
+            git("init", "--initial-branch=main")
+            git("config", "user.name", "Security test")
+            git("config", "user.email", "public-test" + "@example.invalid")
+            git("add", ".")
+            git("commit", "-m", "Test scoped embed")
+            self.assertEqual(validate_outgoing_history(root)["outgoing_commits_checked"], 1)
+            moved = root / "docs/index.html"
+            target.rename(moved)
+            catalog["pages"][0]["path"] = "index.html"
+            (root / "docs/catalog.json").write_text(json.dumps(catalog), encoding="utf-8")
+            git("add", ".")
+            git("commit", "-m", "Test unapproved route")
+            with self.assertRaises(SecurityError):
+                validate_repository(root)
             with self.assertRaises(SecurityError):
                 validate_outgoing_history(root)
 

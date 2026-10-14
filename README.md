@@ -13,7 +13,7 @@ Personal and career details in Profile are limited to the owner-approved name, I
 
 Only the docs/ directory is published by GitHub Pages from main. The publisher checks the entire public export and its HTML, and the local pre-push hook checks it again before upload. Security regression tests must pass before committing.
 
-No JavaScript, external libraries, analytics or remote assets are used. See [security policy](SECURITY.md). Private work records and new unapproved career statements are not part of this repository.
+The first-party pages use no JavaScript, external libraries, analytics or remote assets. An explicitly approved, route-scoped YouTube embed is supported as the sole external-player exception. See [security policy](SECURITY.md). Private work records and new unapproved career statements are not part of this repository.
 
 Before uploading, run:
 
@@ -29,3 +29,11 @@ The current GitHub login lacks workflow scope, so no Actions deployment gate was
 The pre-push check scans outgoing Git commits as well as the working tree, so deleting a secret before pushing does not silently publish it in an earlier commit.
 
 Keep unfinished authoring, private evidence and the approval manifest in a separate local workspace outside this repository. No second repository is required. For a new component, register its ID and version in that locally retained manifest, review its public contents, export it through the approved publisher, and push only the reviewed, completed export here. Put the GitHub Pages URL in Notion as an ordinary link. Root index is current; versioned components are never overwritten.
+
+## Scoped YouTube support
+
+policy.json reserves components/varco-project/v1.0.0/index.html for the approved CityOfRubble video, QewprwQ5BGc. This support change does not publish that component or alter any existing HTML page. The new component must be separately reviewed, added to the catalog, and tested before publication.
+
+The checker derives a page-specific CSP from that exact route and exact youtube-nocookie.com/embed URL. Every other page keeps frame-src 'none'. The iframe must use the fixed reviewed attributes in tools/check_public.py, including a title, lazy loading, restricted permissions, sandbox, and strict-origin-when-cross-origin referrer policy. It cannot use autoplay, URL parameters, srcdoc, event handlers, or additional attributes. An ordinary approved YouTube watch link is required beside the player. The page-level no-referrer policy remains in place for ordinary navigation.
+
+Privacy-enhanced mode does not make the remote player an offline or first-party resource. YouTube runs its own code and can contact its services within the cross-origin frame. The checker verifies the permitted markup and CSP; it cannot establish video availability or successful playback. Verify the actual HTTPS embed page in a browser after publication.
