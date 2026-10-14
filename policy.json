@@ -11,6 +11,9 @@
     "components/stock-demo/v1.0.0/index.html": [
       "sha256-d8IhNbf8seAK4+S/PUt7808XyIDhbX+DGnf0II3PyCM=",
       "sha256-6RVXHXS5iaswTegJk2bt9+IlvO9+A+DbR/crpzCU/fI="
+    ],
+    "components/stock-project/v1.1.0/index.html": [
+      "sha256-qKMR9KiKmg/+IBpJmPtBHTlgo1q5NlHYHoLC2TRPQhI="
     ]
   },
   "approved_youtube_embeds": {

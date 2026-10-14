@@ -244,12 +244,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 19)
+        self.assertEqual(result["html_pages"], 21)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.1.0/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.2.0/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -275,7 +275,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.1.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.2.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
@@ -488,6 +488,28 @@ class StockReleaseTests(unittest.TestCase):
             self.assertNotIn('Stock_Reference',text)
             self.assertNotIn('portfolio.md',text)
             self.assertNotIn('<iframe',text)
+
+
+class StockIntegrationTests(unittest.TestCase):
+    root = Path(__file__).resolve().parents[1] / 'docs'
+
+    def test_in_document_integration_preserves_explanation(self):
+        old = (self.root/'components/stock-project/v1.0.0/index.html').read_text(encoding='utf-8')
+        new = (self.root/'components/stock-project/v1.1.0/index.html').read_text(encoding='utf-8')
+        for anchor in ('idea','about','environment','comment'):
+            pattern = r'<section aria-labelledby="'+anchor+r'">.*?</section>'
+            self.assertEqual(re.search(pattern,old,re.S)[0],re.search(pattern,new,re.S)[0])
+        self.assertEqual(new.count('<main '),1)
+        self.assertEqual(new.count('<h1>'),1)
+        self.assertNotIn('<iframe',new)
+        self.assertNotIn('window.StockModel',new)
+        self.assertNotIn('document.addEventListener',new)
+        self.assertIn('id="stock-widget"',new)
+        self.assertIn('root.querySelector',new)
+        self.assertIn('scenarioPrice',new)
+        listing = (self.root/'components/projects/v1.2.0/index.html').read_text(encoding='utf-8')
+        self.assertIn('../../stock-project/v1.1.0/index.html#work',listing)
+        self.assertNotIn('../../stock-demo/',listing)
 
 
 if __name__ == "__main__":
