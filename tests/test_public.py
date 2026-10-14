@@ -5,6 +5,8 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from html.parser import HTMLParser
+from urllib.parse import unquote, urlsplit
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from check_public import CSP, SecurityError, validate_html, validate_repository, validate_outgoing_history
 
@@ -103,6 +105,100 @@ class PublicPolicyTests(unittest.TestCase):
             self.assertTrue(validate_repository(root)["valid"])
             with self.assertRaises(SecurityError):
                 validate_outgoing_history(root)
+
+
+class PortfolioMigrationTests(unittest.TestCase):
+    root = Path(__file__).resolve().parents[1]
+    project = "components/heros-chef-project/v1.0.0/index.html"
+    profile = "components/profile/v1.0.0/index.html"
+
+    def test_complete_public_export_passes(self):
+        result = validate_repository(self.root)
+        self.assertTrue(result["valid"])
+        self.assertEqual(result["html_pages"], 9)
+
+    def test_three_primary_pages_use_internal_navigation(self):
+        home = (self.root / "docs/index.html").read_text(encoding="utf-8")
+        for route in (self.project, self.profile):
+            self.assertIn('href="' + route + '"', home)
+        for route in ("index.html", self.project, self.profile):
+            text = (self.root / "docs" / route).read_text(encoding="utf-8")
+            self.assertNotIn("notion.site", text)
+        project = (self.root / "docs" / self.project).read_text(encoding="utf-8")
+        self.assertIn('href="https://drive.google.com/drive/folders/', project)
+
+    def test_project_follows_five_sections_and_attributes_ai(self):
+        project = (self.root / "docs" / self.project).read_text(encoding="utf-8")
+        headings = ["01 · 아이디어", "02 · 무엇을 만든 건지", "03 · 환경", "04 · 작업물", "05 · 코멘트"]
+        positions = [project.index('<h2 id="' + anchor + '">' + heading) for anchor, heading in zip(
+            ("idea", "about", "environment", "work", "comment"), headings)]
+        self.assertEqual(positions, sorted(positions))
+        for phrase in ("아이디어 제공 외 전체", "1,474,560바이트 이하", "재미나 사용성을 측정한 결과는 아닙니다",
+                       "파일을 다시 실행하거나 최종 바이트 수를 재측정하지 않았으며", "작성 예정"):
+            self.assertIn(phrase, project)
+        self.assertNotIn("우수상", project)
+        self.assertNotIn("NC AI VARCO", project)
+
+    def test_profile_keeps_approved_facts_and_expected_status(self):
+        profile = (self.root / "docs" / self.profile).read_text(encoding="utf-8")
+        for phrase in ("SEUNGJIN SONG", "디벨로켓에듀", "2023.06 ~ 2025.03", "게임 기획 교강사",
+                       "모비릭스", "2021.11 ~ 2023.06", "아이오넷 / 브릿지 게임즈", "2020.06 ~ 2021.08",
+                       "공학사 학위취득 예정 · 2027.02", "정밀화학과 · 중퇴", "컴퓨터활용능력 2급",
+                       "2026.03.31", "데이터분석 준전문가", "2026.06.06", "NC AI VARCO 3D 인디게임 공모전",
+                       "우수상", "2025.09.22"):
+            self.assertIn(phrase, profile)
+        self.assertNotIn("mailto:", profile)
+        self.assertNotIn("tel:", profile)
+
+    def test_superseded_detail_pages_are_not_in_export(self):
+        catalog = json.loads((self.root / "docs/catalog.json").read_text(encoding="utf-8"))
+        routes = {p["path"] for p in catalog["pages"]}
+        for kind in ("product", "retrospective"):
+            old = "components/heros-chef-" + kind + "/v1.0.0/index.html"
+            self.assertNotIn(old, routes)
+            self.assertFalse((self.root / "docs" / old).exists())
+
+    def test_internal_routes_and_fragment_targets_exist(self):
+        class Links(HTMLParser):
+            def __init__(self, text):
+                super().__init__()
+                self.ids = set()
+                self.hrefs = []
+                self.feed(text)
+
+            def handle_starttag(self, tag, attrs):
+                values = dict(attrs)
+                if "id" in values:
+                    if values["id"] in self.ids:
+                        raise AssertionError("Duplicate HTML id")
+                    self.ids.add(values["id"])
+                if tag == "a":
+                    self.hrefs.append(values.get("href", ""))
+
+        site = self.root / "docs"
+        pages = {path.resolve(): Links(path.read_text(encoding="utf-8")) for path in site.rglob("*.html")}
+        for path, page in pages.items():
+            for href in page.hrefs:
+                parsed = urlsplit(href)
+                if parsed.scheme or parsed.netloc:
+                    continue
+                target = (path.parent / unquote(parsed.path)).resolve() if parsed.path else path
+                self.assertIn(target, pages, f"Missing route: {href}")
+                if parsed.fragment:
+                    self.assertIn(unquote(parsed.fragment), pages[target].ids, f"Missing anchor: {href}")
+
+    def test_existing_component_bytes_remain_unchanged(self):
+        expected = {
+            "editorial-hero/v1.0.0": "9a236c5839e1af4b2a9f1bdf98d946faaf2ef0ba82950e52b6a86e6f249d6de8",
+            "selected-work-intro/v1.1.0": "9aebd02fc09bb215b88e2a539a85c51ec2a8d69dd7f1d63f1850dba1363e35cc",
+            "product-retrospective-tabs/v1.1.0": "78cbbf8144c5d45c8588c5bd65f66385c0cf34bb1dd0981f1b7f5cd8ebb55606",
+            "editorial-footer/v1.0.0": "9ee80e3a66bece73fa15b13a814b2a66cd885e30ec6b83bfd38894100e57e2f8",
+            "project-card/v1.0.0": "6331cdbf6ca6d237709d0c02e5eabae5d95f0d43f0a5ec2a2a20038880c7203c",
+            "timeline/v1.1.0": "22082939c5f726a2d77df7316d622c1f2dda2427381a4747a96411b7da080065",
+        }
+        for route, digest in expected.items():
+            data = (self.root / "docs/components" / route / "index.html").read_bytes()
+            self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
 
 
 if __name__ == "__main__":
