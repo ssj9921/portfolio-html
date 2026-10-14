@@ -23,6 +23,9 @@
     ],
     "components/varco-project/v1.1.0/index.html": [
       "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/projects/v1.8.0/index.html": [
+      "sha256-oES5gQS54Oue7T+uLoueAOp00+3x5wQxisnDcrGd/58="
     ]
   },
   "approved_youtube_embeds": {
@@ -88,6 +91,10 @@
       "assets/city-of-rubble/v1.0.0/main.jpg",
       "assets/city-of-rubble/v1.0.0/ingame-01.jpg",
       "assets/city-of-rubble/v1.0.0/ingame-02.jpg"
+    ],
+    "components/projects/v1.8.0/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/city-of-rubble/v1.0.0/main.jpg"
     ]
   }
 }

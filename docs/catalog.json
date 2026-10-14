@@ -4,10 +4,10 @@
     {
       "id": "homepage",
       "name": "Selected Work",
-      "version": "1.8.0",
+      "version": "1.9.0",
       "path": "index.html",
-      "sha256": "c2a7f6dd6c9e3131a3f5b4573d8ea981d2ea710830c6ca69f784dc94c88d0d4b",
-      "source_sha256": "c2a7f6dd6c9e3131a3f5b4573d8ea981d2ea710830c6ca69f784dc94c88d0d4b"
+      "sha256": "5e7505073392bcccf7ef9a13e5b51a4567c900012755cfe7a566aba1084ec245",
+      "source_sha256": "5e7505073392bcccf7ef9a13e5b51a4567c900012755cfe7a566aba1084ec245"
     },
     {
       "id": "editorial-hero",
@@ -248,6 +248,14 @@
       "path": "components/varco-project/v1.1.0/index.html",
       "sha256": "e768dfda723147a2171dbd386114fbac61bee332e4dff6d935f81520fb5cdb5d",
       "source_sha256": "e768dfda723147a2171dbd386114fbac61bee332e4dff6d935f81520fb5cdb5d"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "version": "1.8.0",
+      "path": "components/projects/v1.8.0/index.html",
+      "sha256": "d853a41efe61dc1b0b64d82b4dd34abae5be9e6625f8c1a64911f2dcd642f285",
+      "source_sha256": "d853a41efe61dc1b0b64d82b4dd34abae5be9e6625f8c1a64911f2dcd642f285"
     }
   ]
 }
