@@ -22,6 +22,9 @@
   "approved_youtube_embeds": {
     "components/varco-project/v1.0.0/index.html": [
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
+    ],
+    "components/varco-project/v1.0.1/index.html": [
+      "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ]
   },
   "approved_image_assets": {

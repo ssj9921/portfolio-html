@@ -244,12 +244,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 27)
+        self.assertEqual(result["html_pages"], 29)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.5.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.1.0/').replace('profile/v1.0.3/','profile/v1.1.0/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.5.1/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.1.0/').replace('profile/v1.0.3/','profile/v1.1.0/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -275,7 +275,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.5.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.5.1/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
@@ -612,6 +612,17 @@ class ProfileCareerTests(unittest.TestCase):
         old=(self.root/'components/projects/v1.4.0/index.html').read_text(encoding='utf-8')
         new=(self.root/'components/projects/v1.5.0/index.html').read_text(encoding='utf-8')
         self.assertEqual(new,old.replace('../../profile/v1.0.3/','../../profile/v1.1.0/'))
+
+
+class VarcoSubtitleTests(unittest.TestCase):
+    def test_only_subtitle_font_and_navigation_changed(self):
+        root=Path(__file__).resolve().parents[1]/'docs'
+        old=(root/'components/varco-project/v1.0.0/index.html').read_text(encoding='utf-8')
+        new=(root/'components/varco-project/v1.0.1/index.html').read_text(encoding='utf-8')
+        expected=old.replace('</style>','.subtitle{font-variant-numeric:lining-nums}\n</style>').replace('../../projects/v1.3.0/','../../projects/v1.5.1/').replace('../../profile/v1.0.3/','../../profile/v1.1.0/')
+        self.assertEqual(new,expected)
+        listing=(root/'components/projects/v1.5.0/index.html').read_text(encoding='utf-8')
+        self.assertEqual((root/'components/projects/v1.5.1/index.html').read_text(encoding='utf-8'),listing.replace('../../varco-project/v1.0.0/','../../varco-project/v1.0.1/'))
 
 
 if __name__ == "__main__":
