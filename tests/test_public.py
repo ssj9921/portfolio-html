@@ -244,12 +244,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 25)
+        self.assertEqual(result["html_pages"], 27)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.4.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.1.0/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.5.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.1.0/').replace('profile/v1.0.3/','profile/v1.1.0/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -275,7 +275,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.4.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.5.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
@@ -589,6 +589,29 @@ class ReviewedImageTests(unittest.TestCase):
         self.assertEqual(self.html.count('class="screenshot screenshot-hero"'),1)
         self.assertIn('object-fit:contain',self.html)
         self.assertIn('grid-template-columns:minmax(0,1fr)',self.html)
+
+
+class ProfileCareerTests(unittest.TestCase):
+    root=Path(__file__).resolve().parents[1]/'docs'
+
+    def test_original_facts_preserved_and_links_are_cards(self):
+        old=(self.root/'components/profile/v1.0.3/index.html').read_text(encoding='utf-8')
+        new=(self.root/'components/profile/v1.1.0/index.html').read_text(encoding='utf-8')
+        for anchor in ('education','qualifications'):
+            pattern=r'<section aria-labelledby="'+anchor+'">.*?</section>'
+            self.assertEqual(re.search(pattern,old,re.S)[0],re.search(pattern,new,re.S)[0])
+        self.assertEqual(re.findall(r'<div class="period">(.*?)</div>',old),re.findall(r'<div class="period">(.*?)</div>',new))
+        self.assertEqual(new.count('<a class="reference-card"'),2)
+        for item in ('Introducing Skill Blitz_B','YouTube · BORA','매치 퍼즐 하우스','Google Play · mobirix','총 6종 기획','국내 이용 불가','서비스 종료','Project-ST','미출시','담당반 팀 프로젝트 관리'):
+            self.assertIn(item,new)
+        for forbidden in ('<iframe','<video','<script','<img','src='):
+            self.assertNotIn(forbidden,new)
+        self.assertIn(CSP,new)
+
+    def test_project_bodies_are_not_changed_by_profile_entry_update(self):
+        old=(self.root/'components/projects/v1.4.0/index.html').read_text(encoding='utf-8')
+        new=(self.root/'components/projects/v1.5.0/index.html').read_text(encoding='utf-8')
+        self.assertEqual(new,old.replace('../../profile/v1.0.3/','../../profile/v1.1.0/'))
 
 
 if __name__ == "__main__":
