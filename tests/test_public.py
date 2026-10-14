@@ -23,6 +23,22 @@ def page(body="", style=""):
 
 
 class PublicPolicyTests(unittest.TestCase):
+    def test_ugc_proposal_preserves_source_boundaries_and_offline_demo(self):
+        root = Path(__file__).resolve().parents[1] / 'docs'
+        detail = (root/'components/zeta-ugc-event/v1.0.0/index.html').read_text(encoding='utf-8')
+        demo = (root/'components/zeta-ugc-wireframes/v1.0.0/index.html').read_text(encoding='utf-8')
+        for phrase in ['미집행', '가상 데이터', '보조 도식', '추가 검토안', '마이페이지', '원작자', '채팅 제출자']:
+            self.assertIn(phrase, detail)
+        self.assertEqual(detail.count('<section aria-labelledby='), 5)
+        self.assertNotIn('<img', demo)
+        self.assertNotIn('Task/', detail + demo)
+        self.assertNotIn('04-profile_', demo)
+        self.assertIn('data-screen="mypage"', demo)
+        self.assertNotIn('class="app-nav" aria-label="예시 앱 주요 메뉴"><button type="button" data-go="profile"', demo)
+        self.assertIn('공개 포크 · 제안', demo)
+        self.assertIn("connect-src 'none'", demo)
+        self.assertIn('noscript', demo)
+
     def test_homepage_script_needs_explicit_flag_and_exact_hash(self):
         code = "document.body.classList.add('ready');"
         policy = dict(POLICY, javascript_allowed=True, homepage_script_allowed=True,
@@ -291,12 +307,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 67)
+        self.assertEqual(result["html_pages"], 75)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.4.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.3.1/').replace('profile/v1.0.3/','profile/v1.2.5/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.5.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.3.2/').replace('profile/v1.0.3/','profile/v1.2.6/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -322,7 +338,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.4.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.5.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
