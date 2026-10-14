@@ -17,6 +17,12 @@
     ],
     "components/stock-project/v1.1.0/index.html": [
       "sha256-qKMR9KiKmg/+IBpJmPtBHTlgo1q5NlHYHoLC2TRPQhI="
+    ],
+    "components/projects/v1.6.0/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/varco-project/v1.1.0/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
     ]
   },
   "approved_youtube_embeds": {
@@ -24,6 +30,9 @@
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ],
     "components/varco-project/v1.0.1/index.html": [
+      "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
+    ],
+    "components/varco-project/v1.1.0/index.html": [
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ]
   },
@@ -45,6 +54,24 @@
       "media_type": "image/jpeg",
       "width": 1280,
       "height": 720
+    },
+    "assets/city-of-rubble/v1.0.0/main.jpg": {
+      "sha256": "ec134b65d0fdbf5644402271265370b803697f3aba820dfead1e42f584e99d23",
+      "media_type": "image/jpeg",
+      "width": 1920,
+      "height": 1080
+    },
+    "assets/city-of-rubble/v1.0.0/ingame-01.jpg": {
+      "sha256": "0557eae323422b8995ca55a78f4f74876dff053db3ed0907c3496fcf6f1bab66",
+      "media_type": "image/jpeg",
+      "width": 2560,
+      "height": 1440
+    },
+    "assets/city-of-rubble/v1.0.0/ingame-02.jpg": {
+      "sha256": "89d899398a73171798f76b692bdc392c039f192887d7d9e61d4153973fb21154",
+      "media_type": "image/jpeg",
+      "width": 1920,
+      "height": 1080
     }
   },
   "approved_page_images": {
@@ -52,6 +79,15 @@
       "assets/heros-chef/v1.0.0/main.png",
       "assets/heros-chef/v1.0.0/battle.jpg",
       "assets/heros-chef/v1.0.0/recipe.jpg"
+    ],
+    "components/projects/v1.6.0/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/city-of-rubble/v1.0.0/main.jpg"
+    ],
+    "components/varco-project/v1.1.0/index.html": [
+      "assets/city-of-rubble/v1.0.0/main.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-01.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-02.jpg"
     ]
   }
 }
