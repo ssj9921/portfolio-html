@@ -4,10 +4,10 @@
     {
       "id": "homepage",
       "name": "Selected Work",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "path": "index.html",
-      "sha256": "d1d781fd059ae13d0776b398fdfc253678d388975db5cda1a4df8a7cacd64dba",
-      "source_sha256": "d1d781fd059ae13d0776b398fdfc253678d388975db5cda1a4df8a7cacd64dba"
+      "sha256": "ece62ec3c5adea212270743f76978e04a709ff43274cf2928fa4de028ee28828",
+      "source_sha256": "ece62ec3c5adea212270743f76978e04a709ff43274cf2928fa4de028ee28828"
     },
     {
       "id": "editorial-hero",
@@ -184,6 +184,22 @@
       "path": "components/projects/v1.3.0/index.html",
       "sha256": "66a8802ba0bc5b57252a0b325de7b08ce83696bc892120c9988137de64743293",
       "source_sha256": "66a8802ba0bc5b57252a0b325de7b08ce83696bc892120c9988137de64743293"
+    },
+    {
+      "id": "heros-chef-project",
+      "name": "용사의 쉐프 — Project",
+      "version": "1.1.0",
+      "path": "components/heros-chef-project/v1.1.0/index.html",
+      "sha256": "86c44393e3f2e8cd2f160085664f79c5998f0c3708475dabce40694ddd714c15",
+      "source_sha256": "f52ac85fa163eb8a3fe4be7ccac7e210175b9e4fd44c621b78725f1b8d8ac70e"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "version": "1.4.0",
+      "path": "components/projects/v1.4.0/index.html",
+      "sha256": "995b8a04231746cc170bfc6f73d702dd53611537062f7d18d8a59cd21a7e5e1e",
+      "source_sha256": "995b8a04231746cc170bfc6f73d702dd53611537062f7d18d8a59cd21a7e5e1e"
     }
   ]
 }

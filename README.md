@@ -32,8 +32,14 @@ Keep unfinished authoring, private evidence and the approval manifest in a separ
 
 ## Scoped YouTube support
 
+City Of Rubble v1.0.0 is now published with its reviewed video and Projects entry. The earlier reservation below describes the initial support change; playback verification remains distinct from page publication.
+
 policy.json reserves components/varco-project/v1.0.0/index.html for the approved CityOfRubble video, QewprwQ5BGc. This support change does not publish that component or alter any existing HTML page. The new component must be separately reviewed, added to the catalog, and tested before publication.
 
 The checker derives a page-specific CSP from that exact route and exact youtube-nocookie.com/embed URL. Every other page keeps frame-src 'none'. The iframe must use the fixed reviewed attributes in tools/check_public.py, including a title, lazy loading, restricted permissions, sandbox, and strict-origin-when-cross-origin referrer policy. It cannot use autoplay, URL parameters, srcdoc, event handlers, or additional attributes. An ordinary approved YouTube watch link is required beside the player. The page-level no-referrer policy remains in place for ordinary navigation.
 
 Privacy-enhanced mode does not make the remote player an offline or first-party resource. YouTube runs its own code and can contact its services within the cross-origin frame. The checker verifies the permitted markup and CSP; it cannot establish video availability or successful playback. Verify the actual HTTPS embed page in a browser after publication.
+
+## Reviewed screenshots
+
+Chef v1.1.0 includes three owner-approved screenshots under assets/heros-chef/v1.0.0. The asset policy records exact SHA256 hashes, dimensions and image types; the page policy records where each image can be used. Public PNG text metadata is stripped with pixel content preserved. The checker rejects other binaries, altered bytes, private metadata and unapproved image references in both the working tree and outgoing commits. Images use responsive 16:9 layout with descriptive alternatives and full-size links.

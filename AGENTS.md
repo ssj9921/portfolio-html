@@ -8,4 +8,6 @@ The owner authorized first-party JavaScript on 2026-10-14. Allow only reviewed i
 
 Run python tools/check_public.py and python -m unittest discover -s tests before every commit and upload. Stop if either check fails. Versioned component routes are immutable; a source or policy change requires a new component version. Root index.html is the current navigation page.
 
+The owner approved three Chef screenshots on 2026-10-14. Only immutable PNG/JPEG assets registered by exact hash, dimensions and media type in approved_image_assets may be exported. approved_page_images limits their use to reviewed component routes. Those pages use img-src 'self'; every image source and attribute is checked against the exact asset list. Other pages retain img-src 'none'. Strip private metadata in public copies without changing pixels; preserve originals outside this repository. Do not generalize this exception to remote assets, SVG, data URLs or other binaries.
+
 Use the existing repository and main branch, publishing the docs/ directory through GitHub Pages. Run checks before any push; no CI deployment gate is installed because the current login lacks workflow scope. Do not change visibility, attach private data sources, disable the local security gate or weaken the policy. Never print tokens or store them in source, logs or Git.

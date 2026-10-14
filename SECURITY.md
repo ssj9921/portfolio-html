@@ -58,4 +58,10 @@ The iframe alone uses strict-origin-when-cross-origin, sending only the public s
 
 After publishing an embed page, check frame loading, CSP, no autoplay, the fallback link, layout, and actual playback separately. A loaded iframe or buffering indicator is not proof that video playback succeeded.
 
+## Local image exception
+
+The 2026-10-14 Chef screenshot approval permits only exact immutable PNG/JPEG assets registered in approved_image_assets and assigned to component routes in approved_page_images. The source export contains no private filesystem paths. Each asset is limited to 2 MiB and 8192 pixels per dimension, with signature, dimensions, metadata and SHA256 verification. PNG text/EXIF metadata and JPEG EXIF/comments are rejected. Each image requires a descriptive alt, exact intrinsic dimensions, explicit loading/decoding and the reviewed class. Arbitrary srcset, remote/data URLs, SVG and other binary formats remain prohibited.
+
+Only an approved image page receives img-src 'self'; markup verification enforces the exact relative asset paths. Other CSP directives and previously published pages stay unchanged. Both current-tree and outgoing-history gates inspect registered binary bytes, reject missing assets and prohibit unregistered binary files. Public copies retain the original visual pixels. Run real image response and responsive rendering checks after publication.
+
 References: [YouTube embedding, privacy-enhanced mode and referrer requirements](https://support.google.com/youtube/answer/171780?hl=en), [YouTube player parameters](https://developers.google.com/youtube/player_parameters).

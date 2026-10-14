@@ -9,7 +9,7 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import unquote, urlsplit
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from check_public import CSP, IFRAME_ATTRIBUTES, page_csp, script_hash, SecurityError, validate_html, validate_repository, validate_outgoing_history
+from check_public import CSP, IFRAME_ATTRIBUTES, page_csp, script_hash, SecurityError, validate_html, validate_repository, validate_outgoing_history, validate_image
 
 POLICY = {"approved_external_links": ["https://example.com/public"], "approved_contacts": []}
 
@@ -244,12 +244,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 23)
+        self.assertEqual(result["html_pages"], 25)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.3.0/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.4.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.1.0/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -275,7 +275,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.3.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.4.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
@@ -382,6 +382,12 @@ class PortfolioMigrationTests(unittest.TestCase):
                 if parsed.scheme or parsed.netloc:
                     continue
                 target = (path.parent / unquote(parsed.path)).resolve() if parsed.path else path
+                if target.suffix in {'.png','.jpg'}:
+                    policy=json.loads((self.root/'policy.json').read_text(encoding='utf-8'))
+                    self.assertIn(target.relative_to(site).as_posix(),policy['approved_image_assets'])
+                    self.assertTrue(target.is_file())
+                    self.assertFalse(parsed.fragment)
+                    continue
                 self.assertIn(target, pages, f"Missing route: {href}")
                 if parsed.fragment:
                     self.assertIn(unquote(parsed.fragment), pages[target].ids, f"Missing anchor: {href}")
@@ -528,6 +534,61 @@ class VarcoReleaseTests(unittest.TestCase):
         self.assertEqual(listing.count('class="project-card"'),3)
         self.assertIn('../../stock-project/v1.1.0/index.html#work',listing)
         self.assertIn('../../varco-project/v1.0.0/index.html',listing)
+
+
+class ReviewedImageTests(unittest.TestCase):
+    root=Path(__file__).resolve().parents[1]
+    route='components/heros-chef-project/v1.1.0/index.html'
+
+    def setUp(self):
+        self.policy=json.loads((self.root/'policy.json').read_text(encoding='utf-8'))
+        self.html=(self.root/'docs'/self.route).read_text(encoding='utf-8')
+        self.asset='assets/heros-chef/v1.0.0/main.png'
+        self.data=(self.root/'docs'/self.asset).read_bytes()
+
+    def test_image_permissions_are_exact_and_require_accessible_layout(self):
+        validate_html(self.html,self.policy,route=self.route)
+        for changed in (self.html.replace('../../../assets/heros-chef/v1.0.0/main.png','https://example.com/main.png'),self.html.replace('../../../assets/heros-chef/v1.0.0/main.png','../../../assets/heros-chef/v1.0.0/unreviewed.png'),self.html.replace('width="1280"','width="1279"'),self.html.replace('decoding="async"','onload="alert(1)"'),re.sub(r'alt="[^"]*"','alt=""',self.html),self.html.replace("img-src 'self'","img-src *")):
+            with self.subTest(changed=changed[:20]),self.assertRaises(SecurityError):validate_html(changed,self.policy,route=self.route)
+        with self.assertRaises(SecurityError):validate_html(self.html,self.policy,route='index.html')
+        self.assertEqual(page_csp(self.policy,'index.html'),CSP)
+
+    def test_binary_hash_and_private_metadata_are_checked(self):
+        import struct,zlib
+        meta=self.policy['approved_image_assets'][self.asset]
+        validate_image(self.data,self.asset,meta)
+        with self.assertRaises(SecurityError):validate_image(self.data+b'extra',self.asset,meta)
+        payload=b'tEXt'+b'Author\x00private';chunk=struct.pack('>I',len(payload)-4)+payload+struct.pack('>I',zlib.crc32(payload)&0xffffffff)
+        changed=self.data[:33]+chunk+self.data[33:]
+        with self.assertRaises(SecurityError):validate_image(changed,self.asset,{**meta,'sha256':hashlib.sha256(changed).hexdigest()})
+
+    def test_unregistered_binary_and_tampered_history_fail(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder); target=root/'docs'/self.route;target.parent.mkdir(parents=True)
+            target.write_text(self.html,encoding='utf-8',newline='\n')
+            policy=dict(self.policy)
+            policy['approved_inline_scripts']={};policy['approved_youtube_embeds']={}
+            (root/'policy.json').write_text(json.dumps(policy),encoding='utf-8')
+            for name in policy['approved_image_assets']:
+                asset=root/'docs'/name;asset.parent.mkdir(parents=True,exist_ok=True);asset.write_bytes((self.root/'docs'/name).read_bytes())
+            (root/'docs/catalog.json').write_text(json.dumps({'pages':[{'path':self.route,'sha256':hashlib.sha256(target.read_bytes()).hexdigest()}]}),encoding='utf-8')
+            # The full page has navigation; history validation checks route-scoped approvals without requiring unrelated pages.
+            def git(*args):subprocess.run(['git','-c','safe.directory='+root.as_posix(),*args],cwd=root,check=True,capture_output=True)
+            git('init','--initial-branch=main');git('config','user.name','Review test');git('config','user.email','review'+'@example.invalid');git('add','.');git('commit','-m','Reviewed images')
+            self.assertEqual(validate_outgoing_history(root)['outgoing_commits_checked'],1)
+            (root/'docs'/self.asset).write_bytes(self.data+b'tampered');git('add','.');git('commit','-m','Tampered image')
+            with self.assertRaises(SecurityError):validate_outgoing_history(root)
+            with self.assertRaises(SecurityError):validate_repository(root)
+
+    def test_chef_content_and_three_full_size_images(self):
+        old=(self.root/'docs/components/heros-chef-project/v1.0.3/index.html').read_text(encoding='utf-8')
+        for anchor in ('idea','environment','work','comment'):
+            pattern=r'<section aria-labelledby="'+anchor+r'">.*?</section>'
+            self.assertEqual(re.search(pattern,old,re.S)[0],re.search(pattern,self.html,re.S)[0])
+        self.assertEqual(self.html.count('<img '),3)
+        self.assertEqual(self.html.count('class="screenshot screenshot-hero"'),1)
+        self.assertIn('object-fit:contain',self.html)
+        self.assertIn('grid-template-columns:minmax(0,1fr)',self.html)
 
 
 if __name__ == "__main__":

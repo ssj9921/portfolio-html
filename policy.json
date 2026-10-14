@@ -21,5 +21,32 @@
     "components/varco-project/v1.0.0/index.html": [
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ]
+  },
+  "approved_image_assets": {
+    "assets/heros-chef/v1.0.0/main.png": {
+      "sha256": "43a2cd26ba43df0a70a504c29f1c3b3540153d3aeea81c2ee2320eeba4232cdd",
+      "media_type": "image/png",
+      "width": 1280,
+      "height": 720
+    },
+    "assets/heros-chef/v1.0.0/battle.jpg": {
+      "sha256": "ef0377d929ba0f15401b441eb77e20c5beba1d9b6045e2ac11e7bf28fe5fec37",
+      "media_type": "image/jpeg",
+      "width": 1280,
+      "height": 720
+    },
+    "assets/heros-chef/v1.0.0/recipe.jpg": {
+      "sha256": "c805db0809408cd8e7e94d72cdbce194ba84c3396c68390ba1cba69906c8bd56",
+      "media_type": "image/jpeg",
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "approved_page_images": {
+    "components/heros-chef-project/v1.1.0/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/heros-chef/v1.0.0/battle.jpg",
+      "assets/heros-chef/v1.0.0/recipe.jpg"
+    ]
   }
 }

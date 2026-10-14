@@ -6,6 +6,9 @@ import hashlib
 import json
 import re
 import subprocess
+import posixpath
+import struct
+import zlib
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -20,6 +23,7 @@ PUBLIC_FILES = {".gitignore", ".gitattributes", "AGENTS.md", "README.md", "SECUR
                 "tools/check_public.py", "tests/test_public.py", "docs/.nojekyll",
                 "docs/index.html", "docs/catalog.json"}
 COMPONENT_PATH = re.compile(r"docs/components/[a-z0-9][a-z0-9-]*/v\d+\.\d+\.\d+/index\.html")
+IMAGE_PATH = re.compile(r"assets/[a-z0-9][a-z0-9-]*/v\d+\.\d+\.\d+/[a-z0-9][a-z0-9-]*\.(?:png|jpg)")
 YOUTUBE_EMBED = re.compile(r"https://www\.youtube-nocookie\.com/embed/[A-Za-z0-9_-]{11}")
 IFRAME_ATTRIBUTES = {
     "width": "560", "height": "315", "loading": "lazy",
@@ -94,12 +98,78 @@ def script_hash(source):
     return "sha256-" + base64.b64encode(hashlib.sha256(source.encode("utf-8")).digest()).decode("ascii")
 
 
+def approved_images(policy, route=None):
+    assets = policy.get('approved_image_assets', {})
+    pages = policy.get('approved_page_images', {})
+    if not isinstance(assets, dict) or not isinstance(pages, dict):
+        raise SecurityError('Image approvals must be exact maps')
+    for name, meta in assets.items():
+        if not isinstance(name, str) or not IMAGE_PATH.fullmatch(name) or not isinstance(meta, dict):
+            raise SecurityError('Images require immutable local asset paths')
+        if set(meta) != {'sha256','media_type','width','height'} or not re.fullmatch(r'[0-9a-f]{64}',str(meta['sha256'])):
+            raise SecurityError('Images require exact review hashes and dimensions')
+        expected = 'image/png' if name.endswith('.png') else 'image/jpeg'
+        if meta['media_type'] != expected or any(type(meta[k]) is not int or not 1 <= meta[k] <= 8192 for k in ('width','height')):
+            raise SecurityError('Invalid image format or dimensions')
+    for name, images in pages.items():
+        if not COMPONENT_PATH.fullmatch('docs/'+name) or not isinstance(images,list) or not images or len(images)!=len(set(images)) or any(i not in assets for i in images):
+            raise SecurityError('Each image page requires exact registered assets')
+    if set(assets) != {i for images in pages.values() for i in images}:
+        raise SecurityError('Every image must be assigned to a reviewed page')
+    return assets, pages.get(route, [])
+
+
+def validate_image(data, name, meta):
+    if len(data)>2*1024*1024 or hashlib.sha256(data).hexdigest()!=meta['sha256']:
+        raise SecurityError('Image exceeds size limit or differs from reviewed bytes')
+    dimensions=None
+    if name.endswith('.png'):
+        if not data.startswith(b'\x89PNG\r\n\x1a\n'):
+            raise SecurityError('Invalid PNG signature')
+        offset=8
+        while offset<len(data):
+            if offset+12>len(data):raise SecurityError('Incomplete PNG')
+            length=int.from_bytes(data[offset:offset+4],'big');kind=data[offset+4:offset+8]
+            end=offset+12+length; payload=data[offset+8:offset+8+length]
+            if end>len(data) or kind not in {b'IHDR',b'IDAT',b'IEND',b'sRGB',b'gAMA',b'cHRM',b'pHYs',b'PLTE',b'tRNS'}:
+                raise SecurityError('PNG metadata or malformed chunk is prohibited')
+            if zlib.crc32(kind+payload)&0xffffffff != int.from_bytes(data[end-4:end],'big'):
+                raise SecurityError('Invalid PNG checksum')
+            if kind==b'IHDR':dimensions=struct.unpack('>II',payload[:8])
+            offset=end
+            if kind==b'IEND':break
+        if offset!=len(data) or kind!=b'IEND':raise SecurityError('PNG trailing or missing data')
+    else:
+        if not data.startswith(b'\xff\xd8') or not data.endswith(b'\xff\xd9'):raise SecurityError('Invalid JPEG signature')
+        offset=2
+        while offset<len(data)-2:
+            if data[offset]!=255:raise SecurityError('Malformed JPEG segment')
+            marker=data[offset+1];offset+=2
+            if marker==0xda:break
+            length=int.from_bytes(data[offset:offset+2],'big')
+            if length<2 or offset+length>len(data):raise SecurityError('Malformed JPEG length')
+            if marker==0xfe or 0xe1<=marker<=0xed or marker==0xef:raise SecurityError('JPEG private metadata prohibited')
+            if marker in {0xc0,0xc1,0xc2}:
+                height,width=struct.unpack('>HH',data[offset+3:offset+7]);dimensions=(width,height)
+            offset+=length
+    if dimensions!=(meta['width'],meta['height']):raise SecurityError('Image dimensions do not match review')
+
+
+def image_target(src, route):
+    parsed=urlsplit(src)
+    if not route or parsed.scheme or parsed.netloc or parsed.query or parsed.fragment or src.startswith('/') or re.search(r'[\\%\s]',src):
+        raise SecurityError('Image source must be an exact local relative path')
+    return posixpath.normpath(posixpath.join(posixpath.dirname(route),src))
+
+
 def page_csp(policy, route=None):
     urls = approved_embeds(policy, route)
     csp = CSP.replace("frame-src 'none'", "frame-src " + " ".join(urls)) if urls else CSP
     hashes = approved_scripts(policy, route)
     if hashes:
         csp = csp.replace("script-src 'none'", "script-src " + " ".join("'" + h + "'" for h in hashes) + "; script-src-attr 'none'")
+    if approved_images(policy,route)[1]:
+        csp = csp.replace("img-src 'none'", "img-src 'self'")
     return csp
 
 
@@ -109,6 +179,7 @@ def validate_html(text, policy, path=None, site=None, route=None):
         route = Path(path).resolve().relative_to(Path(site).resolve()).as_posix()
     embed_urls = approved_embeds(policy, route)
     script_hashes = approved_scripts(policy, route)
+    image_assets, image_paths = approved_images(policy,route)
     expected_csp = page_csp(policy, route)
     for value in EMAIL.findall(text) + PHONE.findall(text):
         if value not in policy.get("approved_contacts", []):
@@ -123,6 +194,7 @@ def validate_html(text, policy, path=None, site=None, route=None):
             self.charset = False
             self.viewport = False
             self.frames = set()
+            self.images = set()
             self.links = set()
             self.iframe_open = False
             self.script_open = False
@@ -143,6 +215,16 @@ def validate_html(text, policy, path=None, site=None, route=None):
                     raise SecurityError("Only reviewed inline classic scripts after CSP are allowed")
                 self.script_open = True
                 self.script_text = ""
+            if tag == 'img':
+                if not self.csp or set(values)!={'src','alt','width','height','loading','decoding','class'}:
+                    raise SecurityError('Images require reviewed attributes after CSP')
+                target=image_target(values.get('src',''),route)
+                if target not in image_paths or target in self.images:
+                    raise SecurityError('Unapproved or duplicate image')
+                meta=image_assets[target]
+                if not values['alt'].strip() or len(values['alt'])>240 or values['width']!=str(meta['width']) or values['height']!=str(meta['height']) or values['loading'] not in {'eager','lazy'} or values['decoding']!='async' or values['class']!='project-image':
+                    raise SecurityError('Image description, layout or loading attributes invalid')
+                self.images.add(target)
             if tag == "iframe":
                 if not self.csp:
                     raise SecurityError("CSP must precede embedded resources")
@@ -160,7 +242,7 @@ def validate_html(text, policy, path=None, site=None, route=None):
                 self.frames.add(src)
                 self.iframe_open = True
             for name, value in attrs:
-                if tag == "iframe" and name == "src":
+                if tag in {"iframe", "img"} and name == "src":
                     continue
                 if name.startswith("on") or name in {"srcdoc", "src", "srcset", "poster", "data", "xlink:href"}:
                     raise SecurityError("Executable attributes and remote resources are prohibited")
@@ -253,6 +335,8 @@ def validate_html(text, policy, path=None, site=None, route=None):
         raise SecurityError("Embedded frame is not closed")
     if page.frames != set(embed_urls):
         raise SecurityError("An embed exception must contain exactly its approved video frames")
+    if page.images != set(image_paths):
+        raise SecurityError('Image page must include exactly its reviewed assets')
     if any(youtube_watch_url(url) not in page.links for url in page.frames):
         raise SecurityError("Every embedded video requires an ordinary watch-on-YouTube fallback")
     if not all((page.csp, page.referrer, page.charset, page.viewport)):
@@ -262,6 +346,7 @@ def validate_html(text, policy, path=None, site=None, route=None):
 def validate_repository(root):
     root = Path(root).resolve()
     policy = json.loads((root / "policy.json").read_text(encoding="utf-8"))
+    images,_ = approved_images(policy)
     files = []
     for path in root.rglob("*"):
         relative = path.relative_to(root).as_posix()
@@ -270,6 +355,10 @@ def validate_repository(root):
         if path.is_symlink():
             raise SecurityError("Symbolic links must never enter the public export")
         if not path.is_file():
+            continue
+        if relative.removeprefix('docs/') in images and relative.startswith('docs/'):
+            validate_image(path.read_bytes(),relative.removeprefix('docs/'),images[relative.removeprefix('docs/')])
+            files.append(relative)
             continue
         if relative not in PUBLIC_FILES and not COMPONENT_PATH.fullmatch(relative):
             raise SecurityError("Unexpected file in public export: " + relative)
@@ -281,6 +370,7 @@ def validate_repository(root):
             validate_html(text, policy, path, root / "docs")
         files.append(relative)
     catalog = json.loads((root / "docs/catalog.json").read_text(encoding="utf-8"))
+    if {'docs/'+n for n in images} - set(files):raise SecurityError('Approved image asset is missing')
     entries = catalog["pages"]
     if len({p["path"] for p in entries}) != len(entries):
         raise SecurityError("Duplicate catalog routes")
@@ -305,12 +395,15 @@ def validate_outgoing_history(root):
     commits = git("rev-list", "HEAD", "--not", "--remotes").decode().splitlines()
     for commit in commits:
         policy = json.loads(git("show", commit + ":policy.json").decode("utf-8"))
+        images,_ = approved_images(policy)
         blobs = {}
         for line in git("ls-tree", "-r", "--format=%(objectmode) %(objectname) %(path)", commit).decode().splitlines():
             mode, sha, name = line.split(" ", 2)
-            if mode not in {"100644", "100755"} or (name not in PUBLIC_FILES and not COMPONENT_PATH.fullmatch(name)):
+            if mode not in {"100644", "100755"} or (name not in PUBLIC_FILES and not COMPONENT_PATH.fullmatch(name) and name not in {'docs/'+i for i in images}):
                 raise SecurityError("Unexpected file or link in outgoing Git history")
             data = git("cat-file", "blob", sha)
+            if name in {'docs/'+i for i in images}:
+                validate_image(data,name.removeprefix('docs/'),images[name.removeprefix('docs/')]);blobs[name]=data;continue
             if len(data) > 250 * 1024:
                 raise SecurityError("Oversized file in outgoing Git history")
             text = data.decode("utf-8")
@@ -319,6 +412,7 @@ def validate_outgoing_history(root):
                 validate_html(text, policy, route=name.removeprefix("docs/"))
             blobs[name] = data
         catalog = json.loads(blobs["docs/catalog.json"])
+        if {'docs/'+n for n in images} - set(blobs):raise SecurityError('Approved image missing from history')
         routes = {p["path"] for p in catalog["pages"]}
         if routes != {name.removeprefix("docs/") for name in blobs if name.endswith(".html")}:
             raise SecurityError("Unregistered HTML in outgoing Git history")
