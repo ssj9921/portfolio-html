@@ -4,10 +4,10 @@
     {
       "id": "homepage",
       "name": "Selected Work",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "path": "index.html",
-      "sha256": "bbfa5a1ec138847f39c98b86f16f3681dcd039aa10280ac56c065902fc984010",
-      "source_sha256": "bbfa5a1ec138847f39c98b86f16f3681dcd039aa10280ac56c065902fc984010"
+      "sha256": "e415c62772b89091f07013901f9abda8a09de18d1020c0a8fd311208dde1be1b",
+      "source_sha256": "e415c62772b89091f07013901f9abda8a09de18d1020c0a8fd311208dde1be1b"
     },
     {
       "id": "editorial-hero",
@@ -63,7 +63,7 @@
       "version": "1.0.0",
       "path": "components/heros-chef-project/v1.0.0/index.html",
       "sha256": "7c6c01c56ec2940738ea7f2ec29db18cd1f1ecc24142f5f014cc84daccbdb5b5",
-      "source_sha256": "bb56693b6bc5daa300e8fc58d55b73f39b588e42ffc613cc5334796634736444"
+      "source_sha256": "7c6c01c56ec2940738ea7f2ec29db18cd1f1ecc24142f5f014cc84daccbdb5b5"
     },
     {
       "id": "profile",
@@ -71,7 +71,7 @@
       "version": "1.0.0",
       "path": "components/profile/v1.0.0/index.html",
       "sha256": "255c731b619d0d40de9e5f897b6f589eb22c4608d9060eb85892ece6d0a21520",
-      "source_sha256": "4f97333f775b573a0d659488b1fe00f9cbc06f9bf806314baf883afde5e79ed5"
+      "source_sha256": "255c731b619d0d40de9e5f897b6f589eb22c4608d9060eb85892ece6d0a21520"
     },
     {
       "id": "heros-chef-project",
@@ -112,6 +112,46 @@
       "path": "components/heros-chef-project/v1.0.2/index.html",
       "sha256": "5a65a0c1f32e3473ff1a04593a2cc5f826b8e305c97e5ac52dfa85dfa5195107",
       "source_sha256": "5a65a0c1f32e3473ff1a04593a2cc5f826b8e305c97e5ac52dfa85dfa5195107"
+    },
+    {
+      "id": "profile",
+      "name": "Profile",
+      "version": "1.0.3",
+      "path": "components/profile/v1.0.3/index.html",
+      "sha256": "780aecb59a5c7d6bb0250815af06da00747384abcb4674da7a8afa7af6422fbc",
+      "source_sha256": "780aecb59a5c7d6bb0250815af06da00747384abcb4674da7a8afa7af6422fbc"
+    },
+    {
+      "id": "heros-chef-project",
+      "name": "용사의 쉐프 · Project",
+      "version": "1.0.3",
+      "path": "components/heros-chef-project/v1.0.3/index.html",
+      "sha256": "5368299cb95182b3a6d0873873d406c7731ba1f463014013998b4bb2b3eab008",
+      "source_sha256": "5368299cb95182b3a6d0873873d406c7731ba1f463014013998b4bb2b3eab008"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "version": "1.1.0",
+      "path": "components/projects/v1.1.0/index.html",
+      "sha256": "a9d48b07cb2841e661cbda423716d9e64a2d021c2195f0d4021c64ccb47d6651",
+      "source_sha256": "a9d48b07cb2841e661cbda423716d9e64a2d021c2195f0d4021c64ccb47d6651"
+    },
+    {
+      "id": "stock-project",
+      "name": "그때 샀다면? · Project",
+      "version": "1.0.0",
+      "path": "components/stock-project/v1.0.0/index.html",
+      "sha256": "361b80b2ae98acd8b181b1f70f3c154bee847e0e578b873ef6d8e646154a2c1b",
+      "source_sha256": "c5ac2d812fcf4c0e42f37723024e637c552e0080df6a46fa8429e3e14eae2ed3"
+    },
+    {
+      "id": "stock-demo",
+      "name": "그때 샀다면? · Interactive Demo",
+      "version": "1.0.0",
+      "path": "components/stock-demo/v1.0.0/index.html",
+      "sha256": "ba64c797f5e479b79ab157ffb38681c02cafbcca6ff134c3ee4d6383542fe48a",
+      "source_sha256": "2c3f2f188857958296d1fb3fac4ed5a257ada9a0f6bd21cf9a840b458cf66ed9"
     }
   ]
 }

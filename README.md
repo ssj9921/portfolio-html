@@ -13,7 +13,7 @@ Personal and career details in Profile are limited to the owner-approved name, I
 
 Only the docs/ directory is published by GitHub Pages from main. The publisher checks the entire public export and its HTML, and the local pre-push hook checks it again before upload. Security regression tests must pass before committing.
 
-The first-party pages use no JavaScript, external libraries, analytics or remote assets. An explicitly approved, route-scoped YouTube embed is supported as the sole external-player exception. See [security policy](SECURITY.md). Private work records and new unapproved career statements are not part of this repository.
+Reviewed first-party JavaScript is supported using route-specific SHA256 CSP hashes. Stock uses two self-contained scripts and no external libraries, analytics, storage or network API. Existing static pages retain their original CSP. An explicitly approved, route-scoped YouTube embed remains the sole external-player exception. See [security policy](SECURITY.md). Private work records and new unapproved career statements are not part of this repository.
 
 Before uploading, run:
 

@@ -12,7 +12,7 @@ This repository and its complete commit history are public. Client-side hiding, 
 
 - Secrets, access tokens, API keys, passwords, signed attachment links or embedded credentials.
 - Internal Notion links, private source documents, company materials, unpublished career details, unapproved personal contact information, local paths or local development addresses.
-- First-party JavaScript, event handlers, execution URLs, external libraries, external CSS, remote images/fonts, arbitrary iframe/embed, forms, tracking, browser storage and server-dependent features. The sole iframe exception is the reviewed YouTube player described below.
+- Unreviewed JavaScript, event attributes, execution URLs, external libraries, external CSS, remote images/fonts, arbitrary iframe/embed, forms, tracking, browser storage and server-dependent features. The sole iframe exception is the reviewed YouTube player described below.
 - Symbolic links, binary attachments, unregistered files, unlisted HTML or catalog hashes that do not match.
 - New personal roles, career or outcome claims without owner approval of their concrete wording.
 
@@ -32,7 +32,7 @@ Component versions are immutable. If HTML or security metadata changes, create a
 
 ## Browser policy and hosting limits
 
-The first-party page CSP blocks scripts, resource loading, connections and form submissions. Only inline CSS is allowed. Frames remain blocked unless that exact versioned route has an approved YouTube exception below. Navigation uses approved HTTPS URLs and new-window links use noopener and noreferrer. The page-level no-referrer metadata prevents sending the page URL through ordinary navigation.
+By default the first-party page CSP blocks scripts, resource loading, connections and form submissions. Reviewed inline JavaScript can be authorized by exact content hashes on its immutable route, as described below. Inline CSS is allowed. Frames remain blocked unless that exact versioned route has an approved YouTube exception below. Navigation uses approved HTTPS URLs and new-window links use noopener and noreferrer. The page-level no-referrer metadata prevents sending the page URL through ordinary navigation.
 
 The CSP is delivered through HTML metadata. It does not implement HTTP-only directives such as frame-ancestors, and it does not restrict who can read this public source. No claim is made that GitHub Pages provides custom response-header enforcement. Use ordinary Notion links rather than relying on embedding behavior.
 
@@ -40,7 +40,13 @@ If a sensitive value is discovered, stop publication, remove it from source and 
 
 References: [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages), [MDN CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP).
 
-## Approved YouTube player exception
+## Reviewed first-party JavaScript
+
+The owner's 2026-10-14 authorization replaces the earlier blanket JavaScript prohibition. Set javascript_allowed to true and register SHA256 hashes in approved_inline_scripts for each exact immutable component route. The exporter and checker require all and only those complete inline classic scripts, without attributes. The CSP permits those hashes and explicitly blocks script event attributes; it does not permit unsafe-inline, unsafe-eval, arbitrary same-origin scripts, external scripts, modules or dynamic imports. Changing code requires renewed content review, new hashes and a new component version.
+
+This is a reviewed-source policy, not an automatic proof that arbitrary JavaScript is safe. Inspect code for network requests, navigation, storage, tracking and access to private information before registering its hashes. The Stock demo has no such behavior; its state is in memory. Connections, images, fonts, objects and forms remain blocked because this release needs none. Browser-native dialogs, controls and inline CSS require no additional resource origins. Hash and route checks also cover unpublished Git history. Review public content and run browser tests with the actual CSP after export.
+
+## Approved YouTube player exception (unchanged)
 
 Only policy.json's approved_youtube_embeds mapping may authorize a frame. Each entry maps one immutable component route to exact HTTPS URLs matching https://www.youtube-nocookie.com/embed/VIDEO_ID. No other host, wildcard, path, query parameter, playlist, or unregistered page is permitted. Adding another video or changing the allowed route requires explicit review. A reserved route is not evidence that a page is published or its content is approved.
 

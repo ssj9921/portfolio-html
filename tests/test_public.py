@@ -9,7 +9,7 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import unquote, urlsplit
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
-from check_public import CSP, IFRAME_ATTRIBUTES, page_csp, SecurityError, validate_html, validate_repository, validate_outgoing_history
+from check_public import CSP, IFRAME_ATTRIBUTES, page_csp, script_hash, SecurityError, validate_html, validate_repository, validate_outgoing_history
 
 POLICY = {"approved_external_links": ["https://example.com/public"], "approved_contacts": []}
 
@@ -244,12 +244,13 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 14)
+        self.assertEqual(result["html_pages"], 19)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            self.assertIn('href="' + route + '"', home)
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.1.0/')
+            self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertNotIn("notion.site", text)
@@ -274,7 +275,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.1.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
@@ -401,6 +402,92 @@ class PortfolioMigrationTests(unittest.TestCase):
         for route, digest in expected.items():
             data = (self.root / "docs/components" / route / "index.html").read_bytes()
             self.assertEqual(hashlib.sha256(data).hexdigest(), digest)
+
+
+class FirstPartyScriptTests(unittest.TestCase):
+    route = 'components/demo/v1.0.0/index.html'
+    code = "document.querySelector('button').addEventListener('click', () => {});"
+
+    def setUp(self):
+        self.hash = script_hash(self.code)
+        self.policy = {**POLICY, 'javascript_allowed': True, 'approved_inline_scripts': {self.route: [self.hash]}}
+        self.html = page('<button>Demo</button><script>' + self.code + '</script>').replace(CSP, page_csp(self.policy, self.route))
+
+    def test_exact_hash_and_route_required(self):
+        validate_html(self.html, self.policy, route=self.route)
+        for route in (None, 'index.html', self.route.replace('1.0.0', '1.0.1')):
+            with self.subTest(route=route), self.assertRaises(SecurityError):
+                validate_html(self.html, self.policy, route=route)
+        self.assertEqual(page_csp(self.policy, 'index.html'), CSP)
+
+    def test_modification_removal_duplicate_and_incomplete_script_fail(self):
+        for text in (self.html.replace(self.code, self.code + ' '),
+                     self.html.replace('<script>' + self.code + '</script>', ''),
+                     self.html.replace('</body>', '<script>' + self.code + '</script></body>'),
+                     self.html.replace('</script>', ''), self.html.replace('<script>', '<script/>')):
+            with self.subTest(text=text), self.assertRaises(SecurityError):
+                validate_html(text, self.policy, route=self.route)
+
+    def test_external_scripts_attributes_and_execution_features_fail(self):
+        for attr in ('src="https://example.com/code.js"', 'src="code.js"', 'type="module"', 'nonce="x"', 'defer'):
+            with self.subTest(attr=attr), self.assertRaises(SecurityError):
+                validate_html(self.html.replace('<script>', '<script '+attr+'>'), self.policy, route=self.route)
+        for extra in ('<div onclick="alert(1)"></div>', '<iframe></iframe>', '<form></form>', '<img src="x.png">'):
+            with self.subTest(extra=extra), self.assertRaises(SecurityError):
+                validate_html(self.html.replace('</body>', extra+'</body>'), self.policy, route=self.route)
+
+    def test_policy_cannot_enable_broad_script_or_network_permissions(self):
+        for text in (self.html.replace("'"+self.hash+"'", "'unsafe-inline'"),
+                     self.html.replace("connect-src 'none'", "connect-src 'self'"),
+                     self.html.replace("script-src-attr 'none'", "script-src-attr 'unsafe-inline'")):
+            with self.subTest(text=text), self.assertRaises(SecurityError):
+                validate_html(text, self.policy, route=self.route)
+        for approved in ([], {'index.html':[self.hash]}, {self.route:[]}, {self.route:['bad']}, {self.route:[self.hash,self.hash]}):
+            with self.subTest(approved=approved), self.assertRaises(SecurityError):
+                validate_html(page(), {**self.policy,'approved_inline_scripts':approved})
+        with self.assertRaises(SecurityError):
+            validate_html(self.html,{**self.policy,'javascript_allowed':False},route=self.route)
+
+    def test_history_also_requires_exact_script_approval(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder); target = root/'docs'/self.route
+            target.parent.mkdir(parents=True); target.write_text(self.html,encoding='utf-8')
+            (root/'policy.json').write_text(json.dumps(self.policy),encoding='utf-8')
+            (root/'docs/catalog.json').write_text(json.dumps({'pages':[{'path':self.route,'sha256':hashlib.sha256(target.read_bytes()).hexdigest()}]}),encoding='utf-8')
+            def git(*args):
+                subprocess.run(['git','-c','safe.directory='+root.as_posix(),*args],cwd=root,check=True,capture_output=True)
+            git('init','--initial-branch=main'); git('config','user.name','Security test'); git('config','user.email','test'+'@example.invalid')
+            git('add','.'); git('commit','-m','Reviewed script')
+            self.assertEqual(validate_outgoing_history(root)['outgoing_commits_checked'],1)
+            target.write_text(self.html.replace(self.code,self.code+' '),encoding='utf-8')
+            git('add','.'); git('commit','-m','Changed script')
+            with self.assertRaises(SecurityError): validate_outgoing_history(root)
+
+class StockReleaseTests(unittest.TestCase):
+    root = Path(__file__).resolve().parents[1] / 'docs'
+
+    def test_new_navigation_preserves_old_documents(self):
+        projects = (self.root/'components/projects/v1.1.0/index.html').read_text(encoding='utf-8')
+        self.assertEqual(projects.count('class="project-card"'),2)
+        for route in ('stock-project','stock-demo'):
+            self.assertIn('../../'+route+'/v1.0.0/index.html',projects)
+        for name in ('heros-chef-project','profile'):
+            old = (self.root/f'components/{name}/v1.0.2/index.html').read_text(encoding='utf-8')
+            expected = old.replace('../../projects/v1.0.0/','../../projects/v1.1.0/').replace('../../profile/v1.0.2/','../../profile/v1.0.3/').replace('../../heros-chef-project/v1.0.2/','../../heros-chef-project/v1.0.3/')
+            self.assertEqual((self.root/f'components/{name}/v1.0.3/index.html').read_text(encoding='utf-8'),expected)
+        self.assertFalse((self.root/'components/varco-project').exists())
+        self.assertFalse((self.root/'components/visual-novel-template').exists())
+
+    def test_stock_keeps_source_boundaries_and_five_sections(self):
+        project = (self.root/'components/stock-project/v1.0.0/index.html').read_text(encoding='utf-8')
+        positions = [project.index('<h2 id="'+anchor+'">') for anchor in ('idea','about','environment','work','comment')]
+        self.assertEqual(positions,sorted(positions))
+        for phrase in ('작성 예정','실제 매매 수익률','가상 예시','실제 사용자 조사나 성과 측정은 수행하지 않았습니다','AI 활용'):
+            self.assertIn(phrase,project)
+        for text in (project,(self.root/'components/stock-demo/v1.0.0/index.html').read_text(encoding='utf-8')):
+            self.assertNotIn('Stock_Reference',text)
+            self.assertNotIn('portfolio.md',text)
+            self.assertNotIn('<iframe',text)
 
 
 if __name__ == "__main__":

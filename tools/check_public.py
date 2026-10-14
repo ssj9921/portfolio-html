@@ -1,6 +1,7 @@
 """Fail-closed checks for the dedicated public HTML export (standard library only)."""
 from __future__ import annotations
 import argparse
+import base64
 import hashlib
 import json
 import re
@@ -73,9 +74,33 @@ def youtube_watch_url(url):
     return "https://www.youtube.com/watch?v=" + url.rsplit("/", 1)[1]
 
 
+def approved_scripts(policy, route):
+    approved = policy.get("approved_inline_scripts", {})
+    if not isinstance(approved, dict):
+        raise SecurityError("Script approvals must map versioned routes to hashes")
+    if approved and policy.get("javascript_allowed") is not True:
+        raise SecurityError("JavaScript requires explicit policy authorization")
+    for key, hashes in approved.items():
+        if not isinstance(key, str) or not COMPONENT_PATH.fullmatch("docs/" + key):
+            raise SecurityError("Scripts require an immutable component route")
+        if (not isinstance(hashes, list) or not hashes
+                or any(not isinstance(h, str) or not re.fullmatch(r"sha256-[A-Za-z0-9+/]{43}=", h) for h in hashes)
+                or len(hashes) != len(set(hashes))):
+            raise SecurityError("Scripts require unique exact SHA256 hashes")
+    return approved.get(route, [])
+
+
+def script_hash(source):
+    return "sha256-" + base64.b64encode(hashlib.sha256(source.encode("utf-8")).digest()).decode("ascii")
+
+
 def page_csp(policy, route=None):
     urls = approved_embeds(policy, route)
-    return CSP.replace("frame-src 'none'", "frame-src " + " ".join(urls)) if urls else CSP
+    csp = CSP.replace("frame-src 'none'", "frame-src " + " ".join(urls)) if urls else CSP
+    hashes = approved_scripts(policy, route)
+    if hashes:
+        csp = csp.replace("script-src 'none'", "script-src " + " ".join("'" + h + "'" for h in hashes) + "; script-src-attr 'none'")
+    return csp
 
 
 def validate_html(text, policy, path=None, site=None, route=None):
@@ -83,6 +108,7 @@ def validate_html(text, policy, path=None, site=None, route=None):
     if path is not None and site is not None:
         route = Path(path).resolve().relative_to(Path(site).resolve()).as_posix()
     embed_urls = approved_embeds(policy, route)
+    script_hashes = approved_scripts(policy, route)
     expected_csp = page_csp(policy, route)
     for value in EMAIL.findall(text) + PHONE.findall(text):
         if value not in policy.get("approved_contacts", []):
@@ -99,6 +125,9 @@ def validate_html(text, policy, path=None, site=None, route=None):
             self.frames = set()
             self.links = set()
             self.iframe_open = False
+            self.script_open = False
+            self.script_text = ""
+            self.scripts = []
 
         def handle_starttag(self, tag, attrs):
             if self.iframe_open:
@@ -107,8 +136,13 @@ def validate_html(text, policy, path=None, site=None, route=None):
             if len(names) != len(set(names)):
                 raise SecurityError("Duplicate HTML attributes")
             values = dict(attrs)
-            if tag in {"script", "object", "embed", "base", "link", "form", "foreignobject"}:
+            if tag in {"object", "embed", "base", "link", "form", "foreignobject"}:
                 raise SecurityError("Scripts, frames, forms and external resources are prohibited")
+            if tag == "script":
+                if not self.csp or not script_hashes or attrs or self.script_open:
+                    raise SecurityError("Only reviewed inline classic scripts after CSP are allowed")
+                self.script_open = True
+                self.script_text = ""
             if tag == "iframe":
                 if not self.csp:
                     raise SecurityError("CSP must precede embedded resources")
@@ -176,11 +210,19 @@ def validate_html(text, policy, path=None, site=None, route=None):
                 raise SecurityError("CSP must be in the head before the body")
 
         def handle_startendtag(self, tag, attrs):
-            if tag == "iframe":
+            if tag in {"iframe", "script"}:
                 raise SecurityError("Embedded frames require an explicit closing tag")
             self.handle_starttag(tag, attrs)
 
         def handle_endtag(self, tag):
+            if tag == "script":
+                if not self.script_open:
+                    raise SecurityError("Unexpected script closing tag")
+                digest = script_hash(self.script_text)
+                if digest not in script_hashes or digest in self.scripts:
+                    raise SecurityError("Unreviewed, modified or duplicate inline script")
+                self.scripts.append(digest)
+                self.script_open = False
             if tag == "iframe":
                 if not self.iframe_open:
                     raise SecurityError("Unexpected iframe closing tag")
@@ -195,6 +237,8 @@ def validate_html(text, policy, path=None, site=None, route=None):
                 raise SecurityError("Embedded frames must not contain comments")
 
         def handle_data(self, text):
+            if self.script_open:
+                self.script_text += text
             if self.iframe_open and text.strip():
                 raise SecurityError("Embedded frames must not contain fallback markup")
             if self.styles:
@@ -203,6 +247,8 @@ def validate_html(text, policy, path=None, site=None, route=None):
     page = StaticPage()
     page.feed(text)
     page.close()
+    if page.script_open or set(page.scripts) != set(script_hashes):
+        raise SecurityError("Page must include exactly its reviewed complete scripts")
     if page.iframe_open:
         raise SecurityError("Embedded frame is not closed")
     if page.frames != set(embed_urls):

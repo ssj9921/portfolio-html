@@ -4,7 +4,7 @@ This repository is public, including every Git commit. Publish only reviewed HTM
 
 All future generated portfolio HTML is routed here after the security checks. Use this single public repository for reviewed, completed exports. Unfinished authoring, private evidence and the approval manifest stay in a separate local workspace outside this repository. Use GitHub Pages URLs in Notion as ordinary links; do not attach raw HTML files.
 
-Keep first-party JavaScript, external libraries, remote assets, forms, analytics and browser storage disabled. The only approved exception is the route-scoped privacy-enhanced YouTube player defined in policy.json and SECURITY.md; do not broaden it to arbitrary frames or scripts. Use only reviewed HTTPS navigation links. New career, personal role and outcome statements still require the owner's approval of the wording.
+The owner authorized first-party JavaScript on 2026-10-14. Allow only reviewed inline code whose SHA256 hashes are registered for its exact immutable route in policy.json. Never enable unsafe-inline or unsafe-eval for scripts. External libraries, remote assets, forms, analytics, browser storage and network connections remain disabled. Preserve the separately approved route-scoped privacy-enhanced YouTube player. Use only reviewed HTTPS navigation links. New career, personal role and outcome statements still require the owner's approval of the wording.
 
 Run python tools/check_public.py and python -m unittest discover -s tests before every commit and upload. Stop if either check fails. Versioned component routes are immutable; a source or policy change requires a new component version. Root index.html is the current navigation page.
 

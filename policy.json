@@ -1,12 +1,18 @@
 {
   "schema_version": 1,
-  "javascript_allowed": false,
+  "javascript_allowed": true,
   "external_libraries_allowed": false,
   "approved_external_links": [
     "https://drive.google.com/drive/folders/1QugdcKMBWz9Yv5TOvHOeGmYBDJsUVrAN?usp=sharing",
     "https://www.youtube.com/watch?v=QewprwQ5BGc"
   ],
   "approved_contacts": [],
+  "approved_inline_scripts": {
+    "components/stock-demo/v1.0.0/index.html": [
+      "sha256-d8IhNbf8seAK4+S/PUt7808XyIDhbX+DGnf0II3PyCM=",
+      "sha256-6RVXHXS5iaswTegJk2bt9+IlvO9+A+DbR/crpzCU/fI="
+    ]
+  },
   "approved_youtube_embeds": {
     "components/varco-project/v1.0.0/index.html": [
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
