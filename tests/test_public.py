@@ -1,5 +1,6 @@
 import hashlib
 import json
+import re
 import sys
 import subprocess
 import tempfile
@@ -109,13 +110,13 @@ class PublicPolicyTests(unittest.TestCase):
 
 class PortfolioMigrationTests(unittest.TestCase):
     root = Path(__file__).resolve().parents[1]
-    project = "components/heros-chef-project/v1.0.0/index.html"
-    profile = "components/profile/v1.0.0/index.html"
+    project = "components/heros-chef-project/v1.0.1/index.html"
+    profile = "components/profile/v1.0.1/index.html"
 
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 9)
+        self.assertEqual(result["html_pages"], 11)
 
     def test_three_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
@@ -126,6 +127,47 @@ class PortfolioMigrationTests(unittest.TestCase):
             self.assertNotIn("notion.site", text)
         project = (self.root / "docs" / self.project).read_text(encoding="utf-8")
         self.assertIn('href="https://drive.google.com/drive/folders/', project)
+
+    def test_home_header_and_intro_spacing_match_detail_pages(self):
+        home = (self.root / "docs/index.html").read_text(encoding="utf-8")
+        header_rules = re.findall(r"(?<![\w.-])header\{([^}]+)\}", home)
+        wrap_rules = re.findall(r"\.wrap\{([^}]+)\}", home)
+        self.assertEqual(len(header_rules), 2)
+        for route in (self.project, self.profile):
+            detail = (self.root / "docs" / route).read_text(encoding="utf-8")
+            self.assertEqual(header_rules, re.findall(r"(?<![\w.-])header\{([^}]+)\}", detail))
+            self.assertEqual(wrap_rules, re.findall(r"\.wrap\{([^}]+)\}", detail))
+            for text in (home, detail):
+                hero_rules = re.findall(r"\.hero\{([^}]+)\}", text)
+                self.assertIn("padding:62px 0 42px", hero_rules[0])
+                self.assertRegex(text, r"@media\(max-width:800px\)\{[^@]*\.hero\{padding:44px 0 30px\}")
+                self.assertRegex(text, r"@media\(max-width:580px\)\{[^@]*\.hero\{padding-top:32px\}")
+                self.assertIn("min-height:44px", re.search(r"\.brand\{([^}]+)\}", text)[1])
+
+    def test_profile_project_navigation_uses_home_listing(self):
+        home = (self.root / "docs/index.html").read_text(encoding="utf-8")
+        profile = (self.root / "docs" / self.profile).read_text(encoding="utf-8")
+        listing = re.search(r'<a href="(#[^"]+)"[^>]*>Projects</a>', home)[1]
+        target = "../../../index.html" + listing
+        self.assertIn('href="' + target + '">Project</a>', profile)
+        self.assertIn('href="' + target + '">Project 보기 →</a>', profile)
+        self.assertIn('href="' + target + '">← 프로젝트 목록</a>', profile)
+        self.assertNotIn('href="../../heros-chef-project/', profile)
+        project = (self.root / "docs" / self.project).read_text(encoding="utf-8")
+        self.assertIn('href="../../profile/v1.0.1/index.html"', project)
+        self.assertNotIn('href="../../profile/v1.0.0/index.html"', project)
+
+    def test_patch_pages_only_change_navigation(self):
+        for component in ("profile", "heros-chef-project"):
+            folder = self.root / "docs/components" / component
+            old = (folder / "v1.0.0/index.html").read_text(encoding="utf-8")
+            expected = old.replace("../../profile/v1.0.0/", "../../profile/v1.0.1/")
+            if component == "profile":
+                expected = expected.replace("../../heros-chef-project/v1.0.0/index.html", "../../../index.html#selected-title")
+                expected = expected.replace('href="../../../index.html">← 프로젝트 목록', 'href="../../../index.html#selected-title">← 프로젝트 목록')
+            else:
+                expected = expected.replace("../../heros-chef-project/v1.0.0/", "../../heros-chef-project/v1.0.1/")
+            self.assertEqual((folder / "v1.0.1/index.html").read_text(encoding="utf-8"), expected)
 
     def test_project_follows_five_sections_and_attributes_ai(self):
         project = (self.root / "docs" / self.project).read_text(encoding="utf-8")
@@ -189,6 +231,8 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_existing_component_bytes_remain_unchanged(self):
         expected = {
+            "profile/v1.0.0": "255c731b619d0d40de9e5f897b6f589eb22c4608d9060eb85892ece6d0a21520",
+            "heros-chef-project/v1.0.0": "7c6c01c56ec2940738ea7f2ec29db18cd1f1ecc24142f5f014cc84daccbdb5b5",
             "editorial-hero/v1.0.0": "9a236c5839e1af4b2a9f1bdf98d946faaf2ef0ba82950e52b6a86e6f249d6de8",
             "selected-work-intro/v1.1.0": "9aebd02fc09bb215b88e2a539a85c51ec2a8d69dd7f1d63f1850dba1363e35cc",
             "product-retrospective-tabs/v1.1.0": "78cbbf8144c5d45c8588c5bd65f66385c0cf34bb1dd0981f1b7f5cd8ebb55606",
