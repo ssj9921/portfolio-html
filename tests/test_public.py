@@ -244,12 +244,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 21)
+        self.assertEqual(result["html_pages"], 23)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.2.0/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v1.3.0/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -275,7 +275,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.2.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v1.3.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
@@ -475,7 +475,7 @@ class StockReleaseTests(unittest.TestCase):
             old = (self.root/f'components/{name}/v1.0.2/index.html').read_text(encoding='utf-8')
             expected = old.replace('../../projects/v1.0.0/','../../projects/v1.1.0/').replace('../../profile/v1.0.2/','../../profile/v1.0.3/').replace('../../heros-chef-project/v1.0.2/','../../heros-chef-project/v1.0.3/')
             self.assertEqual((self.root/f'components/{name}/v1.0.3/index.html').read_text(encoding='utf-8'),expected)
-        self.assertFalse((self.root/'components/varco-project').exists())
+        self.assertNotIn('../../varco-project/',projects)
         self.assertFalse((self.root/'components/visual-novel-template').exists())
 
     def test_stock_keeps_source_boundaries_and_five_sections(self):
@@ -510,6 +510,24 @@ class StockIntegrationTests(unittest.TestCase):
         listing = (self.root/'components/projects/v1.2.0/index.html').read_text(encoding='utf-8')
         self.assertIn('../../stock-project/v1.1.0/index.html#work',listing)
         self.assertNotIn('../../stock-demo/',listing)
+
+
+class VarcoReleaseTests(unittest.TestCase):
+    root = Path(__file__).resolve().parents[1] / 'docs'
+
+    def test_approved_content_and_narrow_video_exception(self):
+        page = (self.root/'components/varco-project/v1.0.0/index.html').read_text(encoding='utf-8')
+        for text in ('City Of Rubble','Duskore','95개','외부 텍스처','소개 문구 작성 예정','프로그래밍을 제외한 제작 전반','우수상'):
+            self.assertIn(text,page)
+        self.assertEqual(page.count('<iframe '),1)
+        self.assertNotIn('<script',page)
+        self.assertIn('https://www.youtube.com/watch?v=QewprwQ5BGc',page)
+        self.assertIn('referrerpolicy="strict-origin-when-cross-origin"',page)
+        self.assertEqual(page.count('<section aria-labelledby='),5)
+        listing = (self.root/'components/projects/v1.3.0/index.html').read_text(encoding='utf-8')
+        self.assertEqual(listing.count('class="project-card"'),3)
+        self.assertIn('../../stock-project/v1.1.0/index.html#work',listing)
+        self.assertIn('../../varco-project/v1.0.0/index.html',listing)
 
 
 if __name__ == "__main__":

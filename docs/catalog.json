@@ -4,10 +4,10 @@
     {
       "id": "homepage",
       "name": "Selected Work",
-      "version": "1.4.0",
+      "version": "1.5.0",
       "path": "index.html",
-      "sha256": "1a0bef98c7c43481a4928b049ba737bb3874008e0d42784584b4ea1865998bce",
-      "source_sha256": "1a0bef98c7c43481a4928b049ba737bb3874008e0d42784584b4ea1865998bce"
+      "sha256": "d1d781fd059ae13d0776b398fdfc253678d388975db5cda1a4df8a7cacd64dba",
+      "source_sha256": "d1d781fd059ae13d0776b398fdfc253678d388975db5cda1a4df8a7cacd64dba"
     },
     {
       "id": "editorial-hero",
@@ -168,6 +168,22 @@
       "path": "components/projects/v1.2.0/index.html",
       "sha256": "326f056c38176c035cbe01e785b7260a4b1c0e33eeaae812dad6547505c6e82c",
       "source_sha256": "326f056c38176c035cbe01e785b7260a4b1c0e33eeaae812dad6547505c6e82c"
+    },
+    {
+      "id": "varco-project",
+      "name": "City Of Rubble — Project",
+      "version": "1.0.0",
+      "path": "components/varco-project/v1.0.0/index.html",
+      "sha256": "f9546ea1a8c9463d7e9fe0a6a7a83f80eeb022356b158562d4232bf5c54434f5",
+      "source_sha256": "5124ccc1ed179fbca0872be9f6a415e5197545ed6d4d8d2f9c409be5b2e82bcf"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "version": "1.3.0",
+      "path": "components/projects/v1.3.0/index.html",
+      "sha256": "66a8802ba0bc5b57252a0b325de7b08ce83696bc892120c9988137de64743293",
+      "source_sha256": "66a8802ba0bc5b57252a0b325de7b08ce83696bc892120c9988137de64743293"
     }
   ]
 }
