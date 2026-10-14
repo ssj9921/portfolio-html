@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'none'; style-src 'unsafe-inline'; img-src 'none'; font-src https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunKm.woff https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.1/ChosunSm.woff; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-zbudhi74qn9pVYIfIwgsLngCHYRBCreU5FAEmjJP48w='; script-src-attr 'none'; style-src 'unsafe-inline'; img-src 'self'; font-src https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunKm.woff https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.1/ChosunSm.woff; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="description" content="프로젝트와 경력, 학습 이력을 함께 살펴보는 포트폴리오.">
 <title>Selected Work · Project &amp; Profile</title>
@@ -38,8 +38,11 @@ details{border:1px solid var(--line);padding:20px;background:var(--white)}summar
 details p,details li{font-size:12px;color:var(--muted)}details ul{padding-left:20px}
 .library{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.component{border:1px solid var(--line);padding:20px;background:var(--white);min-height:124px}
 .component:hover{background:var(--mint)}.component strong{display:block;font-size:13px;font-weight:600}.component small{display:block;font-size:11px;color:var(--muted);margin-top:12px}
-footer{display:flex;justify-content:space-between;gap:24px;border-top:1px solid var(--line);padding:32px 0 44px}
-footer p{font-size:12px;color:var(--muted);max-width:360px}footer h2{font-size:27px}.signature{text-align:right;font-size:10px;color:var(--muted);letter-spacing:.08em}
+footer{border-top:1px solid var(--line);padding:32px 0 28px}
+.contact-list{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 36px;margin:0;padding:0;list-style:none}.contact-list li{min-width:0;max-width:100%}
+.contact-link{display:flex;align-items:center;gap:12px;min-height:48px;padding:4px 2px;color:var(--green)}.contact-link:hover .contact-value{text-decoration:underline;text-underline-offset:4px}
+.contact-icon{width:22px;height:22px;flex:none}.contact-copy{min-width:0}.contact-label{display:block;font-size:11px;color:var(--muted)}.contact-value{display:block;font-size:15px;overflow-wrap:anywhere}
+.creation-credit{margin:22px 0 0;text-align:center;font-size:11px;letter-spacing:.04em;color:var(--muted)}
 @media(max-width:800px){.hero{padding:44px 0 30px}}
 @media(max-width:680px){.hero{grid-template-columns:1fr;gap:30px}.art{justify-self:center;max-width:220px}.hero h1{font-size:38px}.section{padding:34px 0}.section-title{display:block}h2{font-size:29px}.project{padding:24px}.documents,.perspectives{grid-template-columns:1fr}.library{grid-template-columns:1fr 1fr}footer{flex-direction:column}.signature{text-align:left}}
 @media(max-width:380px){.library{grid-template-columns:1fr}.top-link{font-size:11px}.hero h1{font-size:33px}}
@@ -50,20 +53,119 @@ footer p{font-size:12px;color:var(--muted);max-width:360px}footer h2{font-size:2
 .hero h1,.body-copy>section>h2,.section-title h2,footer h2,.card-bar h2,.card-fallback{font-family:"ChosunKm",Georgia,"Batang",serif;font-weight:400;font-synthesis:none}
 .hero .lead,.hero .subtitle,.comment-space,.comment-quote{font-family:"ChosunSm","Batang",Georgia,serif;font-weight:400;font-size:max(18px,1em);line-height:1.8;font-synthesis:none}
 .hero .subtitle{font-size:25px;font-variant-numeric:lining-nums}@media(max-width:580px){.hero .subtitle{font-size:23px}}
+
+/* Home project banner: readable stacked cards before progressive enhancement. */
+.spot-track{display:grid;gap:12px}.spot-card{position:relative;min-width:0;min-height:360px;overflow:hidden;border-radius:8px;isolation:isolate;background:#20342d;color:#fff}
+.spot-back{position:absolute;inset:-20%;z-index:-3;filter:blur(24px);transform:scale(1.1);opacity:.7}.spot-back .project-image{width:100%;height:100%;object-fit:cover}
+.spot-shade{position:absolute;inset:0;z-index:-2;background:linear-gradient(90deg,rgba(9,20,15,.96),rgba(9,20,15,.82) 42%,rgba(9,20,15,.22))}
+.spot-visual{position:absolute;right:20px;top:24px;bottom:24px;width:51%;display:flex;align-items:center;justify-content:center;z-index:-1}
+.spot-visual .project-image{width:100%;height:100%;object-fit:contain}.spot-card .project-image{visibility:hidden;display:block}.spot-card .image-loaded{visibility:visible}
+.spot-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;text-align:center;overflow-wrap:anywhere;font:400 30px/1.5 "ChosunSm","Batang",serif;color:#e6ecdf;background:linear-gradient(145deg,#345745,#1e3028);border:1px solid #ffffff24;border-radius:5px;z-index:-1}.spot-visual:has(.image-loaded) .spot-fallback{visibility:hidden}
+.spot-copy{position:relative;width:49%;padding:32px 24px;min-height:360px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:16px}
+.spot-kind{display:inline-block;padding:4px 8px;background:#0f766e;border-radius:3px;color:#fff;font:600 12px/1.4 Arial,"Malgun Gothic",sans-serif}.spot-kind.kind-proposal{background:#8b3565}
+.spot-copy h3{font:400 clamp(24px,2.5vw,32px)/1.3 "ChosunSm","Batang",Georgia,serif;font-synthesis:none;letter-spacing:-.025em;margin:0;overflow-wrap:anywhere}
+.spot-copy p{margin:0;font:14px/1.8 Arial,"Malgun Gothic",sans-serif;word-break:keep-all;overflow-wrap:anywhere;color:#fff}
+.spot-view{display:inline-flex;align-items:center;justify-content:center;gap:18px;min-height:44px;min-width:88px;padding:8px 16px;background:#f8f3e7;color:#252d29;border-radius:3px;font:13px/1.5 Arial,"Malgun Gothic",sans-serif}
+.spot-card a:focus-visible,.spot-card button:focus-visible,.spot-copy h3:focus-visible{outline:3px solid #fffaf0;outline-offset:4px}
+.spot-select{display:none}.spot-controls{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:18px}.spot-controls[hidden]{display:none}.spot-controls button{min-width:80px;min-height:44px;background:transparent;border:1px solid var(--line);border-radius:3px;color:var(--green);font:13px Arial,"Malgun Gothic",sans-serif;cursor:pointer}.spot-controls button:disabled{opacity:.45;cursor:default}.spot-controls button:focus-visible{outline:3px solid var(--green);outline-offset:3px}.spot-status{margin:0;text-align:center;font-size:12px;color:var(--muted)}
+.banner-ready .spot-track{display:flex;gap:10px}.banner-ready .spot-card{flex:1 1 0;min-height:380px;transition:flex-grow .3s ease}.banner-ready .spot-card.is-active{flex:8 1 0}
+.banner-ready .spot-card:not(.is-active) .spot-copy{display:none}.banner-ready .spot-card:not(.is-active) .spot-visual{inset:0;width:100%;opacity:.65}.banner-ready .spot-card:not(.is-active) .spot-visual .project-image{object-fit:cover;filter:brightness(.6)}.banner-ready .spot-card:not(.is-active) .spot-fallback{font-size:20px;border:0}
+.banner-ready .spot-card:not(.is-active) .spot-select{display:flex;position:absolute;inset:0;width:100%;border:0;padding:24px 8px;align-items:center;justify-content:flex-end;background:linear-gradient(0deg,#0c1c16d9,transparent 80%);color:#fff;cursor:pointer;writing-mode:vertical-rl;font:400 20px/1.4 "ChosunSm","Batang",serif;font-synthesis:none}
+.banner-ready .spot-select:focus-visible{outline-offset:-5px}.banner-ready .spot-copy{min-height:380px;padding:28px 22px}.spot-stock{background:#263e35}
+@media(max-width:900px){.banner-ready .spot-card.is-active{flex:7 1 0}.spot-copy{width:55%;padding:24px 18px}.spot-visual{right:14px;width:43%}.spot-copy h3{font-size:25px}.spot-copy p{font-size:13px}}
+@media(max-width:760px){.spot-card,.banner-ready .spot-card{min-height:0;display:flex;flex-direction:column;padding:18px}.spot-visual,.banner-ready .spot-card:not(.is-active) .spot-visual{position:relative;inset:auto;width:100%;height:auto;aspect-ratio:16/9;opacity:1;z-index:0}.spot-visual .project-image,.banner-ready .spot-card:not(.is-active) .spot-visual .project-image{position:absolute;inset:0;object-fit:contain;filter:none}.spot-copy,.banner-ready .spot-copy,.banner-ready .spot-card:not(.is-active) .spot-copy{display:flex;width:100%;min-height:0;padding:22px 2px 6px;gap:14px;flex:1}.spot-copy h3{font-size:28px}.spot-copy p{font-size:14px}.spot-view{margin-top:auto}.spot-shade{background:linear-gradient(0deg,#0b1a15f5,#10271cc7)}.banner-ready .spot-track{overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#345745 #e6ecdf;gap:12px;padding-bottom:8px}.banner-ready .spot-card,.banner-ready .spot-card.is-active{flex:0 0 100%;scroll-snap-align:start}.banner-ready .spot-card:not(.is-active) .spot-select{display:none}.spot-controls{gap:10px}.spot-controls button{min-width:64px}.spot-status{max-width:180px;overflow-wrap:anywhere}}
+@media(prefers-reduced-motion:reduce){.banner-ready .spot-card{transition:none}.spot-track{scroll-behavior:auto}}
+
+
+@media(min-width:761px){.banner-ready .spot-card:not(.is-active) .spot-fallback{visibility:hidden}}
+
+
 </style>
 </head>
 <body><div class="wrap">
-<header><a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>SELECTED WORK</a><nav class="home-nav" aria-label="주요 페이지"><a href="index.html" aria-current="page">Home</a><a href="components/projects/v2.3.0/index.html">Projects</a><a href="components/profile/v1.2.4/index.html">Profile</a></nav></header>
+<header><a class="brand" href="#top"><span class="mark" aria-hidden="true"></span>SELECTED WORK</a><nav class="home-nav" aria-label="주요 페이지"><a href="index.html" aria-current="page">Home</a><a href="components/projects/v2.4.0/index.html">Projects</a><a href="components/profile/v1.2.5/index.html">Profile</a></nav></header>
 <main id="top"><section class="hero" aria-label="포트폴리오 소개"><div><div class="eyebrow">IDEAS INTO EXPERIENCES</div><h1>문제를 발견하고,<br><em>경험으로 풀어내다.</em></h1><p class="lead">아이디어에서 작업물까지, 프로젝트의 흐름을 기록합니다.<br>프로젝트와 프로필을 통해 작업과 이력을 살펴보세요.</p><div class="tags"><span>PROJECTS</span><span>PROFILE</span></div></div><div class="art" aria-hidden="true"><div class="sheet back"></div><div class="sheet"><span class="tiny">Notes, made tangible.</span><div class="shape"></div><div class="rule"></div><div class="rule short"></div></div></div></section>
-<section class="section" aria-labelledby="selected-title"><div class="section-title"><div><div class="eyebrow">01 / SELECTED PROJECT</div><h2 id="selected-title">Work, in focus.</h2></div><a class="text-link" href="components/projects/v2.3.0/index.html">Projects 전체 보기 →</a></div>
-<article class="project"><div class="small">WINDOWS GAME / 1.44MB</div><h3>용사의 쉐프</h3><p>요리로 용사의 전투를 지원하는 Windows 게임. 1.44MB 용량 제한을 충족한 상태로 공모전 제출을 완료했습니다.</p><div class="status">공모전 제출 완료 · 용량 제한 충족</div><a class="project-link" href="components/heros-chef-project/v1.3.0/index.html">프로젝트 보기 →</a></article></section>
-<section class="section" aria-labelledby="profile-title"><div class="section-title"><div><div class="eyebrow">02 / PROFILE</div><h2 id="profile-title">Background, in brief.</h2></div></div><article class="project profile-card"><div><h3>SEUNGJIN SONG</h3><p>게임 기획과 교육 경력, 학력 및 교육, 자격과 수상.</p></div><a class="text-link" href="components/profile/v1.2.4/index.html">프로필 보기 →</a></article></section>
-<section class="section" aria-label="디자인 자료"><details class="library-disclosure"><summary>HTML 디자인 모음</summary><nav class="library" aria-label="HTML 컴포넌트">
-<a class="component" href="components/editorial-hero/v1.0.0/index.html"><strong>Editorial Hero ↗</strong><small>포트폴리오 첫 화면과 소개</small></a>
-<a class="component" href="components/selected-work-intro/v1.1.0/index.html"><strong>Selected Work Intro ↗</strong><small>대표 프로젝트 영역과 결과물·회고 읽기 안내</small></a>
-<a class="component" href="components/product-retrospective-tabs/v1.1.0/index.html"><strong>Product / Retrospective Tabs ↗</strong><small>문서 유형 관점 전환</small></a>
-<a class="component" href="components/editorial-footer/v1.0.0/index.html"><strong>Editorial Footer ↗</strong><small>포트폴리오 하단 서명</small></a>
-<a class="component" href="components/project-card/v1.0.0/index.html"><strong>Project Card ↗</strong><small>프로젝트별 결과물·회고 문서로 연결하는 카드 템플릿</small></a>
-<a class="component" href="components/timeline/v1.1.0/index.html"><strong>Decision Timeline ↗</strong><small>근거가 있는 작업 흐름과 의사결정을 펼쳐 보는 템플릿</small></a>
-</nav></details></section></main>
-<footer><div><h2>Work is a conversation.</h2><p>작업을 기록하고, 생각을 나누는 공간입니다.<br>새로운 프로젝트와 함께 이야기를 이어갑니다.</p></div><div class="signature">SELECTED WORK<br>PROJECT &amp; PROFILE</div></footer></div></body></html>
+<section class="section" aria-labelledby="selected-title"><div class="section-title"><div><div class="eyebrow">01 / SELECTED PROJECTS</div><h2 id="selected-title">Work, in focus.</h2></div><a class="text-link" href="components/projects/v2.4.0/index.html">Projects 전체 보기 →</a></div>
+<div class="spotlight" role="region" aria-label="대표 프로젝트"><div class="spot-track"><article class="spot-card is-active" data-title="용사의 쉐프" aria-labelledby="spot-title-chef">
+<div class="spot-back" aria-hidden="true"><img class="project-image" src="assets/heros-chef/v1.0.0/main.png" alt="용사의 쉐프 시작 화면" width="1280" height="720" loading="eager" decoding="async"></div><div class="spot-shade" aria-hidden="true"></div>
+<div class="spot-visual"><span class="spot-fallback" aria-hidden="true">용사의 쉐프</span><img class="project-image" src="assets/heros-chef/v1.0.0/main.png" alt="용사의 쉐프 시작 화면" width="1280" height="720" loading="eager" decoding="async"></div>
+<button class="spot-select" type="button" aria-expanded="true" aria-controls="spot-copy-chef" aria-label="용사의 쉐프 펼치기"><span>용사의 쉐프</span></button>
+<div class="spot-copy" id="spot-copy-chef"><span class="spot-kind">제작물</span><h3 id="spot-title-chef" tabindex="-1">용사의 쉐프</h3><p>2P Game Arcade 공모전 출품작입니다. 직접 작성한 원안을 바탕으로 AI를 활용해 개발했습니다.</p><a class="spot-view" href="components/heros-chef-project/v1.3.1/index.html" aria-label="용사의 쉐프 보기">보기 <span aria-hidden="true">↗</span></a></div>
+</article><article class="spot-card spot-stock" data-title="그때 샀다면?" aria-labelledby="spot-title-stock">
+<div class="spot-back" aria-hidden="true"><img class="project-image" src="assets/stock/v1.0.0/summary-detail.png" alt="가상 데이터 데모: 지켜보기 3, 상승 1·하락 1·보합 1 요약과 등록 이후 비교 토글" width="1752" height="1224" loading="eager" decoding="async"></div><div class="spot-shade" aria-hidden="true"></div>
+<div class="spot-visual"><span class="spot-fallback" aria-hidden="true">그때 샀다면?</span><img class="project-image" src="assets/stock/v1.0.0/summary-detail.png" alt="가상 데이터 데모: 지켜보기 3, 상승 1·하락 1·보합 1 요약과 등록 이후 비교 토글" width="1752" height="1224" loading="eager" decoding="async"></div>
+<button class="spot-select" type="button" aria-expanded="false" aria-controls="spot-copy-stock" aria-label="그때 샀다면? 펼치기"><span>그때 샀다면?</span></button>
+<div class="spot-copy" id="spot-copy-stock"><span class="spot-kind kind-proposal">기능 제안</span><h3 id="spot-title-stock" tabindex="-1">그때 샀다면?</h3><p>관심종목 등록 당시 가격과 현재가를 비교하는 기능 제안.</p><a class="spot-view" href="components/stock-project/v1.2.5/index.html" aria-label="그때 샀다면? 보기">보기 <span aria-hidden="true">↗</span></a></div>
+</article><article class="spot-card" data-title="City Of Rubble" aria-labelledby="spot-title-city">
+<div class="spot-back" aria-hidden="true"><img class="project-image" src="assets/city-of-rubble/v1.0.0/main.jpg" alt="City Of Rubble 시작 화면" width="1920" height="1080" loading="eager" decoding="async"></div><div class="spot-shade" aria-hidden="true"></div>
+<div class="spot-visual"><span class="spot-fallback" aria-hidden="true">City Of Rubble</span><img class="project-image" src="assets/city-of-rubble/v1.0.0/main.jpg" alt="City Of Rubble 시작 화면" width="1920" height="1080" loading="eager" decoding="async"></div>
+<button class="spot-select" type="button" aria-expanded="false" aria-controls="spot-copy-city" aria-label="City Of Rubble 펼치기"><span>City Of Rubble</span></button>
+<div class="spot-copy" id="spot-copy-city"><span class="spot-kind">제작물</span><h3 id="spot-title-city" tabindex="-1">City Of Rubble</h3><p>NC AI 주최 VARCO 3D 공모전 출품작입니다.</p><a class="spot-view" href="components/varco-project/v1.3.1/index.html" aria-label="City Of Rubble 보기">보기 <span aria-hidden="true">↗</span></a></div>
+</article><article class="spot-card" data-title="VisualNovelTemplate" aria-labelledby="spot-title-vn">
+<div class="spot-back" aria-hidden="true"><img class="project-image" src="assets/visual-novel-template/v1.0.0/editor-04.png" alt="VisualNovelTemplate 대화 실행 화면과 Unity Inspector" width="1920" height="1040" loading="eager" decoding="async"></div><div class="spot-shade" aria-hidden="true"></div>
+<div class="spot-visual"><span class="spot-fallback" aria-hidden="true">VisualNovelTemplate</span><img class="project-image" src="assets/visual-novel-template/v1.0.0/editor-04.png" alt="VisualNovelTemplate 대화 실행 화면과 Unity Inspector" width="1920" height="1040" loading="eager" decoding="async"></div>
+<button class="spot-select" type="button" aria-expanded="false" aria-controls="spot-copy-vn" aria-label="VisualNovelTemplate 펼치기"><span>VisualNovelTemplate</span></button>
+<div class="spot-copy" id="spot-copy-vn"><span class="spot-kind">제작물</span><h3 id="spot-title-vn" tabindex="-1">VisualNovelTemplate</h3><p>대화·선택지와 데이터를 연결하는 Unity 제작 도구. 개발 중단.</p><a class="spot-view" href="components/visual-novel-template/v1.0.4/index.html" aria-label="VisualNovelTemplate 보기">보기 <span aria-hidden="true">↗</span></a></div>
+</article></div><div class="spot-controls" hidden><button type="button" class="spot-prev" aria-label="이전 프로젝트">← 이전</button><p class="spot-status" role="status" aria-live="polite" aria-atomic="true">1 / 4 · 용사의 쉐프</p><button type="button" class="spot-next" aria-label="다음 프로젝트">다음 →</button></div></div></section>
+<section class="section" aria-labelledby="profile-title"><div class="section-title"><div><div class="eyebrow">02 / PROFILE</div><h2 id="profile-title">Background, in brief.</h2></div></div><article class="project profile-card"><div><h3>SEUNGJIN SONG</h3><p>게임 기획과 교육 경력, 학력 및 교육, 자격과 수상.</p></div><a class="text-link" href="components/profile/v1.2.5/index.html">프로필 보기 →</a></article></section>
+</main>
+<footer aria-label="연락처">
+<ul class="contact-list">
+<li><a class="contact-link" href="mailto:seungjins92@gmail.com"><svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m3 6 9 7 9-7"/></svg><span class="contact-copy"><span class="contact-label">이메일</span><span class="contact-value">seungjins92@gmail.com</span></span></a></li>
+<li><a class="contact-link" href="tel:+821074149921"><svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" focusable="false"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 5h4M10 19h4"/></svg><span class="contact-copy"><span class="contact-label">휴대전화</span><span class="contact-value">010.7414.9921</span></span></a></li>
+</ul><p class="creation-credit">Created with ChatGPT</p>
+</footer></div><script>
+(() => {
+  'use strict';
+  const banner = document.querySelector('.spotlight');
+  const track = banner.querySelector('.spot-track');
+  const cards = [...banner.querySelectorAll('.spot-card')];
+  const previous = banner.querySelector('.spot-prev');
+  const next = banner.querySelector('.spot-next');
+  const status = banner.querySelector('.spot-status');
+  const mobile = matchMedia('(max-width:760px)');
+  let selected = 0, frame = 0;
+  function show(index, move = true, focus = false) {
+    selected = Math.max(0, Math.min(cards.length - 1, index));
+    cards.forEach((card, i) => {
+      card.classList.toggle('is-active', i === selected);
+      card.querySelector('.spot-select').setAttribute('aria-expanded', String(i === selected));
+    });
+    previous.disabled = selected === 0;
+    next.disabled = selected === cards.length - 1;
+    status.textContent = (selected + 1) + ' / ' + cards.length + ' · ' + cards[selected].dataset.title;
+    if (mobile.matches && move) track.scrollTo({left: cards[selected].offsetLeft - cards[0].offsetLeft, behavior: 'instant'});
+    if (focus) cards[selected].querySelector('h3').focus({preventScroll: true});
+  }
+  cards.forEach((card, i) => {
+    card.querySelector('.spot-select').addEventListener('click', () => show(i, true, true));
+    card.querySelectorAll('img').forEach(image => {
+      const loaded = () => image.classList.toggle('image-loaded', image.complete && image.naturalWidth > 0);
+      image.addEventListener('load', loaded); image.addEventListener('error', loaded); loaded();
+    });
+    card.querySelector('.spot-view').addEventListener('focus', () => { if (mobile.matches) show(i); });
+  });
+  previous.addEventListener('click', () => show(selected - 1));
+  next.addEventListener('click', () => show(selected + 1));
+  banner.addEventListener('keydown', event => {
+    const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End'];
+    if (!keys.includes(event.key)) return;
+    event.preventDefault();
+    const index = event.key === 'Home' ? 0 : event.key === 'End' ? cards.length - 1 : selected + (event.key === 'ArrowRight' ? 1 : -1);
+    show(index, true, true);
+  });
+  track.addEventListener('scroll', () => {
+    if (!mobile.matches) return;
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      const index = cards.reduce((best, card, i) => Math.abs(card.offsetLeft - cards[0].offsetLeft - track.scrollLeft) < Math.abs(cards[best].offsetLeft - cards[0].offsetLeft - track.scrollLeft) ? i : best, 0);
+      if (index !== selected) show(index, false);
+    });
+  }, {passive: true});
+  banner.classList.add('banner-ready');
+  banner.querySelector('.spot-controls').hidden = false;
+  mobile.addEventListener('change', () => { if (!mobile.matches) track.scrollLeft = 0; show(selected); });
+  window.addEventListener('resize', () => { if (mobile.matches) show(selected); });
+  show(0);
+})();
+</script></body></html>

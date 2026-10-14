@@ -17,7 +17,7 @@ CSP = "default-src 'none'; script-src 'none'; style-src 'unsafe-inline'; img-src
 SECRET = re.compile(r"gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|(?:ntn_|secret_)[A-Za-z0-9]{20,}|AKIA[A-Z0-9]{16}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|(?:api[_-]?key|password|access[_-]?token)\s*[:=]\s*[\"']?[^\s\"']{12,}", re.I)
 PRIVATE = re.compile(r"app\.notion\.com|(?:www\.)?notion\.so/|notion-file-block\x3a|collection\x3a//|X-Amz\x2d|[A-Z]:[\\/]Users[\\/]|file\x3a//|(?:localhost|127\.0\.0\.1)(?=[:/])", re.I)
 EMAIL = re.compile(r"[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}")
-PHONE = re.compile(r"\b01[016789][- ]?\d{3,4}[- ]?\d{4}\b")
+PHONE = re.compile(r"(?<![\w+])(?:01[016789][- .]?\d{3,4}[- .]?\d{4}|\+821[016789]\d{7,8})(?!\w)")
 PUBLIC_FILES = {".gitignore", ".gitattributes", "AGENTS.md", "README.md", "SECURITY.md", "policy.json",
                 ".github/workflows/deploy.yml", ".githooks/pre-push",
                 "tools/check_public.py", "tests/test_public.py", "docs/.nojekyll",
@@ -114,7 +114,7 @@ def approved_scripts(policy, route):
     if approved and policy.get("javascript_allowed") is not True:
         raise SecurityError("JavaScript requires explicit policy authorization")
     for key, hashes in approved.items():
-        if not isinstance(key, str) or not COMPONENT_PATH.fullmatch("docs/" + key):
+        if not isinstance(key, str) or (not COMPONENT_PATH.fullmatch("docs/" + key) and not (key == "index.html" and policy.get("homepage_script_allowed") is True)):
             raise SecurityError("Scripts require an immutable component route")
         if (not isinstance(hashes, list) or not hashes
                 or any(not isinstance(h, str) or not re.fullmatch(r"sha256-[A-Za-z0-9+/]{43}=", h) for h in hashes)
@@ -141,11 +141,21 @@ def approved_images(policy, route=None):
         if meta['media_type'] != expected or any(type(meta[k]) is not int or not 1 <= meta[k] <= 8192 for k in ('width','height')):
             raise SecurityError('Invalid image format or dimensions')
     for name, images in pages.items():
-        if not COMPONENT_PATH.fullmatch('docs/'+name) or not isinstance(images,list) or not images or len(images)!=len(set(images)) or any(i not in assets for i in images):
+        if (name != 'index.html' and not COMPONENT_PATH.fullmatch('docs/'+name)) or not isinstance(images,list) or not images or len(images)!=len(set(images)) or any(i not in assets for i in images):
             raise SecurityError('Each image page requires exact registered assets')
     if set(assets) != {i for images in pages.values() for i in images}:
         raise SecurityError('Every image must be assigned to a reviewed page')
     return assets, pages.get(route, [])
+
+
+def approved_image_counts(policy, route, image_paths):
+    counts = policy.get('approved_page_image_counts', {})
+    if not isinstance(counts, dict):
+        raise SecurityError('Repeated images require an exact homepage approval')
+    for key, values in counts.items():
+        if key != 'index.html' or not isinstance(values, dict) or set(values) != set(policy.get('approved_page_images', {}).get(key, [])) or any(type(n) is not int or n != 2 for n in values.values()):
+            raise SecurityError('Only reviewed foreground/background pairs may repeat')
+    return counts.get(route, {name: 1 for name in image_paths})
 
 
 def validate_image(data, name, meta):
@@ -212,8 +222,18 @@ def validate_html(text, policy, path=None, site=None, route=None):
     embed_urls = approved_embeds(policy, route)
     script_hashes = approved_scripts(policy, route)
     image_assets, image_paths = approved_images(policy,route)
+    image_counts = approved_image_counts(policy, route, image_paths)
     font_names = approved_fonts(policy, route)
     expected_csp = page_csp(policy, route)
+    contact_links = policy.get("approved_contact_links", {})
+    if not isinstance(contact_links, dict):
+        raise SecurityError("Contact links require an exact page route")
+    for contact_route, links in contact_links.items():
+        if contact_route != "index.html" or not isinstance(links, list) or not links:
+            raise SecurityError("Contact navigation is only approved for the homepage")
+        for link in links:
+            if not isinstance(link, str) or not re.fullmatch(r"(?:mailto:[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}|tel:\+821[016789]\d{7,8})", link) or link.split(":", 1)[1] not in policy.get("approved_contacts", []):
+                raise SecurityError("Contact links must match approved plain email or phone values")
     for value in EMAIL.findall(text) + PHONE.findall(text):
         if value not in policy.get("approved_contacts", []):
             raise SecurityError("Unapproved personal contact information")
@@ -228,6 +248,7 @@ def validate_html(text, policy, path=None, site=None, route=None):
             self.viewport = False
             self.frames = set()
             self.images = set()
+            self.image_counts = {}
             self.links = set()
             self.iframe_open = False
             self.script_open = False
@@ -253,7 +274,8 @@ def validate_html(text, policy, path=None, site=None, route=None):
                 if not self.csp or set(values)!={'src','alt','width','height','loading','decoding','class'}:
                     raise SecurityError('Images require reviewed attributes after CSP')
                 target=image_target(values.get('src',''),route)
-                if target not in image_paths or target in self.images:
+                self.image_counts[target] = self.image_counts.get(target, 0) + 1
+                if target not in image_paths or self.image_counts[target] > image_counts[target]:
                     raise SecurityError('Unapproved or duplicate image')
                 meta=image_assets[target]
                 if not values['alt'].strip() or len(values['alt'])>240 or values['width']!=str(meta['width']) or values['height']!=str(meta['height']) or values['loading'] not in {'eager','lazy'} or values['decoding']!='async' or values['class']!='project-image':
@@ -304,7 +326,10 @@ def validate_html(text, policy, path=None, site=None, route=None):
                 parsed = urlsplit(href)
                 if not href or "\\" in href or re.search(r"[\x00-\x20]", href):
                     raise SecurityError("Unsafe or empty hyperlink")
-                if parsed.scheme or parsed.netloc:
+                if parsed.scheme in {"mailto", "tel"}:
+                    if href not in contact_links.get(route, []) or values.get("target"):
+                        raise SecurityError("Unapproved contact navigation")
+                elif parsed.scheme or parsed.netloc:
                     if parsed.scheme != "https" or href not in policy["approved_external_links"]:
                         raise SecurityError("Hyperlink is outside the approved public URL list")
                     if values.get("target") == "_blank":
@@ -371,6 +396,8 @@ def validate_html(text, policy, path=None, site=None, route=None):
         raise SecurityError("An embed exception must contain exactly its approved video frames")
     if page.images != set(image_paths):
         raise SecurityError('Image page must include exactly its reviewed assets')
+    if page.image_counts != image_counts:
+        raise SecurityError('Image page must include exactly its reviewed image counts')
     if sorted(page.fonts) != sorted(font_names):
         raise SecurityError('Page must include exactly its reviewed font declarations')
     if any(youtube_watch_url(url) not in page.links for url in page.frames):

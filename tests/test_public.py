@@ -23,6 +23,53 @@ def page(body="", style=""):
 
 
 class PublicPolicyTests(unittest.TestCase):
+    def test_homepage_script_needs_explicit_flag_and_exact_hash(self):
+        code = "document.body.classList.add('ready');"
+        policy = dict(POLICY, javascript_allowed=True, homepage_script_allowed=True,
+                      approved_inline_scripts={'index.html':[script_hash(code)]})
+        html = page('<script>' + code + '</script>').replace(CSP, page_csp(policy, 'index.html'))
+        validate_html(html, policy, route='index.html')
+        for changed in [html.replace("'ready'", "'other'"), html.replace('<script>'+code+'</script>', '')]:
+            with self.assertRaises(SecurityError): validate_html(changed, policy, route='index.html')
+        with self.assertRaises(SecurityError): validate_html(html, dict(policy, homepage_script_allowed=False), route='index.html')
+        with self.assertRaises(SecurityError): validate_html(html, policy, route='components/other/v1.0.0/index.html')
+
+    def test_homepage_image_pairs_do_not_allow_extra_or_missing_copies(self):
+        root = Path(__file__).resolve().parents[1]
+        policy = json.loads((root/'policy.json').read_text(encoding='utf-8'))
+        html = (root/'docs/index.html').read_text(encoding='utf-8')
+        img = re.search(r'<img[^>]+>', html)[0]
+        for changed in [html.replace(img, '', 1), html.replace('</body>', img+'</body>')]:
+            with self.assertRaises(SecurityError): validate_html(changed, policy, route='index.html')
+        with self.assertRaises(SecurityError): validate_html(html, dict(policy, approved_page_image_counts={}), route='index.html')
+
+    def test_contact_links_require_exact_homepage_approval(self):
+        email = 'contact' + '@example.com'
+        phone = '+821012345678'
+        policy = dict(POLICY, approved_contacts=[email, phone, '010.1234.5678'],
+                      approved_contact_links={'index.html': ['mailto:' + email, 'tel:' + phone]})
+        body = '<a href="mailto:' + email + '">Email</a><a href="tel:' + phone + '">010.1234.5678</a>'
+        validate_html(page(body), policy, route='index.html')
+        for route in [None, 'components/example/v1.0.0/index.html']:
+            with self.subTest(route=route), self.assertRaises(SecurityError):
+                validate_html(page(body), policy, route=route)
+        for link in ['mailto:' + email + '?subject=Hello', 'mailto:' + email + '#other',
+                     'tel:' + phone + ';ext=1', 'tel:+821012345679']:
+            with self.subTest(link=link), self.assertRaises(SecurityError):
+                validate_html(page('<a href="' + link + '">Contact</a>'), policy, route='index.html')
+
+    def test_phone_disclosure_checks_include_dotted_and_international_values(self):
+        for value in ['010.1234.5678', '010-1234-5678', '+821012345678']:
+            with self.subTest(value=value), self.assertRaises(SecurityError):
+                validate_html(page('<p>' + value + '</p>'), POLICY)
+
+    def test_contact_policy_cannot_grant_other_schemes_or_query_parameters(self):
+        for link in ['https://example.com/public', 'mailto:a@example.com?cc=b@example.com', 'tel:+821012345678;ext=1']:
+            policy = dict(POLICY, approved_contacts=[link.split(':', 1)[1]],
+                          approved_contact_links={'index.html': [link]})
+            with self.subTest(link=link), self.assertRaises(SecurityError):
+                validate_html(page(), policy, route='index.html')
+
     def test_static_page_and_approved_navigation(self):
         validate_html(page('<a href="https://example.com/public" target="_blank" rel="noopener noreferrer">Open</a>'), POLICY)
 
@@ -244,12 +291,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 61)
+        self.assertEqual(result["html_pages"], 67)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.3.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.3.0/').replace('profile/v1.0.3/','profile/v1.2.4/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.4.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.3.1/').replace('profile/v1.0.3/','profile/v1.2.5/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -275,7 +322,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.3.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.4.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
@@ -551,7 +598,7 @@ class ReviewedImageTests(unittest.TestCase):
         for changed in (self.html.replace('../../../assets/heros-chef/v1.0.0/main.png','https://example.com/main.png'),self.html.replace('../../../assets/heros-chef/v1.0.0/main.png','../../../assets/heros-chef/v1.0.0/unreviewed.png'),self.html.replace('width="1280"','width="1279"'),self.html.replace('decoding="async"','onload="alert(1)"'),re.sub(r'alt="[^"]*"','alt=""',self.html),self.html.replace("img-src 'self'","img-src *")):
             with self.subTest(changed=changed[:20]),self.assertRaises(SecurityError):validate_html(changed,self.policy,route=self.route)
         with self.assertRaises(SecurityError):validate_html(self.html,self.policy,route='index.html')
-        self.assertIn("img-src 'none'",page_csp(self.policy,'index.html'))
+        self.assertIn("img-src 'none'",page_csp(self.policy,'components/unapproved/v1.0.0/index.html'))
 
     def test_binary_hash_and_private_metadata_are_checked(self):
         import struct,zlib
