@@ -237,6 +237,17 @@ def validate_html(text, policy, path=None, site=None, route=None):
     script_hashes = approved_scripts(policy, route)
     image_assets, image_paths = approved_images(policy,route)
     image_counts = approved_image_counts(policy, route, image_paths)
+    pictures = policy.get('approved_banner_pictures', {})
+    if not isinstance(pictures, dict):
+        raise SecurityError('Banner pictures require exact page assignments')
+    for key, pair in pictures.items():
+        if not re.fullmatch(r'components/zeta-ugc-event/v\d+\.\d+\.\d+/index\.html', key) or not isinstance(pair, dict) or set(pair) != {'mobile','desktop'}:
+            raise SecurityError('Only reviewed Zeta banner pairs are permitted')
+        for kind, dims in [('mobile',(720,405)),('desktop',(1800,600))]:
+            asset = pair[kind]
+            if asset not in policy.get('approved_page_images',{}).get(key,[]) or asset not in image_assets or (image_assets[asset]['width'],image_assets[asset]['height']) != dims:
+                raise SecurityError('Banner pair must use its registered dimensions and assets')
+    picture = pictures.get(route)
     font_names = approved_fonts(policy, route)
     expected_csp = page_csp(policy, route)
     contact_links = policy.get("approved_contact_links", {})
@@ -273,6 +284,8 @@ def validate_html(text, policy, path=None, site=None, route=None):
             self.preloads = set()
             self.open_graph = set()
             self.og_values = {}
+            self.picture_state = None
+            self.picture_seen = False
 
         def handle_starttag(self, tag, attrs):
             if self.iframe_open:
@@ -281,6 +294,22 @@ def validate_html(text, policy, path=None, site=None, route=None):
             if len(names) != len(set(names)):
                 raise SecurityError("Duplicate HTML attributes")
             values = dict(attrs)
+            if self.picture_state and tag not in {'source','img'}:
+                raise SecurityError('Reviewed pictures contain only one source and one fallback image')
+            if tag == 'picture':
+                if not self.csp or attrs or not picture or self.picture_seen:
+                    raise SecurityError('Unapproved or duplicate responsive banner picture')
+                self.picture_state = 'source'
+                self.picture_seen = True
+            if tag == 'source':
+                if self.picture_state != 'source' or set(values) != {'media','srcset','width','height'} or values.get('media') != '(max-width:800px)' or values.get('width') != '720' or values.get('height') != '405':
+                    raise SecurityError('Banner source requires the exact reviewed mobile breakpoint')
+                target = image_target(values.get('srcset',''),route)
+                if target != picture['mobile'] or target in self.images:
+                    raise SecurityError('Unapproved or duplicate mobile banner source')
+                self.images.add(target)
+                self.image_counts[target] = 1
+                self.picture_state = 'img'
             if tag in {"object", "embed", "base", "form", "foreignobject"}:
                 raise SecurityError("Scripts, frames, forms and external resources are prohibited")
             if tag == 'link':
@@ -310,6 +339,10 @@ def validate_html(text, policy, path=None, site=None, route=None):
                 if not self.csp or set(values) != required | responsive:
                     raise SecurityError('Images require reviewed attributes after CSP')
                 target=image_target(values.get('src',''),route)
+                if self.picture_state:
+                    if self.picture_state != 'img' or target != picture['desktop'] or responsive:
+                        raise SecurityError('Banner fallback must be its reviewed desktop image')
+                    self.picture_state = 'done'
                 if target not in image_paths:
                     raise SecurityError('Unapproved image')
                 meta=image_assets[target]
@@ -364,7 +397,7 @@ def validate_html(text, policy, path=None, site=None, route=None):
                 self.frames.add(src)
                 self.iframe_open = True
             for name, value in attrs:
-                if (tag in {"iframe", "img"} and name == "src") or (tag == 'img' and name == 'srcset'):
+                if (tag in {"iframe", "img"} and name == "src") or (tag in {'img','source'} and name == 'srcset'):
                     continue
                 if name.startswith("on") or name in {"srcdoc", "src", "srcset", "poster", "data", "xlink:href"}:
                     raise SecurityError("Executable attributes and remote resources are prohibited")
@@ -442,6 +475,10 @@ def validate_html(text, policy, path=None, site=None, route=None):
             self.handle_starttag(tag, attrs)
 
         def handle_endtag(self, tag):
+            if tag == 'picture':
+                if self.picture_state != 'done':
+                    raise SecurityError('Incomplete responsive banner picture')
+                self.picture_state = None
             if tag == "script":
                 if not self.script_open:
                     raise SecurityError("Unexpected script closing tag")
@@ -474,6 +511,8 @@ def validate_html(text, policy, path=None, site=None, route=None):
     page = StaticPage()
     page.feed(text)
     page.close()
+    if page.picture_state or bool(picture) != page.picture_seen:
+        raise SecurityError('Page must include exactly its complete reviewed banner picture')
     if page.script_open or set(page.scripts) != set(script_hashes):
         raise SecurityError("Page must include exactly its reviewed complete scripts")
     if page.iframe_open:

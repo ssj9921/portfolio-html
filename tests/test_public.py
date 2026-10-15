@@ -12,6 +12,39 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from check_public import CSP, IFRAME_ATTRIBUTES, page_csp, script_hash, SecurityError, validate_html, validate_repository, validate_outgoing_history, validate_image, font_css
 
 
+class BannerPictureSecurityTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.root=Path(__file__).resolve().parents[1]
+        cls.route='components/zeta-ugc-event/v1.3.0/index.html'
+        cls.html=(cls.root/'docs'/cls.route).read_text(encoding='utf-8')
+        cls.policy=json.loads((cls.root/'policy.json').read_text(encoding='utf-8'))
+
+    def check(self,s):
+        validate_html(s,self.policy,route=self.route)
+
+    def test_exact_reviewed_picture_passes(self):
+        self.check(self.html)
+
+    def test_source_scope_breakpoint_and_urls_are_exact(self):
+        tag=re.search(r'<source[^>]+>',self.html)[0]
+        for bad in [tag.replace('800px','900px'),tag.replace('width="720"','width="721"'),tag.replace('banner-mobile.png','banner-desktop.png'),re.sub(r'srcset="[^"]+"','srcset="https://example.com/x.png"',tag),tag+' '+tag,tag.replace(' srcset=',' src="x" srcset=')]:
+            with self.subTest(bad=bad),self.assertRaises(SecurityError):
+                self.check(self.html.replace(tag,bad,1))
+
+    def test_picture_requires_one_ordered_source_and_fallback(self):
+        picture=re.search(r'<picture>[\s\S]*?</picture>',self.html)[0]
+        source=re.search(r'<source[^>]+>',picture)[0]
+        image=re.search(r'<img[^>]+>',picture)[0]
+        for bad in ['<picture>'+image+source+'</picture>',picture+picture,picture.replace(source,''),picture.replace(image,''),picture.replace('</picture>',''),picture.replace('<picture>','<picture style="color:red">'),picture.replace(image,'<div>'+image+'</div>')]:
+            with self.subTest(bad=bad),self.assertRaises(SecurityError):
+                self.check(self.html.replace(picture,bad,1))
+
+    def test_source_without_picture_and_broad_csp_rejected(self):
+        for bad in [self.html.replace('<picture>','').replace('</picture>',''),self.html.replace("img-src 'self'","img-src *")]:
+            with self.assertRaises(SecurityError):self.check(bad)
+
+
 class ResponsiveMetadataSecurityTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -370,12 +403,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 115)
+        self.assertEqual(result["html_pages"], 123)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.9.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.4.1/').replace('profile/v1.0.3/','profile/v1.3.0/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.10.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.4.2/').replace('profile/v1.0.3/','profile/v1.3.1/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -401,7 +434,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.9.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.10.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
