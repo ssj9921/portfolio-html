@@ -4,10 +4,10 @@
     {
       "id": "homepage",
       "name": "Selected Work",
-      "version": "2.8.0",
+      "version": "2.9.0",
       "path": "index.html",
-      "sha256": "0110b6e022ae0a393360c992feb26ac39a767657b104e28ee03551fded939ca8",
-      "source_sha256": "a6af2f869b7ed52b39eddb248de6a0fbdccebfab6a622ec05eb69ebe254d088b"
+      "sha256": "e7c3e6c1559fbada105429cd9b1789f7fb719858dff643e19ba8c2c50d8d8063",
+      "source_sha256": "236bf1f7434e3a40bca5dfd48169160d1fee7c0a730f55dbf539dd9975cea0dc"
     },
     {
       "id": "editorial-hero",
@@ -856,6 +856,70 @@
       "path": "components/zeta-ugc-wireframes/v1.0.4/index.html",
       "sha256": "f8d6ceafe8466be8b318e3aac8d8697555e4517d6c22ce60c9671458508a7f2f",
       "source_sha256": "c275a730143c0d261354c991b4c899813ff96affe898720d30a078f7977c2d0f"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "version": "2.9.0",
+      "path": "components/projects/v2.9.0/index.html",
+      "sha256": "eba9c2e0d0bdf896e851d3ed14d9bb393fc9b9c00f880b6ea1e64472ee57828f",
+      "source_sha256": "8dec1507dd058449e91a6acaeb35718aab0596b01f46ee7cb17a0968c13d20dc"
+    },
+    {
+      "id": "profile",
+      "name": "SEUNGJIN SONG · Profile",
+      "version": "1.3.0",
+      "path": "components/profile/v1.3.0/index.html",
+      "sha256": "2f17182084fc96f07c4b7d6c7b78a272a702075f8744f872f692211dd7a15bd8",
+      "source_sha256": "6dda2a664e605b75b7ac774bd7a45a8c7ffbe78608c42812e16c597ee339e65b"
+    },
+    {
+      "id": "heros-chef-project",
+      "name": "용사의 쉐프 · Project",
+      "version": "1.4.1",
+      "path": "components/heros-chef-project/v1.4.1/index.html",
+      "sha256": "a86c89abf4ded440a2feba4e8e95950fe39639673c12b8ca40a2adbe3f848a3d",
+      "source_sha256": "9fed2fa2e926b4c8a6af13de0470ed22dafa2fbf7076fb598e5c5e074a5d2158"
+    },
+    {
+      "id": "stock-project",
+      "name": "그때 샀다면? · Project",
+      "version": "1.4.0",
+      "path": "components/stock-project/v1.4.0/index.html",
+      "sha256": "0c93555e2d8d7ff60e3a13301968a9ccb029401cc5ad3b10667110de666055f7",
+      "source_sha256": "26f750b08762063662595817756dada4646ec076ecf33ee2c5ddaa205a2ab904"
+    },
+    {
+      "id": "varco-project",
+      "name": "City Of Rubble — Project",
+      "version": "1.4.1",
+      "path": "components/varco-project/v1.4.1/index.html",
+      "sha256": "3a596d61d2d1f61863d3952de7c64694122b1a69e053828c0ea47b185dde276e",
+      "source_sha256": "284891b09fc504a89c76359c844443c35072aba9c89379fa82b841aad8553b9c"
+    },
+    {
+      "id": "visual-novel-template",
+      "name": "VisualNovelTemplate · Project",
+      "version": "1.0.10",
+      "path": "components/visual-novel-template/v1.0.10/index.html",
+      "sha256": "3f5462f478d86b9771e8d8d68ce16d46eed754ff309bc9bf476814ce6ee19de1",
+      "source_sha256": "bea786ac311b26489f9286aa9908787473166308b63984e8e675bc2371fa6ded"
+    },
+    {
+      "id": "zeta-ugc-event",
+      "name": "제타 채팅 어워즈 · 제안",
+      "version": "1.2.1",
+      "path": "components/zeta-ugc-event/v1.2.1/index.html",
+      "sha256": "7359fcb20e5b401ea886ec10ae757f23cad28f8a8108abe5cd64fd0892bb6516",
+      "source_sha256": "a2c905ae8d5318b771862dd43c29dd5bdee34514cc0fd716480370c1d650d071"
+    },
+    {
+      "id": "zeta-ugc-wireframes",
+      "name": "UGC · 독립 예시 UI",
+      "version": "1.1.0",
+      "path": "components/zeta-ugc-wireframes/v1.1.0/index.html",
+      "sha256": "3cc820ee298f7b26e81a659bc4c0063bb2b6bf2128558caf55c47c31be830b6a",
+      "source_sha256": "b2d0de63a143f8b0cbf5aae9784232add04ee2615525ae51993163152fea2ade"
     }
   ]
 }

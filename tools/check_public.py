@@ -53,6 +53,16 @@ WEBFONTS = {
     'chosun-shin': ('ChosunSm', 'https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.1/ChosunSm.woff'),
 }
 
+PUBLIC_BASE = 'https://ssj9921.github.io/portfolio-html/'
+CARD_SIZES = '(max-width:580px) calc(100vw - 44px), (max-width:1000px) calc(50vw - 48px), 320px'
+HOME_SIZES = '(max-width:760px) calc(100vw - 44px), 420px'
+
+
+def canonical_url(route):
+    if route != 'index.html' and (not isinstance(route, str) or not COMPONENT_PATH.fullmatch('docs/' + route)):
+        raise SecurityError('Metadata requires an exact public page route')
+    return PUBLIC_BASE + ('' if route == 'index.html' else route)
+
 
 def font_css(name):
     family, url = WEBFONTS[name]
@@ -130,7 +140,8 @@ def script_hash(source):
 def approved_images(policy, route=None):
     assets = policy.get('approved_image_assets', {})
     pages = policy.get('approved_page_images', {})
-    if not isinstance(assets, dict) or not isinstance(pages, dict):
+    shared = policy.get('approved_metadata_images', {})
+    if not isinstance(assets, dict) or not isinstance(pages, dict) or not isinstance(shared, dict):
         raise SecurityError('Image approvals must be exact maps')
     for name, meta in assets.items():
         if not isinstance(name, str) or not IMAGE_PATH.fullmatch(name) or not isinstance(meta, dict):
@@ -143,7 +154,10 @@ def approved_images(policy, route=None):
     for name, images in pages.items():
         if (name != 'index.html' and not COMPONENT_PATH.fullmatch('docs/'+name)) or not isinstance(images,list) or not images or len(images)!=len(set(images)) or any(i not in assets for i in images):
             raise SecurityError('Each image page requires exact registered assets')
-    if set(assets) != {i for images in pages.values() for i in images}:
+    for name, image in shared.items():
+        if (name != 'index.html' and (not isinstance(name,str) or not COMPONENT_PATH.fullmatch('docs/'+name))) or image not in assets:
+            raise SecurityError('Share images require an exact page route and registered asset')
+    if set(assets) != {i for images in pages.values() for i in images} | set(shared.values()):
         raise SecurityError('Every image must be assigned to a reviewed page')
     return assets, pages.get(route, [])
 
@@ -255,6 +269,10 @@ def validate_html(text, policy, path=None, site=None, route=None):
             self.script_text = ""
             self.scripts = []
             self.fonts = []
+            self.canonical = False
+            self.preloads = set()
+            self.open_graph = set()
+            self.og_values = {}
 
         def handle_starttag(self, tag, attrs):
             if self.iframe_open:
@@ -263,24 +281,72 @@ def validate_html(text, policy, path=None, site=None, route=None):
             if len(names) != len(set(names)):
                 raise SecurityError("Duplicate HTML attributes")
             values = dict(attrs)
-            if tag in {"object", "embed", "base", "link", "form", "foreignobject"}:
+            if tag in {"object", "embed", "base", "form", "foreignobject"}:
                 raise SecurityError("Scripts, frames, forms and external resources are prohibited")
+            if tag == 'link':
+                if not self.csp:
+                    raise SecurityError('CSP must precede metadata and font preloads')
+                if values.get('rel') == 'canonical':
+                    if set(values) != {'rel', 'href'} or self.canonical or values['href'] != canonical_url(route):
+                        raise SecurityError('Canonical must name only its own exact public route')
+                    self.canonical = True
+                elif values.get('rel') == 'preload':
+                    if set(values) != {'rel', 'href', 'as', 'type', 'crossorigin'} or values.get('as') != 'font' or values.get('type') != 'font/woff' or values.get('crossorigin') != 'anonymous':
+                        raise SecurityError('Only exact original WOFF font preloads are allowed')
+                    href = values['href']
+                    if href not in {WEBFONTS[n][1] for n in font_names} or href in self.preloads:
+                        raise SecurityError('Unapproved or duplicate font preload')
+                    self.preloads.add(href)
+                else:
+                    raise SecurityError('Stylesheets and other resource link types remain prohibited')
             if tag == "script":
                 if not self.csp or not script_hashes or attrs or self.script_open:
                     raise SecurityError("Only reviewed inline classic scripts after CSP are allowed")
                 self.script_open = True
                 self.script_text = ""
             if tag == 'img':
-                if not self.csp or set(values)!={'src','alt','width','height','loading','decoding','class'}:
+                required = {'src','alt','width','height','loading','decoding','class'}
+                responsive = {'srcset','sizes'} if 'srcset' in values or 'sizes' in values else set()
+                if not self.csp or set(values) != required | responsive:
                     raise SecurityError('Images require reviewed attributes after CSP')
                 target=image_target(values.get('src',''),route)
-                self.image_counts[target] = self.image_counts.get(target, 0) + 1
-                if target not in image_paths or self.image_counts[target] > image_counts[target]:
-                    raise SecurityError('Unapproved or duplicate image')
+                if target not in image_paths:
+                    raise SecurityError('Unapproved image')
                 meta=image_assets[target]
                 if not values['alt'].strip() or len(values['alt'])>240 or values['width']!=str(meta['width']) or values['height']!=str(meta['height']) or values['loading'] not in {'eager','lazy'} or values['decoding']!='async' or values['class']!='project-image':
                     raise SecurityError('Image description, layout or loading attributes invalid')
-                self.images.add(target)
+                targets = {target}
+                if responsive:
+                    expected_sizes = HOME_SIZES if route == 'index.html' else CARD_SIZES if re.fullmatch(r'components/projects/v\d+\.\d+\.\d+/index\.html', route or '') else None
+                    if not expected_sizes or values['sizes'] != expected_sizes:
+                        raise SecurityError('Responsive images are restricted to reviewed home and Projects sizes')
+                    widths = set()
+                    candidate_targets = set()
+                    candidates = values['srcset'].split(',')
+                    if len(candidates) != 3:
+                        raise SecurityError('Card srcset must contain exactly three reviewed widths')
+                    for candidate in candidates:
+                        match = re.fullmatch(r'\s*(\S+) (320|640|960)w\s*', candidate)
+                        if not match or int(match[2]) in widths:
+                            raise SecurityError('Invalid or duplicate responsive width')
+                        alternative = image_target(match[1], route)
+                        if alternative not in image_paths:
+                            raise SecurityError('Unapproved responsive image')
+                        details = image_assets[alternative]
+                        width = int(match[2]); widths.add(width)
+                        if alternative != target.rsplit('-',1)[0] + '-' + str(width) + '.jpg':
+                            raise SecurityError('Responsive candidates must use the same reviewed card family')
+                        if details['width'] != width or abs(details['height'] - meta['height'] * width / meta['width']) > 1:
+                            raise SecurityError('Responsive dimensions must match the reviewed image aspect ratio')
+                        targets.add(alternative)
+                        candidate_targets.add(alternative)
+                    if widths != {320,640,960} or target not in candidate_targets or meta['width'] != 960:
+                        raise SecurityError('Responsive fallback must be the reviewed 960px image')
+                for current in targets:
+                    self.image_counts[current] = self.image_counts.get(current, 0) + 1
+                    if self.image_counts[current] > image_counts[current]:
+                        raise SecurityError('Duplicate image exceeds exact approval')
+                self.images.update(targets)
             if tag == "iframe":
                 if not self.csp:
                     raise SecurityError("CSP must precede embedded resources")
@@ -298,13 +364,33 @@ def validate_html(text, policy, path=None, site=None, route=None):
                 self.frames.add(src)
                 self.iframe_open = True
             for name, value in attrs:
-                if tag in {"iframe", "img"} and name == "src":
+                if (tag in {"iframe", "img"} and name == "src") or (tag == 'img' and name == 'srcset'):
                     continue
                 if name.startswith("on") or name in {"srcdoc", "src", "srcset", "poster", "data", "xlink:href"}:
                     raise SecurityError("Executable attributes and remote resources are prohibited")
                 if name == "style":
                     css_check(value or "")
             if tag == "meta":
+                prop = values.get('property', '')
+                if prop.startswith('og:'):
+                    allowed = {'og:title','og:description','og:type','og:url','og:image','og:image:alt','og:image:width','og:image:height'}
+                    if not self.csp or set(values) != {'property','content'} or prop not in allowed or prop in self.open_graph:
+                        raise SecurityError('Open Graph metadata must be unique and use the reviewed fields')
+                    content = values['content']
+                    if prop == 'og:url' and content != canonical_url(route):
+                        raise SecurityError('Open Graph URL must match the exact public route')
+                    if prop == 'og:image':
+                        expected_image = policy.get('approved_metadata_images',{}).get(route)
+                        if not expected_image or content != PUBLIC_BASE + expected_image:
+                            raise SecurityError('Share images must be exact registered public assets')
+                    if prop == 'og:type' and content not in {'website','profile'}:
+                        raise SecurityError('Unapproved Open Graph content type')
+                    if prop in {'og:image:width','og:image:height'} and not re.fullmatch(r'[1-9]\d{0,4}', content):
+                        raise SecurityError('Invalid share image dimensions')
+                    if not content.strip() or len(content)>500:
+                        raise SecurityError('Invalid or excessive Open Graph content')
+                    self.open_graph.add(prop)
+                    self.og_values[prop] = content
                 equiv = (values.get("http-equiv") or "").lower()
                 if equiv and equiv != "content-security-policy":
                     raise SecurityError("Meta refresh and other HTTP-equivalent directives are prohibited")
@@ -400,6 +486,13 @@ def validate_html(text, policy, path=None, site=None, route=None):
         raise SecurityError('Image page must include exactly its reviewed image counts')
     if sorted(page.fonts) != sorted(font_names):
         raise SecurityError('Page must include exactly its reviewed font declarations')
+    if 'og:image' in page.og_values:
+        shared = image_assets[page.og_values['og:image'][len(PUBLIC_BASE):]]
+        for key in ('width','height'):
+            if 'og:image:'+key in page.og_values and page.og_values['og:image:'+key] != str(shared[key]):
+                raise SecurityError('Share image dimensions must match the registered asset')
+    if policy.get('approved_metadata_images',{}).get(route) and 'og:image' not in page.og_values:
+        raise SecurityError('An exact share-image approval must be used by its page')
     if any(youtube_watch_url(url) not in page.links for url in page.frames):
         raise SecurityError("Every embedded video requires an ordinary watch-on-YouTube fallback")
     if not all((page.csp, page.referrer, page.charset, page.viewport)):

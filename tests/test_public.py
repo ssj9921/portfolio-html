@@ -11,6 +11,52 @@ from urllib.parse import unquote, urlsplit
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
 from check_public import CSP, IFRAME_ATTRIBUTES, page_csp, script_hash, SecurityError, validate_html, validate_repository, validate_outgoing_history, validate_image, font_css
 
+
+class ResponsiveMetadataSecurityTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.root = Path(__file__).resolve().parents[1]
+        cls.route = 'components/projects/v2.9.0/index.html'
+        cls.html = (cls.root/'docs'/cls.route).read_text(encoding='utf-8')
+        cls.policy = json.loads((cls.root/'policy.json').read_text(encoding='utf-8'))
+
+    def check(self, text):
+        validate_html(text, self.policy, route=self.route)
+
+    def test_reviewed_metadata_and_responsive_page_pass(self):
+        self.check(self.html)
+
+    def test_canonical_origin_route_query_and_duplicates_rejected(self):
+        tag = re.search(r'<link rel="canonical"[^>]+>', self.html)[0]
+        url = 'https://ssj9921.github.io/portfolio-html/'+self.route
+        for bad in [tag.replace(url,'https://example.com/'),tag.replace(url,url+'?x=1'),tag.replace(url,url+'#work'),tag.replace('v2.9.0','v2.8.0'),tag+tag]:
+            with self.subTest(bad=bad), self.assertRaises(SecurityError):
+                self.check(self.html.replace(tag,bad,1))
+
+    def test_preload_does_not_enable_arbitrary_resource_permissions(self):
+        tag = re.search(r'<link rel="preload"[^>]+>', self.html)[0]
+        for bad in [tag.replace('as="font"','as="script"'),tag.replace('rel="preload"','rel="stylesheet"'),tag.replace('crossorigin="anonymous"','crossorigin="use-credentials"'),re.sub(r'href="[^"]+"','href="https://example.com/font.woff"',tag),tag+tag]:
+            with self.subTest(bad=bad), self.assertRaises(SecurityError):
+                self.check(self.html.replace(tag,bad,1))
+
+    def test_srcset_urls_family_widths_and_sizes_are_exact(self):
+        tag = re.search(r'<img\b[^>]+srcset="[^"]+"[^>]*>',self.html)[0]
+        for bad in [tag.replace('chef-320.jpg','city-320.jpg'),tag.replace('320w','321w'),re.sub(r'srcset="[^"]+"','srcset="https://example.com/x.jpg 320w, x 640w, y 960w"',tag),re.sub(r'sizes="[^"]+"','sizes="100vw"',tag),re.sub(r' sizes="[^"]+"','',tag)]:
+            with self.subTest(bad=bad), self.assertRaises(SecurityError):
+                self.check(self.html.replace(tag,bad,1))
+
+    def test_share_urls_and_registered_dimensions_cannot_drift(self):
+        tag = re.search(r'<meta property="og:image"[^>]+>',self.html)[0]
+        for bad in [tag.replace('assets/heros-chef/v1.0.0/main.png','assets/city-of-rubble/v1.0.0/main.jpg'),tag.replace('https://ssj9921.github.io/portfolio-html/','https://example.com/')]:
+            with self.subTest(bad=bad), self.assertRaises(SecurityError):
+                self.check(self.html.replace(tag,bad,1))
+        with self.assertRaises(SecurityError):
+            self.check(self.html.replace('property="og:image:width" content="1280"','property="og:image:width" content="1279"'))
+
+    def test_original_no_network_and_no_broad_script_permissions_remain(self):
+        for bad in [self.html.replace("connect-src 'none'","connect-src *"),self.html.replace("script-src-attr 'none'","script-src-attr 'unsafe-inline'")]:
+            with self.assertRaises(SecurityError):self.check(bad)
+
 POLICY = {"approved_external_links": ["https://example.com/public"], "approved_contacts": []}
 
 
@@ -324,12 +370,12 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 107)
+        self.assertEqual(result["html_pages"], 115)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.8.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.4.0/').replace('profile/v1.0.3/','profile/v1.2.10/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.9.0/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.4.1/').replace('profile/v1.0.3/','profile/v1.3.0/')
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -355,7 +401,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.8.0/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.9.0/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')

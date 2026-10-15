@@ -197,6 +197,24 @@
     ],
     "components/zeta-ugc-wireframes/v1.0.4/index.html": [
       "sha256-SedADli16pLmlg4TcR9pgDlq6/BjiQ9yk8YSqDYJ2c0="
+    ],
+    "components/projects/v2.9.0/index.html": [
+      "sha256-Kqc/Uvn/Emtte4tYbypnNRTCh85dCv8zeZjDMK+rESk="
+    ],
+    "components/stock-project/v1.4.0/index.html": [
+      "sha256-2kSl5ZjIBMjBQth4BQQuAuaMTqkVg/f5PJYBG5hyLxw="
+    ],
+    "components/varco-project/v1.4.1/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/visual-novel-template/v1.0.10/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/zeta-ugc-event/v1.2.1/index.html": [
+      "sha256-eETwTatklnog+dKWHy0BB6wgopVsUyuE45nL2OBUtcU="
+    ],
+    "components/zeta-ugc-wireframes/v1.1.0/index.html": [
+      "sha256-qDGke0oSKVkmUq5qkdBU+jN70o2xzRA8gBuqNw4iaKE="
     ]
   },
   "homepage_script_allowed": true,
@@ -241,6 +259,9 @@
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ],
     "components/varco-project/v1.4.0/index.html": [
+      "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
+    ],
+    "components/varco-project/v1.4.1/index.html": [
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ]
   },
@@ -528,6 +549,34 @@
     "components/zeta-ugc-event/v1.2.0/index.html": [
       "chosun-bold",
       "chosun-shin"
+    ],
+    "components/projects/v2.9.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/profile/v1.3.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/heros-chef-project/v1.4.1/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/stock-project/v1.4.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/varco-project/v1.4.1/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/visual-novel-template/v1.0.10/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/zeta-ugc-event/v1.2.1/index.html": [
+      "chosun-bold",
+      "chosun-shin"
     ]
   },
   "approved_image_assets": {
@@ -626,6 +675,96 @@
       "media_type": "image/png",
       "width": 1752,
       "height": 1224
+    },
+    "assets/card-thumbnails/v1.0.0/chef-320.jpg": {
+      "sha256": "953d0da994918b5b92df880b47635e626a129eeb0c3fae421dc3a52f6b74308a",
+      "media_type": "image/jpeg",
+      "width": 320,
+      "height": 180
+    },
+    "assets/card-thumbnails/v1.0.0/chef-640.jpg": {
+      "sha256": "f1cf8316ec37bf3c5034a48997227d8186dcdf7d9cad15406a1d3c7a0fdf05e7",
+      "media_type": "image/jpeg",
+      "width": 640,
+      "height": 360
+    },
+    "assets/card-thumbnails/v1.0.0/chef-960.jpg": {
+      "sha256": "3da5a329ba394f94af498ad2552d8e3c3d5ff2fe4357f47c7d755103076ef17a",
+      "media_type": "image/jpeg",
+      "width": 960,
+      "height": 540
+    },
+    "assets/card-thumbnails/v1.0.0/city-320.jpg": {
+      "sha256": "3554096b7e8c62e997c006d1c8c212107cda46d9eb96cf305e6c9f143557b490",
+      "media_type": "image/jpeg",
+      "width": 320,
+      "height": 180
+    },
+    "assets/card-thumbnails/v1.0.0/city-640.jpg": {
+      "sha256": "728b1d4ef4c5811fa45436420f3d5269237fcc698b1176b16763e37c6cf7c6c0",
+      "media_type": "image/jpeg",
+      "width": 640,
+      "height": 360
+    },
+    "assets/card-thumbnails/v1.0.0/city-960.jpg": {
+      "sha256": "e62e0b75fa7fb874669d99bcc4438eb082aab2f2668c384d85c65aded9ffc67d",
+      "media_type": "image/jpeg",
+      "width": 960,
+      "height": 540
+    },
+    "assets/card-thumbnails/v1.0.0/vn-320.jpg": {
+      "sha256": "b7d890d42c4d5ea31146cc60a48a84f09f02ec494bd23184daaa9af3867fd96e",
+      "media_type": "image/jpeg",
+      "width": 320,
+      "height": 173
+    },
+    "assets/card-thumbnails/v1.0.0/vn-640.jpg": {
+      "sha256": "1389a80d920be4bd1fbb314abf37a236aee7bec02ee33c9ed8b30e92d248c5f2",
+      "media_type": "image/jpeg",
+      "width": 640,
+      "height": 347
+    },
+    "assets/card-thumbnails/v1.0.0/vn-960.jpg": {
+      "sha256": "3ea6bbf8fb3800a20819aa18c40775a0bdce9b76c74a772eea288f8b898de64d",
+      "media_type": "image/jpeg",
+      "width": 960,
+      "height": 520
+    },
+    "assets/card-thumbnails/v1.0.0/stock-summary-320.jpg": {
+      "sha256": "20bce4c680292fe2c36ee3456e3378731ef6647f906a023ee75033c883de1111",
+      "media_type": "image/jpeg",
+      "width": 320,
+      "height": 180
+    },
+    "assets/card-thumbnails/v1.0.0/stock-summary-640.jpg": {
+      "sha256": "8e355f3ac1a2f5691fb088541d4c374a5c21a52a4f3c5d854527e64212fe109e",
+      "media_type": "image/jpeg",
+      "width": 640,
+      "height": 360
+    },
+    "assets/card-thumbnails/v1.0.0/stock-summary-960.jpg": {
+      "sha256": "b0f8a4fb2a013c5080e4b2401ef44a97e5f3af3f2da0c76826f28d673b5678a5",
+      "media_type": "image/jpeg",
+      "width": 960,
+      "height": 540
+    },
+    "assets/card-thumbnails/v1.0.0/stock-detail-320.jpg": {
+      "sha256": "5a3a0352bb5bed775ab128e502cdf2bac354e19d87025cb602a2e9878a76b147",
+      "media_type": "image/jpeg",
+      "width": 320,
+      "height": 224
+    },
+    "assets/card-thumbnails/v1.0.0/stock-detail-640.jpg": {
+      "sha256": "9f9c3669e3d28342bfe756aae58761d24107dfe69aac967ee06b2e08f9adc26a",
+      "media_type": "image/jpeg",
+      "width": 640,
+      "height": 447
+    },
+    "assets/card-thumbnails/v1.0.0/stock-detail-960.jpg": {
+      "sha256": "b26d7742edf5b093bbec49305957f9d2369a3afc71970f18989a15634c6b66fc",
+      "media_type": "image/jpeg",
+      "width": 960,
+      "height": 671
     }
   },
   "approved_page_images": {
@@ -783,10 +922,18 @@
       "assets/visual-novel-template/v1.0.0/event-spec.png"
     ],
     "index.html": [
-      "assets/heros-chef/v1.0.0/main.png",
-      "assets/city-of-rubble/v1.0.0/main.jpg",
-      "assets/visual-novel-template/v1.0.0/editor-04.png",
-      "assets/stock/v1.0.0/summary-detail.png"
+      "assets/card-thumbnails/v1.0.0/chef-320.jpg",
+      "assets/card-thumbnails/v1.0.0/chef-640.jpg",
+      "assets/card-thumbnails/v1.0.0/chef-960.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-detail-320.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-detail-640.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-detail-960.jpg",
+      "assets/card-thumbnails/v1.0.0/city-320.jpg",
+      "assets/card-thumbnails/v1.0.0/city-640.jpg",
+      "assets/card-thumbnails/v1.0.0/city-960.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-320.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-640.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-960.jpg"
     ],
     "components/projects/v2.5.0/index.html": [
       "assets/heros-chef/v1.0.0/main.png",
@@ -912,14 +1059,63 @@
       "assets/visual-novel-template/v1.0.0/ingame.jpg",
       "assets/visual-novel-template/v1.0.0/text-spec.png",
       "assets/visual-novel-template/v1.0.0/event-spec.png"
+    ],
+    "components/projects/v2.9.0/index.html": [
+      "assets/card-thumbnails/v1.0.0/chef-320.jpg",
+      "assets/card-thumbnails/v1.0.0/chef-640.jpg",
+      "assets/card-thumbnails/v1.0.0/chef-960.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-summary-320.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-summary-640.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-summary-960.jpg",
+      "assets/card-thumbnails/v1.0.0/city-320.jpg",
+      "assets/card-thumbnails/v1.0.0/city-640.jpg",
+      "assets/card-thumbnails/v1.0.0/city-960.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-320.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-640.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-960.jpg"
+    ],
+    "components/heros-chef-project/v1.4.1/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/heros-chef/v1.0.0/battle.jpg",
+      "assets/heros-chef/v1.0.0/recipe.jpg"
+    ],
+    "components/varco-project/v1.4.1/index.html": [
+      "assets/city-of-rubble/v1.0.0/main.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-01.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-02.jpg"
+    ],
+    "components/visual-novel-template/v1.0.10/index.html": [
+      "assets/visual-novel-template/v1.0.0/editor-01.png",
+      "assets/visual-novel-template/v1.0.0/editor-02.png",
+      "assets/visual-novel-template/v1.0.0/editor-03.png",
+      "assets/visual-novel-template/v1.0.0/editor-05.png",
+      "assets/visual-novel-template/v1.0.0/ingame.jpg",
+      "assets/visual-novel-template/v1.0.0/text-spec.png",
+      "assets/visual-novel-template/v1.0.0/event-spec.png"
     ]
   },
   "approved_page_image_counts": {
     "index.html": {
-      "assets/heros-chef/v1.0.0/main.png": 2,
-      "assets/city-of-rubble/v1.0.0/main.jpg": 2,
-      "assets/visual-novel-template/v1.0.0/editor-04.png": 2,
-      "assets/stock/v1.0.0/summary-detail.png": 2
+      "assets/card-thumbnails/v1.0.0/chef-320.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/chef-640.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/chef-960.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/stock-detail-320.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/stock-detail-640.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/stock-detail-960.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/city-320.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/city-640.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/city-960.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/vn-320.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/vn-640.jpg": 2,
+      "assets/card-thumbnails/v1.0.0/vn-960.jpg": 2
     }
+  },
+  "approved_metadata_images": {
+    "index.html": "assets/heros-chef/v1.0.0/main.png",
+    "components/projects/v2.9.0/index.html": "assets/heros-chef/v1.0.0/main.png",
+    "components/heros-chef-project/v1.4.1/index.html": "assets/heros-chef/v1.0.0/main.png",
+    "components/stock-project/v1.4.0/index.html": "assets/stock/v1.0.0/summary-detail.png",
+    "components/varco-project/v1.4.1/index.html": "assets/city-of-rubble/v1.0.0/main.jpg",
+    "components/visual-novel-template/v1.0.10/index.html": "assets/visual-novel-template/v1.0.0/ingame.jpg"
   }
 }
