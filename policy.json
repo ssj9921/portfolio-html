@@ -179,6 +179,24 @@
     ],
     "components/zeta-ugc-wireframes/v1.0.3/index.html": [
       "sha256-SedADli16pLmlg4TcR9pgDlq6/BjiQ9yk8YSqDYJ2c0="
+    ],
+    "components/projects/v2.8.0/index.html": [
+      "sha256-Kqc/Uvn/Emtte4tYbypnNRTCh85dCv8zeZjDMK+rESk="
+    ],
+    "components/stock-project/v1.3.0/index.html": [
+      "sha256-qKMR9KiKmg/+IBpJmPtBHTlgo1q5NlHYHoLC2TRPQhI="
+    ],
+    "components/varco-project/v1.4.0/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/visual-novel-template/v1.0.9/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/zeta-ugc-event/v1.2.0/index.html": [
+      "sha256-eETwTatklnog+dKWHy0BB6wgopVsUyuE45nL2OBUtcU="
+    ],
+    "components/zeta-ugc-wireframes/v1.0.4/index.html": [
+      "sha256-SedADli16pLmlg4TcR9pgDlq6/BjiQ9yk8YSqDYJ2c0="
     ]
   },
   "homepage_script_allowed": true,
@@ -220,6 +238,9 @@
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ],
     "components/varco-project/v1.3.5/index.html": [
+      "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
+    ],
+    "components/varco-project/v1.4.0/index.html": [
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ]
   },
@@ -477,6 +498,34 @@
       "chosun-shin"
     ],
     "components/zeta-ugc-event/v1.1.2/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/projects/v2.8.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/profile/v1.2.10/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/heros-chef-project/v1.4.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/stock-project/v1.3.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/varco-project/v1.4.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/visual-novel-template/v1.0.9/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/zeta-ugc-event/v1.2.0/index.html": [
       "chosun-bold",
       "chosun-shin"
     ]
@@ -831,6 +880,31 @@
       "assets/city-of-rubble/v1.0.0/ingame-02.jpg"
     ],
     "components/visual-novel-template/v1.0.8/index.html": [
+      "assets/visual-novel-template/v1.0.0/editor-01.png",
+      "assets/visual-novel-template/v1.0.0/editor-02.png",
+      "assets/visual-novel-template/v1.0.0/editor-03.png",
+      "assets/visual-novel-template/v1.0.0/editor-05.png",
+      "assets/visual-novel-template/v1.0.0/ingame.jpg",
+      "assets/visual-novel-template/v1.0.0/text-spec.png",
+      "assets/visual-novel-template/v1.0.0/event-spec.png"
+    ],
+    "components/projects/v2.8.0/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/city-of-rubble/v1.0.0/main.jpg",
+      "assets/visual-novel-template/v1.0.0/editor-04.png",
+      "assets/stock/v1.0.0/summary.png"
+    ],
+    "components/heros-chef-project/v1.4.0/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/heros-chef/v1.0.0/battle.jpg",
+      "assets/heros-chef/v1.0.0/recipe.jpg"
+    ],
+    "components/varco-project/v1.4.0/index.html": [
+      "assets/city-of-rubble/v1.0.0/main.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-01.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-02.jpg"
+    ],
+    "components/visual-novel-template/v1.0.9/index.html": [
       "assets/visual-novel-template/v1.0.0/editor-01.png",
       "assets/visual-novel-template/v1.0.0/editor-02.png",
       "assets/visual-novel-template/v1.0.0/editor-03.png",
