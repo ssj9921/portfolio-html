@@ -9,7 +9,8 @@
     "https://www.youtube.com/watch?v=yMVUd6CHyZo",
     "https://play.google.com/store/apps/details?id=com.mobirix.tmh&hl=ko&gl=US",
     "https://zeta-ai.io/ko/announcements/11617",
-    "https://prtimes.jp/main/html/rd/p/000000006.000137634.html"
+    "https://prtimes.jp/main/html/rd/p/000000006.000137634.html",
+    "https://oheasy.itch.io/heros"
   ],
   "approved_contacts": [
     "seungjins92@gmail.com",
@@ -233,6 +234,24 @@
     ],
     "components/zeta-ugc-wireframes/v1.1.1/index.html": [
       "sha256-qDGke0oSKVkmUq5qkdBU+jN70o2xzRA8gBuqNw4iaKE="
+    ],
+    "components/projects/v2.11.0/index.html": [
+      "sha256-5BtO7/pdtAdLP0KM9b9+rYruTARpCTtuFUzmPXw7C50="
+    ],
+    "components/stock-project/v1.4.2/index.html": [
+      "sha256-2kSl5ZjIBMjBQth4BQQuAuaMTqkVg/f5PJYBG5hyLxw="
+    ],
+    "components/varco-project/v1.4.3/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/visual-novel-template/v1.0.12/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/zeta-ugc-event/v1.3.1/index.html": [
+      "sha256-eETwTatklnog+dKWHy0BB6wgopVsUyuE45nL2OBUtcU="
+    ],
+    "components/zeta-ugc-wireframes/v1.1.2/index.html": [
+      "sha256-qDGke0oSKVkmUq5qkdBU+jN70o2xzRA8gBuqNw4iaKE="
     ]
   },
   "homepage_script_allowed": true,
@@ -283,6 +302,9 @@
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ],
     "components/varco-project/v1.4.2/index.html": [
+      "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
+    ],
+    "components/varco-project/v1.4.3/index.html": [
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ]
   },
@@ -626,6 +648,38 @@
     "components/zeta-ugc-event/v1.3.0/index.html": [
       "chosun-bold",
       "chosun-shin"
+    ],
+    "components/projects/v2.11.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/profile/v1.3.2/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/heros-chef-project/v1.5.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/stock-project/v1.4.2/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/varco-project/v1.4.3/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/visual-novel-template/v1.0.12/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/zeta-ugc-event/v1.3.1/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/heros-chef-godot/v1.0.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
     ]
   },
   "approved_image_assets": {
@@ -844,6 +898,42 @@
       "media_type": "image/png",
       "width": 720,
       "height": 405
+    },
+    "assets/heros-chef-godot/v1.0.0/cooking.png": {
+      "sha256": "190ed304bcddc4bdf42d4cae78b646df28c8b6364728530d0c30171577943e07",
+      "media_type": "image/png",
+      "width": 1280,
+      "height": 720
+    },
+    "assets/heros-chef-godot/v1.0.0/compare-ingredients.png": {
+      "sha256": "3be2fc875061913da461df3027ee34c4aa974079eb5a37f37efb437318751daf",
+      "media_type": "image/png",
+      "width": 1280,
+      "height": 720
+    },
+    "assets/heros-chef-godot/v1.0.0/compare-method.png": {
+      "sha256": "f9bab77aee3dd117eaa48c6cd25f352050fe2c54cd0e5dc929ea8ba3e1c1865e",
+      "media_type": "image/png",
+      "width": 1280,
+      "height": 720
+    },
+    "assets/heros-chef-godot/v1.0.0/card-320.jpg": {
+      "sha256": "505c61f3438ebc2ed773400527cfa4258390dcc3cf3633407c65bea6666e82b7",
+      "media_type": "image/jpeg",
+      "width": 320,
+      "height": 180
+    },
+    "assets/heros-chef-godot/v1.0.0/card-640.jpg": {
+      "sha256": "53daa5444fe7f80991a17b995e8d6eef264e32075ac2fa53dc915c1a21d89689",
+      "media_type": "image/jpeg",
+      "width": 640,
+      "height": 360
+    },
+    "assets/heros-chef-godot/v1.0.0/card-960.jpg": {
+      "sha256": "24634a1bee447f4883b286a4777e6bac7dbc03673ad8647ed04730f23ab33462",
+      "media_type": "image/jpeg",
+      "width": 960,
+      "height": 540
     }
   },
   "approved_page_images": {
@@ -1211,6 +1301,56 @@
       "assets/visual-novel-template/v1.0.0/ingame.jpg",
       "assets/visual-novel-template/v1.0.0/text-spec.png",
       "assets/visual-novel-template/v1.0.0/event-spec.png"
+    ],
+    "components/projects/v2.11.0/index.html": [
+      "assets/card-thumbnails/v1.0.0/chef-320.jpg",
+      "assets/card-thumbnails/v1.0.0/chef-640.jpg",
+      "assets/card-thumbnails/v1.0.0/chef-960.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-summary-320.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-summary-640.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-summary-960.jpg",
+      "assets/card-thumbnails/v1.0.0/city-320.jpg",
+      "assets/card-thumbnails/v1.0.0/city-640.jpg",
+      "assets/card-thumbnails/v1.0.0/city-960.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-320.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-640.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-960.jpg",
+      "assets/zeta-images/v1.0.0/card-320.jpg",
+      "assets/zeta-images/v1.0.0/card-640.jpg",
+      "assets/zeta-images/v1.0.0/card-960.jpg",
+      "assets/heros-chef-godot/v1.0.0/card-320.jpg",
+      "assets/heros-chef-godot/v1.0.0/card-640.jpg",
+      "assets/heros-chef-godot/v1.0.0/card-960.jpg"
+    ],
+    "components/heros-chef-godot/v1.0.0/index.html": [
+      "assets/heros-chef-godot/v1.0.0/cooking.png",
+      "assets/heros-chef-godot/v1.0.0/compare-ingredients.png",
+      "assets/heros-chef-godot/v1.0.0/compare-method.png",
+      "assets/heros-chef/v1.0.0/battle.jpg",
+      "assets/heros-chef/v1.0.0/recipe.jpg"
+    ],
+    "components/heros-chef-project/v1.5.0/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/heros-chef/v1.0.0/battle.jpg",
+      "assets/heros-chef/v1.0.0/recipe.jpg"
+    ],
+    "components/varco-project/v1.4.3/index.html": [
+      "assets/city-of-rubble/v1.0.0/main.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-01.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-02.jpg"
+    ],
+    "components/visual-novel-template/v1.0.12/index.html": [
+      "assets/visual-novel-template/v1.0.0/editor-01.png",
+      "assets/visual-novel-template/v1.0.0/editor-02.png",
+      "assets/visual-novel-template/v1.0.0/editor-03.png",
+      "assets/visual-novel-template/v1.0.0/editor-05.png",
+      "assets/visual-novel-template/v1.0.0/ingame.jpg",
+      "assets/visual-novel-template/v1.0.0/text-spec.png",
+      "assets/visual-novel-template/v1.0.0/event-spec.png"
+    ],
+    "components/zeta-ugc-event/v1.3.1/index.html": [
+      "assets/zeta-images/v1.0.0/banner-mobile.png",
+      "assets/zeta-images/v1.0.0/banner-desktop.png"
     ]
   },
   "approved_page_image_counts": {
@@ -1240,10 +1380,20 @@
     "components/heros-chef-project/v1.4.2/index.html": "assets/heros-chef/v1.0.0/main.png",
     "components/stock-project/v1.4.1/index.html": "assets/stock/v1.0.0/summary-detail.png",
     "components/varco-project/v1.4.2/index.html": "assets/city-of-rubble/v1.0.0/main.jpg",
-    "components/visual-novel-template/v1.0.11/index.html": "assets/visual-novel-template/v1.0.0/ingame.jpg"
+    "components/visual-novel-template/v1.0.11/index.html": "assets/visual-novel-template/v1.0.0/ingame.jpg",
+    "components/heros-chef-godot/v1.0.0/index.html": "assets/heros-chef-godot/v1.0.0/cooking.png",
+    "components/projects/v2.11.0/index.html": "assets/heros-chef/v1.0.0/main.png",
+    "components/heros-chef-project/v1.5.0/index.html": "assets/heros-chef/v1.0.0/main.png",
+    "components/stock-project/v1.4.2/index.html": "assets/stock/v1.0.0/summary-detail.png",
+    "components/varco-project/v1.4.3/index.html": "assets/city-of-rubble/v1.0.0/main.jpg",
+    "components/visual-novel-template/v1.0.12/index.html": "assets/visual-novel-template/v1.0.0/ingame.jpg"
   },
   "approved_banner_pictures": {
     "components/zeta-ugc-event/v1.3.0/index.html": {
+      "mobile": "assets/zeta-images/v1.0.0/banner-mobile.png",
+      "desktop": "assets/zeta-images/v1.0.0/banner-desktop.png"
+    },
+    "components/zeta-ugc-event/v1.3.1/index.html": {
       "mobile": "assets/zeta-images/v1.0.0/banner-mobile.png",
       "desktop": "assets/zeta-images/v1.0.0/banner-desktop.png"
     }
