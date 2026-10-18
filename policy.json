@@ -1260,9 +1260,9 @@
       "assets/visual-novel-template/v1.0.0/event-spec.png"
     ],
     "index.html": [
-      "assets/card-thumbnails/v1.0.0/chef-320.jpg",
-      "assets/card-thumbnails/v1.0.0/chef-640.jpg",
-      "assets/card-thumbnails/v1.0.0/chef-960.jpg",
+      "assets/heros-chef-godot/v1.0.0/card-320.jpg",
+      "assets/heros-chef-godot/v1.0.0/card-640.jpg",
+      "assets/heros-chef-godot/v1.0.0/card-960.jpg",
       "assets/card-thumbnails/v1.0.0/stock-detail-320.jpg",
       "assets/card-thumbnails/v1.0.0/stock-detail-640.jpg",
       "assets/card-thumbnails/v1.0.0/stock-detail-960.jpg",
@@ -1656,9 +1656,6 @@
   },
   "approved_page_image_counts": {
     "index.html": {
-      "assets/card-thumbnails/v1.0.0/chef-320.jpg": 2,
-      "assets/card-thumbnails/v1.0.0/chef-640.jpg": 2,
-      "assets/card-thumbnails/v1.0.0/chef-960.jpg": 2,
       "assets/card-thumbnails/v1.0.0/stock-detail-320.jpg": 2,
       "assets/card-thumbnails/v1.0.0/stock-detail-640.jpg": 2,
       "assets/card-thumbnails/v1.0.0/stock-detail-960.jpg": 2,
@@ -1667,7 +1664,10 @@
       "assets/card-thumbnails/v1.0.0/city-960.jpg": 2,
       "assets/card-thumbnails/v1.0.0/vn-320.jpg": 2,
       "assets/card-thumbnails/v1.0.0/vn-640.jpg": 2,
-      "assets/card-thumbnails/v1.0.0/vn-960.jpg": 2
+      "assets/card-thumbnails/v1.0.0/vn-960.jpg": 2,
+      "assets/heros-chef-godot/v1.0.0/card-320.jpg": 2,
+      "assets/heros-chef-godot/v1.0.0/card-640.jpg": 2,
+      "assets/heros-chef-godot/v1.0.0/card-960.jpg": 2
     }
   },
   "approved_metadata_images": {

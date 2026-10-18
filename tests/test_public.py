@@ -409,6 +409,10 @@ class PortfolioMigrationTests(unittest.TestCase):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
             current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.12.1/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.5.2/').replace('profile/v1.0.3/','profile/v1.3.4/')
+            if route == self.project:
+                current = "components/heros-chef-godot/v1.0.2/index.html"
+                godot = (self.root / "docs" / current).read_text(encoding="utf-8")
+                self.assertIn('href="../../heros-chef-project/v1.5.2/index.html"', godot)
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
