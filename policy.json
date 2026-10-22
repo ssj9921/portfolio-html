@@ -311,6 +311,24 @@
     ],
     "components/zeta-ugc-wireframes/v1.1.5/index.html": [
       "sha256-qDGke0oSKVkmUq5qkdBU+jN70o2xzRA8gBuqNw4iaKE="
+    ],
+    "components/projects/v2.12.3/index.html": [
+      "sha256-5BtO7/pdtAdLP0KM9b9+rYruTARpCTtuFUzmPXw7C50="
+    ],
+    "components/stock-project/v1.4.6/index.html": [
+      "sha256-2kSl5ZjIBMjBQth4BQQuAuaMTqkVg/f5PJYBG5hyLxw="
+    ],
+    "components/varco-project/v1.5.0/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/visual-novel-template/v1.0.16/index.html": [
+      "sha256-AdgXkGfOm2Xdr2uU8monemEQVUjXgdysJHdRoLDlMzo="
+    ],
+    "components/zeta-ugc-event/v1.3.5/index.html": [
+      "sha256-eETwTatklnog+dKWHy0BB6wgopVsUyuE45nL2OBUtcU="
+    ],
+    "components/zeta-ugc-wireframes/v1.1.6/index.html": [
+      "sha256-qDGke0oSKVkmUq5qkdBU+jN70o2xzRA8gBuqNw4iaKE="
     ]
   },
   "homepage_script_allowed": true,
@@ -373,6 +391,9 @@
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ],
     "components/varco-project/v1.4.6/index.html": [
+      "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
+    ],
+    "components/varco-project/v1.5.0/index.html": [
       "https://www.youtube-nocookie.com/embed/QewprwQ5BGc"
     ]
   },
@@ -866,6 +887,46 @@
       "chosun-shin"
     ],
     "components/employment-works/v1.0.2/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/projects/v2.12.3/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/profile/v1.4.1/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/heros-chef-project/v1.5.4/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/stock-project/v1.4.6/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/varco-project/v1.5.0/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/visual-novel-template/v1.0.16/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/zeta-ugc-event/v1.3.5/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/zeta-ugc-wireframes/v1.1.6/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/heros-chef-godot/v1.0.4/index.html": [
+      "chosun-bold",
+      "chosun-shin"
+    ],
+    "components/employment-works/v1.0.3/index.html": [
       "chosun-bold",
       "chosun-shin"
     ]
@@ -1779,6 +1840,72 @@
       "assets/employment-works/v1.0.0/match-home.jpg",
       "assets/employment-works/v1.0.0/audition-puzzle.jpg",
       "assets/employment-works/v1.0.0/audition-avatar.jpg"
+    ],
+    "components/projects/v2.12.3/index.html": [
+      "assets/employment-works/v1.0.0/skill-solitaire.jpg",
+      "assets/employment-works/v1.0.0/skill-bingo.jpg",
+      "assets/employment-works/v1.0.0/merge-number.jpg",
+      "assets/employment-works/v1.0.0/match-puzzle.jpg",
+      "assets/employment-works/v1.0.0/match-home.jpg",
+      "assets/employment-works/v1.0.0/audition-puzzle.jpg",
+      "assets/employment-works/v1.0.0/audition-avatar.jpg",
+      "assets/card-thumbnails/v1.0.0/chef-960.jpg",
+      "assets/card-thumbnails/v1.0.0/chef-320.jpg",
+      "assets/card-thumbnails/v1.0.0/chef-640.jpg",
+      "assets/heros-chef-godot/v1.0.0/card-960.jpg",
+      "assets/heros-chef-godot/v1.0.0/card-320.jpg",
+      "assets/heros-chef-godot/v1.0.0/card-640.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-summary-960.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-summary-320.jpg",
+      "assets/card-thumbnails/v1.0.0/stock-summary-640.jpg",
+      "assets/card-thumbnails/v1.0.0/city-960.jpg",
+      "assets/card-thumbnails/v1.0.0/city-320.jpg",
+      "assets/card-thumbnails/v1.0.0/city-640.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-960.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-320.jpg",
+      "assets/card-thumbnails/v1.0.0/vn-640.jpg",
+      "assets/zeta-images/v1.0.0/card-960.jpg",
+      "assets/zeta-images/v1.0.0/card-320.jpg",
+      "assets/zeta-images/v1.0.0/card-640.jpg"
+    ],
+    "components/heros-chef-project/v1.5.4/index.html": [
+      "assets/heros-chef/v1.0.0/main.png",
+      "assets/heros-chef/v1.0.0/battle.jpg",
+      "assets/heros-chef/v1.0.0/recipe.jpg"
+    ],
+    "components/varco-project/v1.5.0/index.html": [
+      "assets/city-of-rubble/v1.0.0/main.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-01.jpg",
+      "assets/city-of-rubble/v1.0.0/ingame-02.jpg"
+    ],
+    "components/visual-novel-template/v1.0.16/index.html": [
+      "assets/visual-novel-template/v1.0.0/ingame.jpg",
+      "assets/visual-novel-template/v1.0.0/editor-01.png",
+      "assets/visual-novel-template/v1.0.0/text-spec.png",
+      "assets/visual-novel-template/v1.0.0/editor-05.png",
+      "assets/visual-novel-template/v1.0.0/event-spec.png",
+      "assets/visual-novel-template/v1.0.0/editor-02.png",
+      "assets/visual-novel-template/v1.0.0/editor-03.png"
+    ],
+    "components/zeta-ugc-event/v1.3.5/index.html": [
+      "assets/zeta-images/v1.0.0/banner-mobile.png",
+      "assets/zeta-images/v1.0.0/banner-desktop.png"
+    ],
+    "components/heros-chef-godot/v1.0.4/index.html": [
+      "assets/heros-chef-godot/v1.0.0/cooking.png",
+      "assets/heros-chef/v1.0.0/battle.jpg",
+      "assets/heros-chef-godot/v1.0.0/compare-ingredients.png",
+      "assets/heros-chef/v1.0.0/recipe.jpg",
+      "assets/heros-chef-godot/v1.0.0/compare-method.png"
+    ],
+    "components/employment-works/v1.0.3/index.html": [
+      "assets/employment-works/v1.0.0/skill-solitaire.jpg",
+      "assets/employment-works/v1.0.0/skill-bingo.jpg",
+      "assets/employment-works/v1.0.0/merge-number.jpg",
+      "assets/employment-works/v1.0.0/match-puzzle.jpg",
+      "assets/employment-works/v1.0.0/match-home.jpg",
+      "assets/employment-works/v1.0.0/audition-puzzle.jpg",
+      "assets/employment-works/v1.0.0/audition-avatar.jpg"
     ]
   },
   "approved_page_image_counts": {
@@ -1832,7 +1959,13 @@
     "components/stock-project/v1.4.5/index.html": "assets/stock/v1.0.0/summary-detail.png",
     "components/varco-project/v1.4.6/index.html": "assets/city-of-rubble/v1.0.0/main.jpg",
     "components/visual-novel-template/v1.0.15/index.html": "assets/visual-novel-template/v1.0.0/ingame.jpg",
-    "components/heros-chef-godot/v1.0.3/index.html": "assets/heros-chef-godot/v1.0.0/cooking.png"
+    "components/heros-chef-godot/v1.0.3/index.html": "assets/heros-chef-godot/v1.0.0/cooking.png",
+    "components/projects/v2.12.3/index.html": "assets/heros-chef/v1.0.0/main.png",
+    "components/heros-chef-project/v1.5.4/index.html": "assets/heros-chef/v1.0.0/main.png",
+    "components/stock-project/v1.4.6/index.html": "assets/stock/v1.0.0/summary-detail.png",
+    "components/varco-project/v1.5.0/index.html": "assets/city-of-rubble/v1.0.0/main.jpg",
+    "components/visual-novel-template/v1.0.16/index.html": "assets/visual-novel-template/v1.0.0/ingame.jpg",
+    "components/heros-chef-godot/v1.0.4/index.html": "assets/heros-chef-godot/v1.0.0/cooking.png"
   },
   "approved_banner_pictures": {
     "components/zeta-ugc-event/v1.3.0/index.html": {
@@ -1852,6 +1985,10 @@
       "desktop": "assets/zeta-images/v1.0.0/banner-desktop.png"
     },
     "components/zeta-ugc-event/v1.3.4/index.html": {
+      "mobile": "assets/zeta-images/v1.0.0/banner-mobile.png",
+      "desktop": "assets/zeta-images/v1.0.0/banner-desktop.png"
+    },
+    "components/zeta-ugc-event/v1.3.5/index.html": {
       "mobile": "assets/zeta-images/v1.0.0/banner-mobile.png",
       "desktop": "assets/zeta-images/v1.0.0/banner-desktop.png"
     }
