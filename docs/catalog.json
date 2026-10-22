@@ -4,10 +4,10 @@
     {
       "id": "homepage",
       "name": "Selected Work",
-      "version": "2.12.4",
+      "version": "2.12.5",
       "path": "index.html",
-      "sha256": "4845869b5e54266068951c0724c99bbee2e51256e3ad256b75fa7443e6150763",
-      "source_sha256": "e2ddb078474ff76a88c4a39a022ae1dac2cb494bb9b266fc179088d45fe5bad2"
+      "sha256": "97ab559ea68e678e262cec17198e897b12ec51e4375c1e433997b49e36f72d52",
+      "source_sha256": "be9bb391d045103d7dc638e72d5e6104f91b009c8148349a5809c4bd4a495098"
     },
     {
       "id": "editorial-hero",
