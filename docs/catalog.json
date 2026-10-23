@@ -4,10 +4,10 @@
     {
       "id": "homepage",
       "name": "Selected Work",
-      "version": "2.12.7",
+      "version": "2.12.8",
       "path": "index.html",
-      "sha256": "c17a9889443127c5f1e3098f082c35f665f13dff4ff620e163da195b95938927",
-      "source_sha256": "adbc60fbd5325bb8cb8153a364d934bbdc362ae88132049b506f874bd8c94899"
+      "sha256": "f73e399bffc05154d83aed53191536ebd3c1b4b73d5733c599bf59350573ea1a",
+      "source_sha256": "7397029632f24970ec29992eb3d397a99705dedd714821aae151c235bc77c56f"
     },
     {
       "id": "editorial-hero",
@@ -1536,6 +1536,86 @@
       "path": "components/employment-works/v1.1.1/index.html",
       "sha256": "ca75aa797040a5ff8bb3ea12e6f36df18a86f5fd700046abf524f0731bb18ba9",
       "source_sha256": "9446a2745e3eb80a41e7fa43478b749d071ad947a6f916db928815ebb5f1fa47"
+    },
+    {
+      "id": "projects",
+      "name": "Projects",
+      "version": "2.13.2",
+      "path": "components/projects/v2.13.2/index.html",
+      "sha256": "20e56abad571e6943d11791454fe32fa3ce2b049c9956313d8d725768e837569",
+      "source_sha256": "7cf7e0821f501b26b3743cf4de597ac06f4b2364201d602634c3832585575479"
+    },
+    {
+      "id": "profile",
+      "name": "SEUNGJIN SONG · Profile",
+      "version": "1.6.1",
+      "path": "components/profile/v1.6.1/index.html",
+      "sha256": "3e2528ef372414ed5cc28445c4de532b54bc657cb96d786db6ea9ca38e8471a2",
+      "source_sha256": "15c5fde7693bb34aec5a8f33a957d9e184b064af763cf0a90ef67ffcf1fca1de"
+    },
+    {
+      "id": "heros-chef-project",
+      "name": "용사의 쉐프 · Project",
+      "version": "1.5.7",
+      "path": "components/heros-chef-project/v1.5.7/index.html",
+      "sha256": "add8089dcb4c4e39f20bc131a0bfd2011397aebcb954185b626363fe02663f12",
+      "source_sha256": "caa043883991dcca859c95eecf5787f1980c7be8ca54e4104a6a940a5d14305e"
+    },
+    {
+      "id": "stock-project",
+      "name": "그때 샀다면? · Project",
+      "version": "1.4.9",
+      "path": "components/stock-project/v1.4.9/index.html",
+      "sha256": "faf2eb01017bc201ccfc6f1fb58f16f211b3813151460dae4cecec3f30778594",
+      "source_sha256": "a45a3ed9326d87371fbbdaac1fcb1d4645610570437c33039fa58ed170b1ef6e"
+    },
+    {
+      "id": "varco-project",
+      "name": "City Of Rubble — Project",
+      "version": "1.6.2",
+      "path": "components/varco-project/v1.6.2/index.html",
+      "sha256": "1f48854461e3a333da4d93ba5b5f443ff6862536d7c85f73618dca1f1b066393",
+      "source_sha256": "73f7587f9b6f0bf395c7bf671c0464cda27b17808896fbe6bf7ab6e546df349c"
+    },
+    {
+      "id": "visual-novel-template",
+      "name": "VisualNovelTemplate · Project",
+      "version": "1.0.19",
+      "path": "components/visual-novel-template/v1.0.19/index.html",
+      "sha256": "ae98c834b4a577b635b62ea9a018026e17a6e01275a680f5e9147515576c49f2",
+      "source_sha256": "58a9924560720471fa22850611b79d4aa0a48bd5fa1dbd7090f2dfd0139eed2d"
+    },
+    {
+      "id": "zeta-ugc-event",
+      "name": "제타 채팅 어워즈 · 제안",
+      "version": "1.3.8",
+      "path": "components/zeta-ugc-event/v1.3.8/index.html",
+      "sha256": "675e270c7a52494376a72996dd63e9914f6188beb519f8c818b556226a72d981",
+      "source_sha256": "13b29b0bbaeeb4b4fb642864d7a2d7e21d1117fac9422a318824d9e113455e08"
+    },
+    {
+      "id": "zeta-ugc-wireframes",
+      "name": "UGC · 독립 예시 UI",
+      "version": "1.1.9",
+      "path": "components/zeta-ugc-wireframes/v1.1.9/index.html",
+      "sha256": "02f9f498af95af707351aa36568c24f1c04fbe2d7f8ea451c113e38dd2807ab2",
+      "source_sha256": "f5cab0d944fae15963d5b0068ab7b91d6aa3eea0a61710ccb20ecd485da7290e"
+    },
+    {
+      "id": "heros-chef-godot",
+      "name": "Hero’s Chef · Godot 개발판",
+      "version": "1.1.2",
+      "path": "components/heros-chef-godot/v1.1.2/index.html",
+      "sha256": "e295617d8c09ee54c08debe0593073b1837d74256bfbb0f783ba97930e287e45",
+      "source_sha256": "d2cf5d5580e043e4b0f3ccce1c0d907115a30e07c82bd50cb15bf94ab9115bf5"
+    },
+    {
+      "id": "employment-works",
+      "name": "재직 중 참여작",
+      "version": "1.1.2",
+      "path": "components/employment-works/v1.1.2/index.html",
+      "sha256": "86ef2927b53550dda2074314c3de45cdcb28fc03d681bc0f2c5c72065ea61278",
+      "source_sha256": "5b08e44f930fd8425b22b321b00992de9e3ba1cdf47dcdb30045f0b88f85eb1d"
     }
   ]
 }

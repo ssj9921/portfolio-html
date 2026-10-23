@@ -403,16 +403,16 @@ class PortfolioMigrationTests(unittest.TestCase):
     def test_complete_public_export_passes(self):
         result = validate_repository(self.root)
         self.assertTrue(result["valid"])
-        self.assertEqual(result["html_pages"], 192)
+        self.assertEqual(result["html_pages"], 202)
 
     def test_four_primary_pages_use_internal_navigation(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
         for route in (self.project, self.profile, self.projects):
-            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.13.1/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.5.6/').replace('profile/v1.0.3/','profile/v1.6.0/')
+            current = route.replace('v1.0.2/', 'v1.0.3/').replace('projects/v1.0.0/', 'projects/v2.13.2/').replace('heros-chef-project/v1.0.3/','heros-chef-project/v1.5.7/').replace('profile/v1.0.3/','profile/v1.6.1/')
             if route == self.project:
-                current = "components/heros-chef-godot/v1.1.1/index.html"
+                current = "components/heros-chef-godot/v1.1.2/index.html"
                 godot = (self.root / "docs" / current).read_text(encoding="utf-8")
-                self.assertIn('href="../../heros-chef-project/v1.5.6/index.html"', godot)
+                self.assertIn('href="../../heros-chef-project/v1.5.7/index.html"', godot)
             self.assertIn('href="' + current + '"', home)
         for route in ("index.html", self.project, self.profile, self.projects):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
@@ -438,7 +438,7 @@ class PortfolioMigrationTests(unittest.TestCase):
 
     def test_current_pages_link_to_dedicated_projects_listing(self):
         home = (self.root / "docs/index.html").read_text(encoding="utf-8")
-        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.13.1/') + '">Projects</a>', home)
+        self.assertIn('href="' + self.projects.replace('v1.0.0/', 'v2.13.2/') + '">Projects</a>', home)
         for route in (self.profile, self.project):
             text = (self.root / "docs" / route).read_text(encoding="utf-8")
             self.assertRegex(text, r'href="../../projects/v1.0.0/index.html"[^>]*>Projects</a>')
@@ -811,3 +811,14 @@ class ScopedWebfontTests(unittest.TestCase):
     def test_broad_csp_rejected(self):
         html=self.html().replace('font-src https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunKm.woff https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.1/ChosunSm.woff','font-src https:')
         with self.assertRaises(SecurityError):validate_html(html,self.policy(),route=self.route)
+
+
+class EditorialToolNameTests(unittest.TestCase):
+    def test_current_level_test_bot_name_and_concise_copy(self):
+        from pathlib import Path
+        root = Path(__file__).resolve().parents[1]
+        for route in ['components/projects/v2.13.2/index.html', 'components/profile/v1.6.1/index.html', 'components/employment-works/v1.1.2/index.html']:
+            text = (root / 'docs' / route).read_text(encoding='utf-8')
+            self.assertIn('레벨 테스트 Bot', text)
+            self.assertNotRegex(text, r'(?i)MCTS|몬테카를로|Monte\s*Carlo')
+            self.assertNotRegex(text, r'\b[A-Za-z][A-Za-z0-9_-]+\s+Bot\b')
