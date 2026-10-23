@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ko"><head><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-5BtO7/pdtAdLP0KM9b9+rYruTARpCTtuFUzmPXw7C50='; script-src-attr 'none'; style-src 'unsafe-inline'; img-src 'self'; font-src https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunKm.woff https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.1/ChosunSm.woff; connect-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="재직 중 참여작과 개인 프로젝트·제안서를 구분해 소개합니다.">
+<title>Projects | Selected Work</title>
+<style>
+:root{--paper:#f4f3ed;--white:#fafbf7;--ink:#252d29;--green:#345745;--muted:#606962;--line:#d7ddd3;--mint:#e6ecdf;color-scheme:light}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.9 Arial,"Malgun Gothic",sans-serif;overflow-wrap:break-word}
+a{color:inherit;text-decoration:none}a:focus-visible{outline:3px solid var(--green);outline-offset:5px}::selection{background:#cadcc4}
+.wrap{max-width:1080px;margin:auto;padding:0 36px}.skip{position:absolute;left:16px;top:-100px;padding:12px;background:var(--white);z-index:2}.skip:focus{top:12px}
+header{display:flex;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);gap:20px}.brand{font-size:13px;font-weight:700;letter-spacing:.09em;display:flex;align-items:center;gap:12px;min-height:44px}.mark{width:17px;height:17px;background:var(--green);border-radius:50% 50% 0 50%;transform:rotate(-20deg);flex-shrink:0}
+.top-nav{display:flex;flex-wrap:wrap;gap:4px 20px;font-size:12px;color:var(--muted)}.top-nav a{display:flex;align-items:center;min-height:44px}.top-nav [aria-current]{color:var(--green);text-decoration:underline;text-underline-offset:6px}
+.eyebrow{font-size:11px;letter-spacing:.13em;color:var(--green)}.hero{padding:62px 0 42px;max-width:820px}h1{font:500 clamp(38px,5.2vw,58px)/1.35 Georgia,"Batang",serif;letter-spacing:-.045em;margin:20px 0 16px}.subtitle{font:normal 25px/1.5 Georgia,"Batang",serif;color:var(--green);margin:0}.lead{max-width:650px;color:var(--muted);font-size:14px;word-break:keep-all}.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}.tags span{padding:6px 12px;border:1px solid var(--line);border-radius:24px;font-size:11px}
+.page-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-top:1px solid var(--line);padding:28px 0 44px;font-size:13px}.page-nav a{text-decoration:underline;text-underline-offset:5px;color:var(--green);min-height:44px;display:inline-flex;align-items:center}
+footer{border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;padding:28px 0 40px;color:var(--muted);font-size:11px}.signature{letter-spacing:.08em}footer p{margin:0}
+
+.intro-slot{min-height:28px;color:var(--muted);font-size:13px}
+@media(max-width:800px){.hero{padding:44px 0 30px}}
+@media(max-width:580px){.wrap{padding:0 22px}header{align-items:flex-start;flex-direction:column;gap:4px;padding:16px 0}.brand{font-size:12px}.top-nav{gap:20px;width:100%}.hero{padding-top:32px}h1{font-size:39px}.page-nav{align-items:flex-start;flex-direction:column;gap:6px}footer{flex-direction:column;gap:10px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+.project-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;padding-bottom:48px}.project-card{position:relative;aspect-ratio:16/9;min-width:0;background:var(--mint);border-radius:6px;box-shadow:inset 0 0 0 1px var(--line)}.card-media{position:absolute;inset:0;overflow:hidden;border-radius:6px;background:var(--mint)}.card-fallback{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:18px 18px 22%;color:var(--green);text-align:center;font:normal clamp(22px,3vw,30px)/1.4 Georgia,"Batang",serif;overflow-wrap:anywhere}.project-image{display:block;width:100%;height:100%;object-fit:cover;visibility:hidden}.card-media.is-loaded .project-image{visibility:visible}.card-media.is-loaded .card-fallback{visibility:hidden}.card-details{position:absolute;inset:0 0 calc(100% * 2 / 9);z-index:2}.card-details summary{-webkit-tap-highlight-color:transparent;position:absolute;inset:0;list-style:none;cursor:pointer;border-radius:6px 6px 0 0}.card-details summary::-webkit-details-marker{display:none}.card-details summary::marker{content:""}.card-details summary:focus-visible{outline:3px solid white;outline-offset:-5px;box-shadow:inset 0 0 0 7px #17271d}.card-description{position:absolute;inset:0 0 calc(100% * 2 / 9);z-index:2;margin:0;padding:20px;display:flex;align-items:center;justify-content:center;text-align:center;background:rgba(0,0,0,.72);color:#fff;border-radius:6px 6px 0 0;font-size:13px;line-height:1.7;pointer-events:none;visibility:hidden;opacity:0;overflow:auto}.project-card:has(.card-details[open]) .card-description,.project-card:has(:focus-visible):not(.is-dismissed) .card-description{visibility:visible;opacity:1}.card-details:not([open])>.card-description{display:flex}.card-bar{position:absolute;left:0;right:0;bottom:0;height:calc(100% * 2 / 9);background:rgba(0,0,0,.25);border-radius:0 0 6px 6px;display:flex;align-items:center;padding-left:12px;padding-right:80px;z-index:3}.card-bar h3{font:normal 20px/1.25 Georgia,"Batang",serif;letter-spacing:-.035em;margin:0;min-width:0;max-width:100%;color:#fff}.card-title-label{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:2px 5px;background:rgba(0,0,0,.45);border-radius:2px;text-shadow:0 1px 2px #000}.card-view{position:absolute;right:0;bottom:0;width:68px;height:max(100%,44px);display:flex;align-items:center;justify-content:center;color:#fff;background:#1d2821;border-radius:3px 0 6px 0;font-size:13px;line-height:1;text-decoration:none}.card-view:hover{background:#345745}.card-view:focus-visible{outline:3px solid #fff;outline-offset:-5px;box-shadow:0 0 0 3px #17271d}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(hover:hover){.project-card:hover:not(.is-dismissed) .card-description{visibility:visible;opacity:1}}
+@media(max-width:1000px){.project-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:580px){.project-grid{grid-template-columns:1fr;gap:18px;padding-bottom:34px}.card-description{padding:16px}.card-bar h3{font-size:20px}}
+
+@font-face{font-family:"ChosunKm";src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunKm.woff") format("woff");font-style:normal;font-weight:400;font-display:swap;}@font-face{font-family:"ChosunSm";src:url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.1/ChosunSm.woff") format("woff");font-style:normal;font-weight:400;font-display:swap;}
+.hero .subtitle{font-size:25px;font-variant-numeric:lining-nums}@media(max-width:580px){.hero .subtitle{font-size:23px}}
+.vn-card .project-image{object-fit:contain}.vn-card .card-fallback{overflow-wrap:anywhere}
+.project-kind{position:absolute;top:8px;left:8px;z-index:4;display:block;padding:4px 8px;border:1px solid #fff;border-radius:3px;background:#1d2821;color:#fff;font:600 12px/1.4 Arial,"Malgun Gothic",sans-serif;white-space:nowrap;pointer-events:none}.card-description{padding:38px 16px 12px}
+
+.project-card{container-type:inline-size}.card-bar{background:rgba(0,0,0,.75);padding-left:12px;padding-right:84px}.card-title-label{background:transparent;padding:0;border-radius:0;text-shadow:none}.card-view{right:8px;bottom:0;width:64px;height:44px;display:block;background:transparent;color:#252d29;border-radius:0}.card-view:hover{background:transparent}.card-view-label{position:absolute;left:0;right:0;bottom:8px;height:calc(12.5cqw - 16px);display:flex;align-items:center;justify-content:center;background:#f8f3e7;color:#252d29;border-radius:3px;font-size:13px;line-height:1;pointer-events:none}.card-view:hover .card-view-label{background:#fffaf0}.card-view:focus-visible{outline:3px solid #fffaf0;outline-offset:-2px;box-shadow:none}.project-kind{border:0;background:#0f766e;color:#fff}.project-kind.kind-proposal{background:#8b3565}
+
+/* Six real cards per horizontal group; without JS the original grid stays readable. */
+.project-browser{display:grid;grid-auto-flow:column;grid-auto-columns:100%;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;padding:6px 0 18px;margin-bottom:30px;scrollbar-width:thin;min-width:0;direction:ltr}
+.project-page.project-grid{padding-bottom:0;scroll-snap-align:start;scroll-snap-stop:always;align-content:start;grid-template-rows:repeat(2,min-content)}
+.project-browser:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.project-paging{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:12px}.project-paging[hidden]{display:none}
+.project-paging button{font:inherit;font-size:13px;min-height:44px;min-width:90px;padding:8px 14px;border:1px solid var(--line);border-radius:4px;background:var(--white);color:var(--green);cursor:pointer;touch-action:manipulation}.project-paging button:disabled{opacity:.45;cursor:default}.project-paging button:focus-visible{outline:3px solid var(--green);outline-offset:2px}.project-page-status{font-size:12px;text-align:center;color:var(--muted)}
+@media(max-width:1000px){.project-page.project-grid{grid-template-rows:repeat(3,min-content)}}
+@media(max-width:580px){.project-page.project-grid{grid-template-rows:repeat(6,min-content)}.project-paging{gap:8px}.project-paging button{min-width:76px;padding:8px}.project-page-status{font-size:11px}}
+.project-filters{display:flex;flex-wrap:wrap;gap:8px;padding:0 0 8px}.project-filters[hidden],.filter-result[hidden],.project-empty[hidden]{display:none}.project-filters button{font:14px/1.5 Arial,"Malgun Gothic",sans-serif;min-height:44px;padding:10px 14px;border:1px solid #aebbac;border-radius:5px;background:var(--white);color:var(--green);cursor:pointer;touch-action:manipulation;white-space:nowrap}.project-filters button[aria-pressed="true"]{background:var(--green);color:white;border-color:var(--green);font-weight:700;box-shadow:inset 0 0 0 1px currentColor}.project-filters button:focus-visible{outline:3px solid var(--green);outline-offset:3px}.filter-result{font-size:13px;min-height:24px;margin:0 0 12px;color:var(--muted)}.filter-result:empty{margin-bottom:8px}.project-empty{padding:24px;background:var(--mint);font-size:14px;line-height:1.8}@media(max-width:580px){.project-filters{gap:6px}.project-filters button{font-size:13px;padding:10px 11px}}
+@scope (#employment-works){
+:root{--paper:#f4f3ed;--white:#fafbf7;--ink:#252d29;--green:#345745;--muted:#606962;--line:#d7ddd3;--mint:#e6ecdf;color-scheme:light}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:24px}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.9 Arial,"Malgun Gothic",sans-serif;overflow-wrap:break-word}
+a{color:inherit;text-decoration:none}a:focus-visible{outline:3px solid var(--green);outline-offset:5px}::selection{background:#cadcc4}
+.wrap{max-width:1080px;margin:auto;padding:0 36px}.skip{position:absolute;left:16px;top:-100px;padding:12px;background:var(--white);z-index:2}.skip:focus{top:12px}
+header{display:flex;align-items:center;justify-content:space-between;padding:24px 0;border-bottom:1px solid var(--line);gap:20px}.brand{font-size:13px;font-weight:700;letter-spacing:.09em;display:flex;align-items:center;gap:12px;min-height:44px}.mark{width:17px;height:17px;background:var(--green);border-radius:50% 50% 0 50%;transform:rotate(-20deg);flex-shrink:0}
+.top-nav{display:flex;flex-wrap:wrap;gap:4px 20px;font-size:12px;color:var(--muted)}.top-nav a{display:flex;align-items:center;min-height:44px}.top-nav [aria-current]{color:var(--green);text-decoration:underline;text-underline-offset:6px}
+.eyebrow{font-size:11px;letter-spacing:.13em;color:var(--green)}.hero{padding:62px 0 42px;max-width:820px}h1{font:500 clamp(38px,5.2vw,58px)/1.35 Georgia,"Batang",serif;letter-spacing:-.045em;margin:20px 0 16px}.subtitle{font:normal 25px/1.5 Georgia,"Batang",serif;color:var(--green);margin:0}.lead{max-width:650px;color:var(--muted);font-size:14px;word-break:keep-all}.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}.tags span{padding:6px 12px;border:1px solid var(--line);border-radius:24px;font-size:11px}
+.reading-note{border-left:3px solid var(--green);background:var(--mint);padding:18px 22px;margin-bottom:38px;font-size:13px;color:var(--green)}.reading-note p{margin:0}
+.layout{display:grid;grid-template-columns:190px minmax(0,1fr);gap:48px;align-items:start}.contents{position:sticky;top:28px;padding-top:24px;border-top:1px solid var(--line);font-size:12px}.contents ol{list-style:none;margin:14px 0 0;padding:0}.contents a{display:block;min-height:44px;padding:9px 0;color:var(--muted)}.contents a:hover{color:var(--green);text-decoration:underline;text-underline-offset:4px}
+.body-copy{min-width:0}.body-copy section{padding:28px 0 34px;border-top:1px solid var(--line)}h2{font:normal 27px/1.5 Georgia,"Batang",serif;letter-spacing:-.03em;margin:0 0 22px}h3{font-size:16px;font-weight:600;color:var(--green);margin:30px 0 12px}p{margin:14px 0}.body-copy p,.body-copy li{word-break:keep-all;overflow-wrap:anywhere}.body-copy a,.page-nav a{text-decoration:underline;text-underline-offset:5px;color:var(--green)}.body-copy li{padding-left:3px;margin:10px 0}.body-copy ol{padding-left:23px}.body-copy strong{font-weight:600;color:var(--green)}
+table{border-collapse:collapse;table-layout:fixed;width:100%;font-size:13px;line-height:1.8;margin:24px 0}caption{text-align:left;font-size:12px;color:var(--muted);margin-bottom:10px}th,td{padding:14px 12px;vertical-align:top;text-align:left;border-bottom:1px solid var(--line);overflow-wrap:anywhere;word-break:keep-all}th{background:var(--mint);color:var(--green);font-weight:600}th:first-child,td:first-child{width:27%}td{background:var(--white)}
+pre{max-width:100%;overflow-x:auto;border:1px solid var(--line);padding:22px;background:var(--white);font:12px/2.1 "Malgun Gothic",Arial,sans-serif;tab-size:2}pre:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.page-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-top:1px solid var(--line);padding:28px 0 44px;font-size:13px}.page-nav a{min-height:44px;display:inline-flex;align-items:center}
+footer{border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;padding:28px 0 40px;color:var(--muted);font-size:11px}.signature{letter-spacing:.08em}footer p{margin:0}
+@media(max-width:800px){.layout{grid-template-columns:1fr;gap:24px}.contents{position:static}.contents ol{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.hero{padding:44px 0 30px}.reading-note{margin-bottom:28px}}
+@media(max-width:580px){.wrap{padding:0 22px}header{align-items:flex-start;flex-direction:column;gap:4px;padding:16px 0}.brand{font-size:12px}.top-nav{gap:20px;width:100%}.hero{padding-top:32px}h1{font-size:39px}.subtitle{font-size:23px}h2{font-size:25px}.contents ol{grid-template-columns:1fr}.contents a{padding:9px 0}.body-copy{font-size:14px}.body-copy section{padding:24px 0 30px}.reading-note{padding:16px 18px}table,tbody,tr,td{display:block}thead{display:none}tr{margin:0 0 12px;border:1px solid var(--line)}td,td:first-child{width:auto;border:0;padding:10px 14px}td+td{border-top:1px solid var(--line)}td::before{content:attr(data-label);display:block;font-size:11px;color:var(--green);font-weight:700;margin-bottom:3px}footer{flex-direction:column;gap:10px}.page-nav{align-items:flex-start;flex-direction:column;gap:6px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:22px 0}.fact{border:1px solid var(--line);background:var(--white);padding:18px}.fact dt{font-size:11px;color:var(--muted);margin-bottom:8px}.fact dd{margin:0;font-size:14px;color:var(--green)}.entry{padding:20px 0;border-bottom:1px solid var(--line)}.entry:first-of-type{padding-top:0}.entry:last-child{border:0;padding-bottom:0}.entry h3{margin:0 0 5px;color:var(--ink);font-size:17px}.entry .period{font-size:12px;color:var(--muted)}.entry p{margin:7px 0}.entry .detail{font-size:13px;color:var(--muted)}.status-line{font-size:13px;color:var(--green)}.button{display:inline-flex;align-items:center;min-height:48px;padding:10px 20px;background:var(--green);color:var(--white)!important;text-decoration:none!important;border-radius:3px}.evidence-note{font-size:12px;color:var(--muted);margin-top:18px}.comment-space{border:1px dashed #bcc8b6;padding:24px;background:var(--white);color:var(--muted);font-size:14px}.profile-title{font-size:clamp(30px,5.2vw,54px);letter-spacing:-.03em}.body-copy ul{padding-left:22px}
+@media(max-width:580px){.facts{grid-template-columns:1fr}.profile-title{font-size:34px}.fact{padding:16px}.entry h3{font-size:16px}}
+
+.former-name{display:inline-block;font-size:13px;font-weight:400;color:var(--muted);line-height:1.8}.career-duties{font-size:14px;margin:15px 0 0}.career-project{margin:22px 0 0;padding-left:18px;border-left:2px solid var(--line)}.career-project h4{font-size:14px;font-weight:600;color:var(--ink);margin:0 0 7px;line-height:1.8}.career-project>p{font-size:13px;margin:6px 0}.project-state{display:inline-block;margin-left:6px;padding:1px 7px;border:1px solid var(--line);border-radius:3px;color:var(--muted);font-size:11px;font-weight:400;vertical-align:middle}.body-copy .reference-card{display:grid;gap:8px;max-width:100%;margin:16px 0 6px;padding:18px 20px;border:1px solid var(--line);border-radius:5px;background:var(--white);text-decoration:none;line-height:1.7}.reference-card:hover{background:var(--mint);border-color:#a8bba6}.reference-card:focus-visible{outline:3px solid var(--green);outline-offset:4px}.reference-source{font-size:11px;color:var(--muted);letter-spacing:.04em}.reference-title{font-size:15px;overflow-wrap:anywhere}.reference-description{font-size:13px;color:var(--muted);word-break:keep-all;overflow-wrap:anywhere}.reference-action{font-size:12px;color:var(--green);text-decoration:underline;text-underline-offset:4px;margin-top:3px}.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:580px){.former-name{display:block}.career-project{padding-left:12px}.body-copy .reference-card{padding:16px}.project-state{margin-left:0}}
+.hero .subtitle{font-size:25px;font-variant-numeric:lining-nums}@media(max-width:580px){.hero .subtitle{font-size:23px}}
+
+
+.work-intro{max-width:720px}.work-jump{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 36px}.work-jump a{padding:8px 14px;border:1px solid var(--line);background:var(--white);font-size:12px;min-height:44px}
+.company-heading{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:22px 0 14px;margin-top:40px}.company-heading h3{margin:0;font-size:24px}.company-heading p{margin:0;color:var(--muted);font-size:13px}
+.work{padding:32px 0;border-bottom:1px solid var(--line);scroll-margin-top:24px}.work h4{font-size:30px;line-height:1.3;margin:8px 0 18px}.work p{margin:10px 0}.work-kicker{color:var(--green);font-size:11px;letter-spacing:.12em;font-weight:bold}.work-featured{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;padding:36px;background:var(--mint);border:1px solid var(--line);margin:24px 0}.work-featured h3{font-size:42px}.six{font:90px/1 Georgia,serif;color:var(--green);margin:24px 0 12px}.six span{font:14px Arial,sans-serif;margin-left:12px}.scope{border-left:3px solid var(--green);padding:4px 0 4px 16px;margin:20px 0}.scope strong{display:block;font-size:12px;color:var(--green);margin-bottom:8px}.boundary{font-size:13px;color:var(--muted)}
+.work-pair{display:grid;grid-template-columns:1fr 1fr;gap:36px}.source-links{display:grid;gap:10px;margin-top:22px}.source-links a{display:block;padding:14px 16px;background:var(--white);border:1px solid var(--line);min-height:44px}.source-links span{display:block;font-size:11px;letter-spacing:.05em;color:var(--muted)}.source-links strong{display:block;font-size:14px;margin:3px 0}.source-links small{display:block;font-size:12px;line-height:1.6;color:var(--muted)}.source-links a:hover{border-color:var(--green)}.work-compact h4{font-size:24px}.work-compact{max-width:760px}.section-link{display:block;background:var(--mint);padding:16px 20px;margin:24px 0;text-decoration:underline;text-underline-offset:4px}.work-note{font-size:13px;color:var(--muted);max-width:760px;margin:24px 0 40px}
+@media(max-width:700px){.work-featured,.work-pair{grid-template-columns:1fr;gap:20px}.work-featured{padding:22px}.work-featured h3{font-size:34px}.six{font-size:72px}.work h4{font-size:27px}.work-pair .work{padding:24px 0}.company-heading h3{font-size:22px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.media-gallery{display:grid;gap:14px;margin:24px 0}.media-gallery figure{margin:0;min-width:0}.media-gallery img{display:block;width:100%;height:auto;object-fit:contain;background:#f9faf6;border:1px solid var(--line)}.media-gallery figcaption{font-size:12px;line-height:1.6;margin-top:7px;color:var(--muted)}.media-credit{grid-column:1/-1;font-size:11px;line-height:1.7;color:var(--muted);margin:0!important}.media-credit a{text-decoration:underline}.skill-gallery{grid-column:1/-1;grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:0}.skill-gallery figure{max-width:275px;justify-self:center;width:100%}.audition-gallery{grid-template-columns:1fr 1fr}.work-pair .media-gallery{gap:16px}.media-gallery img:focus-visible{outline:3px solid var(--green)}@media(max-width:580px){.skill-gallery{grid-template-columns:1fr}.skill-gallery figure{max-width:250px}.audition-gallery{grid-template-columns:1fr}}
+.aligned-work-list{display:block}.aligned-work,.work-pair .aligned-work{padding:28px;margin:24px 0 32px;border:1px solid var(--line);background:var(--white);display:block}.featured-aligned{background:var(--mint);border-top:4px solid var(--green)}.aligned-work .work-heading{height:210px;padding-bottom:20px}.aligned-work h4{font-size:30px;margin:8px 0 12px}.aligned-work .work-heading p{font-size:14px;line-height:1.8;margin:8px 0}.mini-examples{color:var(--green);font-weight:bold}.work-columns{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}.aligned-work .media-gallery{height:360px;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:312px 36px;gap:12px;align-content:start;grid-column:auto}.aligned-work .media-gallery figure{width:100%;max-width:none;display:grid;grid-template-rows:282px 30px;gap:0;justify-self:stretch}.aligned-work .media-gallery img{width:100%;height:282px;object-fit:contain;background:#f0f1eb;border:1px solid var(--line)}.aligned-work .media-gallery figcaption{margin-top:5px;font-size:11px}.aligned-work .media-gallery:not(:has(figure:nth-of-type(2))) figure{grid-column:1/-1}.aligned-work .media-credit{margin:0!important;line-height:1.6}.work-copy{height:520px;min-height:520px;display:flex;flex-direction:column}.work-copy .scope{min-height:132px;margin:0 0 12px}.work-copy .boundary{font-size:12px;margin:6px 0}.work-copy .source-links{margin-top:auto;padding-top:16px}.work-copy .source-links a{padding:12px 14px}.work-copy .source-links strong{font-size:13px}.work-copy .source-links small{font-size:11px}.work-compact{margin:24px 0 32px;padding:20px 0}.work-compact h4{font-size:24px}
+@media(max-width:700px){.aligned-work,.work-pair .aligned-work{padding:20px;margin:20px 0 28px}.aligned-work .work-heading{height:260px}.aligned-work h4{font-size:27px}.work-columns{grid-template-columns:1fr;gap:24px}.aligned-work .media-gallery{height:336px;grid-template-rows:288px 36px;gap:12px}.aligned-work .media-gallery figure{grid-template-rows:258px 30px}.aligned-work .media-gallery img{height:258px}.work-copy{height:520px;min-height:520px}.work-copy .scope{min-height:132px}.aligned-work .media-credit{font-size:10px}.aligned-work .media-gallery figcaption{font-size:10px}}.aligned-work .work-heading{height:170px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)){grid-template-columns:1fr;grid-template-rows:148px 148px 36px;gap:12px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) figure{grid-template-rows:130px 18px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) img{height:130px}@media(max-width:700px){.aligned-work .work-heading{height:220px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)){grid-template-rows:144px 144px 36px;gap:6px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) figure{grid-template-rows:124px 20px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) img{height:124px}}
+.hero{padding:28px 0 12px;margin:0}.work-jump{margin:16px 0 20px}.work-note{margin:16px 0 24px}.company-heading{margin-top:24px;padding:16px 0 12px}.aligned-work,.work-pair .aligned-work{padding:24px;margin:16px 0 24px}.aligned-work .work-heading{height:auto;min-height:0;padding-bottom:16px}.aligned-work h4{margin:6px 0 10px}.work-columns{gap:24px}.work-copy{height:auto;min-height:0;display:block}.work-copy .scope{min-height:0;margin:0 0 12px}.work-copy .source-links{margin-top:16px;padding-top:0}.aligned-work .media-gallery{height:300px;grid-template-rows:264px 28px;gap:8px}.aligned-work .media-gallery figure{grid-template-rows:244px 20px}.aligned-work .media-gallery img{height:244px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)){grid-template-rows:128px 128px 28px;gap:8px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) figure{grid-template-rows:108px 20px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) img{height:108px}.work-status{font-size:12px!important;color:var(--green);font-weight:bold}.work-compact{padding:16px 0;margin:16px 0 24px}
+@media(max-width:700px){.aligned-work,.work-pair .aligned-work{padding:16px;margin:16px 0 24px}.aligned-work .work-heading{height:auto;min-height:0;padding-bottom:14px}.work-columns{gap:16px}.work-copy{height:auto;min-height:0}.work-copy .scope{min-height:0}.aligned-work .media-gallery{height:280px;grid-template-rows:244px 28px;gap:8px}.aligned-work .media-gallery figure{grid-template-rows:224px 20px}.aligned-work .media-gallery img{height:224px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)){grid-template-rows:118px 118px 28px;gap:8px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) figure{grid-template-rows:98px 20px}.aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) img{height:98px}}
+.work-meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:8px 0 12px!important;font:12px/1.6 Arial,"Malgun Gothic",sans-serif!important}.work-meta span{color:var(--muted);font-size:11px}.work-meta strong{font-weight:600;color:var(--green)}}
+#employment-works,#personal-projects{scroll-margin-top:76px;padding:28px 0;border-top:1px solid var(--line)}#employment-title,#personal-title{font:normal 30px/1.5 Georgia,"Batang",serif;margin:0 0 12px;color:var(--green)}.section-intro,.personal-intro{font-size:13px;color:var(--muted);max-width:760px}.section-switch{display:flex;flex-wrap:wrap;gap:8px;padding:12px 0;background:var(--paper);position:sticky;top:0;z-index:4;margin:0 0 24px;border-bottom:1px solid var(--line)}.section-switch a{padding:10px 16px;border:1px solid var(--line);background:var(--white);min-height:44px;font-size:13px;color:var(--green)}.section-switch a:hover,.section-switch a:focus-visible{background:var(--mint)}@media(max-width:580px){.section-switch a{flex:1;text-align:center;padding:9px;font-size:12px}#employment-title,#personal-title{font-size:25px}}
+</style>
+
+<link rel="canonical" href="https://ssj9921.github.io/portfolio-html/components/projects/v2.13.0/index.html">
+<meta property="og:title" content="Projects | Selected Work">
+<meta property="og:description" content="재직 중 참여작과 개인 프로젝트·제안서를 구분해 소개합니다.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ssj9921.github.io/portfolio-html/components/projects/v2.13.0/index.html">
+<meta property="og:image" content="https://ssj9921.github.io/portfolio-html/assets/heros-chef/v1.0.0/main.png">
+<meta property="og:image:alt" content="용사의 쉐프 시작 화면">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.0/ChosunKm.woff" as="font" type="font/woff" crossorigin="anonymous">
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@1.1/ChosunSm.woff" as="font" type="font/woff" crossorigin="anonymous">
+
+
+
+
+
+
+
+<style id="portfolio-typography">
+:root{
+ --type-title:"ChosunKm","Malgun Gothic",sans-serif;
+ --type-work:Arial,"Malgun Gothic",sans-serif;
+ --type-body:Arial,"Malgun Gothic",sans-serif;
+ --type-page:clamp(34px,4.3vw,54px);
+ --type-section:28px;--type-card:22px;
+ --type-body-size:15px;--type-meta:12px;--type-control:13px;
+}
+html body{font-family:var(--type-body);font-size:var(--type-body-size);line-height:1.8;font-weight:400;font-synthesis:none;letter-spacing:normal}
+html h1,html .hero h1{font-family:var(--type-title);font-size:var(--type-page);font-weight:400;font-style:normal;line-height:1.35;letter-spacing:-.02em;font-synthesis:none;overflow-wrap:anywhere;word-break:keep-all;text-wrap:balance}
+html .hero .vn-title{font-size:clamp(30px,4vw,48px)}
+html body[data-page-role="project-detail"] h1{font-family:var(--type-work);font-weight:700;font-synthesis:none;letter-spacing:0}
+html h2,html .section-title h2,html .body-copy>section>h2,html #employment-title,html #personal-title{font-family:var(--type-title);font-size:var(--type-section);font-weight:400;line-height:1.5;letter-spacing:-.02em;font-synthesis:none}
+html .hero .lead,html .hero .subtitle,html .comment-space,html .comment-quote{font-family:var(--type-body);font-weight:400;font-synthesis:none;letter-spacing:normal;line-height:1.8}
+html .hero .subtitle{word-break:keep-all;overflow-wrap:anywhere;text-wrap:balance}
+html .hero .lead{font-size:18px}html .hero .subtitle{font-size:24px}
+html .body-copy,html .body-copy p,html .body-copy li,html .scope p,html .work-heading p,
+html #employment-works .scope p,html #employment-works .work-heading p{font-family:var(--type-body);font-size:var(--type-body-size);font-weight:400;line-height:1.8;letter-spacing:normal;word-break:keep-all;overflow-wrap:anywhere}
+html .card-bar h2,html .card-bar h3,html .card-fallback,html .aligned-work h3,html .aligned-work h4,
+html #employment-works .aligned-work h4,html .work-compact h3,html .work-compact h4,
+html #employment-works .work-compact h4,html .project h3{font-family:var(--type-work);font-size:var(--type-card);font-weight:700;line-height:1.4;letter-spacing:0;font-synthesis:none}
+html .spot-copy h3{font-family:var(--type-work);font-size:clamp(24px,2.5vw,32px);font-weight:700;line-height:1.4;letter-spacing:0;font-synthesis:none}
+html .spot-fallback{font-family:var(--type-work);font-weight:700;font-synthesis:none}
+html .company-heading h3,html #employment-works .company-heading h3,html .entry h3{font-family:var(--type-body);font-size:18px;font-weight:700;line-height:1.6;letter-spacing:normal;font-synthesis:none}
+html .body-copy h3{font-family:var(--type-body);font-size:18px;font-weight:700;line-height:1.6;letter-spacing:normal}
+html .career-project h4{font-family:var(--type-work);font-size:18px;font-weight:700;line-height:1.5;letter-spacing:0;font-synthesis:none}
+html .source-links strong,html .work-copy .source-links strong,html #employment-works .source-links strong,html .reference-title,html .reference-card .reference-title{font-family:var(--type-body);font-size:14px;font-weight:700;line-height:1.6;letter-spacing:normal}
+html .source-links small,html .work-copy .source-links small,html #employment-works .source-links small,html .reference-description,html .reference-card .reference-description{font-family:var(--type-body);font-size:13px;font-weight:400;line-height:1.7;letter-spacing:normal}
+html .work-meta,html #employment-works .work-meta{font-family:var(--type-body)!important;font-size:var(--type-meta)!important;font-weight:400;line-height:1.6!important;letter-spacing:normal}
+html .work-meta span,html #employment-works .work-meta span{font-size:var(--type-meta);font-weight:400;line-height:1.6}
+html .work-meta strong,html #employment-works .work-meta strong{font-size:var(--type-meta);font-weight:700;line-height:1.6}
+html .eyebrow,html .work-kicker,html #employment-works .work-kicker,
+html .reference-source,html .source-links span,html #employment-works .source-links span,
+html .media-credit,html .aligned-work .media-credit,html #employment-works .media-credit,
+html .media-gallery figcaption,html #employment-works .media-gallery figcaption,
+html .screenshot figcaption,html .evidence-note,html .small-copy,html .small,html .entry .period,
+html .project-state,html .company-heading>p,html #employment-works .company-heading>p,
+html .boundary,html #employment-works .boundary,html .section-intro,html .personal-intro,
+html .signature,html footer,html .creation-credit,html .reference-action{font-family:var(--type-body);font-size:var(--type-meta);font-weight:400;line-height:1.6;letter-spacing:normal}
+html .eyebrow,html .work-kicker,html #employment-works .work-kicker{letter-spacing:.04em}
+html button,html .button,html .card-view,html .spot-view,html .spot-controls button,
+html .project-filters button,html .project-paging button,html .section-switch a,
+html .page-nav a,html .top-nav,html .home-nav,html .work-jump a,html .section-link{font-family:var(--type-body);font-size:var(--type-control);font-weight:400;line-height:1.5;letter-spacing:normal;font-synthesis:none}
+html .project-filters button[aria-pressed="true"],html button[aria-pressed="true"]{font-weight:700}
+html .project-kind,html .spot-kind,html .tags span{font-family:var(--type-body);font-size:12px;font-weight:400;line-height:1.5;letter-spacing:normal;font-synthesis:none}
+html table{font-family:var(--type-body);font-size:15px;line-height:1.8;letter-spacing:normal}
+/* Caption and credit rows must accommodate the new readable 12px text. */
+html .aligned-work .media-gallery,html #employment-works .aligned-work .media-gallery{height:360px;grid-template-rows:284px 60px;gap:8px}
+html .aligned-work .media-gallery figure,html #employment-works .aligned-work .media-gallery figure{grid-template-rows:244px 40px}
+html .aligned-work .media-gallery figcaption,html #employment-works .aligned-work .media-gallery figcaption{margin-top:0;padding-top:2px}
+html .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)),html #employment-works .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)){grid-template-rows:140px 140px 60px;gap:8px}
+html .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) figure,html #employment-works .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) figure{grid-template-rows:100px 40px}
+html .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) img,html #employment-works .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) img{height:100px}
+@media(max-width:700px){html .aligned-work .media-gallery,html #employment-works .aligned-work .media-gallery{height:352px;grid-template-rows:264px 60px}html .aligned-work .media-gallery figure,html #employment-works .aligned-work .media-gallery figure{grid-template-rows:224px 40px}html .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)),html #employment-works .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)){grid-template-rows:138px 138px 60px}html .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) figure,html #employment-works .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) figure{grid-template-rows:98px 40px}html .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) img,html #employment-works .aligned-work .media-gallery:not(.skill-gallery):has(figure:nth-of-type(2)) img{height:98px}}
+@media(max-width:580px){:root{--type-section:24px;--type-card:20px}html .hero .subtitle{font-size:22px}}
+
+</style>
+<style>.media-gallery .project-image{visibility:visible}</style></head><body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<div class="wrap"><header><a class="brand" href="../../../index.html"><span class="mark" aria-hidden="true"></span>SELECTED WORK</a><nav class="top-nav" aria-label="주요 페이지"><a href="../../../index.html">Home</a><a href="index.html" aria-current="page">Projects</a><a href="../../profile/v1.5.0/index.html">Profile</a></nav></header>
+<main id="content"><div class="hero"><div class="eyebrow">SELECTED WORK / PROJECTS</div><h1>Projects</h1><p class="lead intro-slot">재직 중 참여작과 개인 프로젝트·제안서를 구분해 소개합니다.</p></div>
+<nav class="section-switch" aria-label="Projects 영역 바로가기"><a href="#personal-projects">개인 프로젝트·제안서 · 6</a><a href="#employment-works">재직 중 참여작 · 5</a></nav><section id="personal-projects" aria-labelledby="personal-title"><h2 id="personal-title">개인 프로젝트·제안서</h2><p class="personal-intro">직접 제작한 작업물과 서비스 기능 제안을 소개합니다.</p><div class="project-filters" role="group" aria-label="프로젝트 유형 필터" hidden><button type="button" data-project-filter="all" aria-controls="project-list" aria-pressed="true">전체 <span data-filter-count></span></button><button type="button" data-project-filter="production" aria-controls="project-list" aria-pressed="false">제작물 <span data-filter-count></span></button><button type="button" data-project-filter="proposal" aria-controls="project-list" aria-pressed="false">기능 제안 <span data-filter-count></span></button></div><p id="project-result-status" class="filter-result" role="status" aria-live="polite" aria-atomic="true" hidden></p><p class="project-empty" hidden>해당 유형의 프로젝트가 없습니다. ‘전체’에서 모든 프로젝트를 볼 수 있습니다.</p><div class="project-paging" hidden><button type="button" data-page-previous aria-controls="project-list">← 이전 6개</button><span class="project-page-status" role="status" aria-live="polite" aria-atomic="true"></span><button type="button" data-page-next aria-controls="project-list">다음 6개 →</button></div><section id="project-list" class="project-grid" aria-label="프로젝트 목록, 한 묶음 최대 6개">
+<article data-project-type="production" class="project-card" aria-labelledby="chef-title"><span class="project-kind">제작물</span><div class="card-media"><span class="card-fallback" aria-hidden="true">용사의 쉐프 · 공모전 원작</span><img class="project-image" src="../../../assets/card-thumbnails/v1.0.0/chef-960.jpg" alt="용사의 쉐프 · 공모전 원작 시작 화면" width="960" height="540" loading="eager" decoding="async" srcset="../../../assets/card-thumbnails/v1.0.0/chef-320.jpg 320w, ../../../assets/card-thumbnails/v1.0.0/chef-640.jpg 640w, ../../../assets/card-thumbnails/v1.0.0/chef-960.jpg 960w" sizes="(max-width:580px) calc(100vw - 44px), (max-width:1000px) calc(50vw - 48px), 320px"></div><details class="card-details"><summary aria-label="용사의 쉐프 · 공모전 원작 설명 열기 또는 닫기"><span class="visually-hidden">용사의 쉐프 · 공모전 원작 설명</span></summary></details><p class="card-description" id="chef-description">1.44MB 제한 안에서 요리로 용사를 돕는 게임을 완성한 공모전 원작입니다.</p><div class="card-bar"><h3 id="chef-title" title="용사의 쉐프 · 공모전 원작"><span class="card-title-label">용사의 쉐프 · 공모전 원작</span></h3><a class="card-view" href="../../heros-chef-project/v1.5.5/index.html" aria-label="용사의 쉐프 · 공모전 원작 보기"><span class="card-view-label">보기</span></a></div></article><article data-project-type="production" class="project-card" aria-labelledby="godot-title"><span class="project-kind">제작물</span><div class="card-media"><span class="card-fallback" aria-hidden="true">Hero’s Chef · Godot 개발판</span><img class="project-image" src="../../../assets/heros-chef-godot/v1.0.0/card-960.jpg" alt="같은 작품의 Godot 후속 개발판 조리 화면" width="960" height="540" loading="eager" decoding="async" srcset="../../../assets/heros-chef-godot/v1.0.0/card-320.jpg 320w, ../../../assets/heros-chef-godot/v1.0.0/card-640.jpg 640w, ../../../assets/heros-chef-godot/v1.0.0/card-960.jpg 960w" sizes="(max-width:580px) calc(100vw - 44px), (max-width:1000px) calc(50vw - 48px), 320px"></div><details class="card-details"><summary aria-label="Hero’s Chef · Godot 개발판 설명 열기 또는 닫기"><span class="visually-hidden">Hero’s Chef · Godot 개발판 설명</span></summary></details><p class="card-description" id="godot-description">기존 작품의 Godot 전환과 기능 개선을 AI 중심으로 진행한 프로젝트입니다. 같은 작품의 후속 개발이며 개발 중입니다.</p><div class="card-bar"><h3 id="godot-title" title="Hero’s Chef · Godot 개발판"><span class="card-title-label">Hero’s Chef · Godot 개발판</span></h3><a class="card-view" href="../../heros-chef-godot/v1.1.0/index.html" aria-label="Hero’s Chef · Godot 개발판 보기"><span class="card-view-label">보기</span></a></div></article>
+<article data-project-type="proposal" class="project-card stock-card" aria-labelledby="stock-title"><span class="project-kind kind-proposal">기능 제안</span><div class="card-media"><span class="card-fallback" aria-hidden="true">그때 샀다면?</span><img class="project-image" src="../../../assets/card-thumbnails/v1.0.0/stock-summary-960.jpg" alt="가상 데이터 데모: 지켜보기 3, 상승 1·하락 1·보합 1 요약과 등록 이후 비교 토글" width="960" height="540" loading="eager" decoding="async" srcset="../../../assets/card-thumbnails/v1.0.0/stock-summary-320.jpg 320w, ../../../assets/card-thumbnails/v1.0.0/stock-summary-640.jpg 640w, ../../../assets/card-thumbnails/v1.0.0/stock-summary-960.jpg 960w" sizes="(max-width:580px) calc(100vw - 44px), (max-width:1000px) calc(50vw - 48px), 320px"></div><details class="card-details"><summary aria-label="그때 샀다면? 설명 열기 또는 닫기"><span class="visually-hidden">그때 샀다면? 설명</span></summary></details><p class="card-description" id="stock-description">관심종목 등록 당시 가격과 현재가를 비교하는 기능 제안.</p><div class="card-bar"><h3 id="stock-title" title="그때 샀다면?"><span class="card-title-label">그때 샀다면?</span></h3><a class="card-view" href="../../stock-project/v1.4.7/index.html" aria-label="그때 샀다면? 보기"><span class="card-view-label">보기</span></a></div></article>
+<article data-project-type="production" class="project-card" aria-labelledby="varco-title"><span class="project-kind">제작물</span><div class="card-media"><span class="card-fallback" aria-hidden="true">City Of Rubble</span><img class="project-image" src="../../../assets/card-thumbnails/v1.0.0/city-960.jpg" alt="City Of Rubble 시작 화면" width="960" height="540" loading="eager" decoding="async" srcset="../../../assets/card-thumbnails/v1.0.0/city-320.jpg 320w, ../../../assets/card-thumbnails/v1.0.0/city-640.jpg 640w, ../../../assets/card-thumbnails/v1.0.0/city-960.jpg 960w" sizes="(max-width:580px) calc(100vw - 44px), (max-width:1000px) calc(50vw - 48px), 320px"></div><details class="card-details"><summary aria-label="City Of Rubble 설명 열기 또는 닫기"><span class="visually-hidden">City Of Rubble 설명</span></summary></details><p class="card-description" id="varco-description">기획·AI 에셋 제작·Unity 적용을 맡은 2인 팀 액션 RPG. 2025년 공모전 우수상 수상작입니다.</p><div class="card-bar"><h3 id="varco-title" title="City Of Rubble"><span class="card-title-label">City Of Rubble</span></h3><a class="card-view" href="../../varco-project/v1.6.0/index.html" aria-label="City Of Rubble 보기"><span class="card-view-label">보기</span></a></div></article>
+<article data-project-type="production" class="project-card vn-card" aria-labelledby="vn-title"><span class="project-kind">제작물</span><div class="card-media"><span class="card-fallback" aria-hidden="true">VisualNovelTemplate</span><img class="project-image" src="../../../assets/card-thumbnails/v1.0.0/vn-960.jpg" alt="VisualNovelTemplate 대화 실행 화면과 Unity Inspector" width="960" height="520" loading="eager" decoding="async" srcset="../../../assets/card-thumbnails/v1.0.0/vn-320.jpg 320w, ../../../assets/card-thumbnails/v1.0.0/vn-640.jpg 640w, ../../../assets/card-thumbnails/v1.0.0/vn-960.jpg 960w" sizes="(max-width:580px) calc(100vw - 44px), (max-width:1000px) calc(50vw - 48px), 320px"></div><details class="card-details"><summary aria-label="VisualNovelTemplate 설명 열기 또는 닫기"><span class="visually-hidden">VisualNovelTemplate 설명</span></summary></details><p class="card-description" id="vn-description">대화·선택지와 데이터를 연결하는 Unity 제작 도구. 개발 중단.</p><div class="card-bar"><h3 id="vn-title" title="VisualNovelTemplate"><span class="card-title-label">VisualNovelTemplate</span></h3><a class="card-view" href="../../visual-novel-template/v1.0.17/index.html" aria-label="VisualNovelTemplate 보기"><span class="card-view-label">보기</span></a></div></article>
+<article data-project-type="proposal" class="project-card" aria-labelledby="ugc-title"><span class="project-kind kind-proposal">기능 제안</span><div class="card-media"><span class="card-fallback" aria-hidden="true">제타 채팅 어워즈</span><img class="project-image" src="../../../assets/zeta-images/v1.0.0/card-960.jpg" alt="가상 채팅의 다음 선택을 이어받는 제타 UGC 기능 제안 예시" width="960" height="540" loading="eager" decoding="async" srcset="../../../assets/zeta-images/v1.0.0/card-320.jpg 320w, ../../../assets/zeta-images/v1.0.0/card-640.jpg 640w, ../../../assets/zeta-images/v1.0.0/card-960.jpg 960w" sizes="(max-width:580px) calc(100vw - 44px), (max-width:1000px) calc(50vw - 48px), 320px"></div><details class="card-details"><summary aria-label="제타 채팅 어워즈 설명 열기 또는 닫기"><span class="visually-hidden">제타 채팅 어워즈 설명</span></summary></details><p class="card-description" id="ugc-description">채팅 공모·선정·공동 보상과 후속 영상 활용을 잇는 UGC 이벤트 제안. 미집행.</p><div class="card-bar"><h3 id="ugc-title" title="제타 채팅 어워즈"><span class="card-title-label">제타 채팅 어워즈</span></h3><a class="card-view" href="../../zeta-ugc-event/v1.3.6/index.html" aria-label="제타 채팅 어워즈 보기"><span class="card-view-label">보기</span></a></div></article>
+</section>
+</section><section id="employment-works" aria-labelledby="employment-title"><h2 id="employment-title">재직 중 참여작</h2><p class="section-intro">회사 재직 중 참여한 작품과 직접 담당한 기획 범위입니다. 아래 기간은 회사 재직기간이며 작품별 정확한 참여기간을 뜻하지 않습니다.</p><section aria-labelledby="mobirix"><div class="company-heading"><h3 id="mobirix">모비릭스</h3><p>재직기간 2021.11 ~ 2023.06</p></div>
+<article class="work aligned-work featured-aligned" id="skill-blitz" aria-labelledby="skill-title"><div class="work-heading"><span class="work-kicker">FEATURED CONTRIBUTION · MINI GAMES</span><h4 id="skill-title">Skill Blitz</h4><p class="work-meta"><span>이용·서비스 정보</span><strong>국내 이용 불가</strong></p><p>넵튠이 개발한 플랫폼에 모비릭스가 제작한 미니게임을 탑재한 프로젝트입니다.</p><p class="mini-examples">6종 기획 · 솔리테어 · 북미식 빙고 등</p></div><div class="work-columns"><div class="media-gallery skill-gallery" aria-label="Skill Blitz 공개 영상 속 확인된 솔리테어와 빙고 화면"><figure><img class="project-image" src="../../../assets/employment-works/v1.0.0/skill-solitaire.jpg" alt="Skill Blitz 공개 영상 속 카드 배열과 솔리테어 플레이 화면" width="275" height="462" loading="lazy" decoding="async"><figcaption>솔리테어 · 영상 00:12</figcaption></figure><figure><img class="project-image" src="../../../assets/employment-works/v1.0.0/skill-bingo.jpg" alt="Skill Blitz 공개 영상 속 숫자 빙고판과 체크된 칸" width="275" height="462" loading="lazy" decoding="async"><figcaption>북미식 빙고 · 영상 00:05</figcaption></figure><p class="media-credit">출처: <a href="https://www.youtube.com/watch?v=yMVUd6CHyZo" target="_blank" rel="noopener noreferrer">BORA 공개 소개 영상</a> · 확인된 플레이 화면 부분 발췌</p></div><div class="work-copy"><div class="scope"><strong>직접 담당</strong><p>넵튠이 개발한 개별 게임 진입형 플랫폼에 탑재되는 모비릭스 미니게임 6종의 규칙·플레이 흐름·UI·튜토리얼을 기획했습니다. 플랫폼 자체 구현은 담당 범위와 구분합니다.</p><p>Skillz 플랫폼을 레퍼런스로 삼았고, 간단한 규칙으로 작동하는 저용량·저사양 게임이라는 제약을 고려했습니다. 영상 촬영이나 직접 플레이형 튜토리얼은 제작 공수가 커 사용하지 않고, 이미지 기반 안내에 Unity Animation을 활용하는 방식을 선택했습니다.</p></div><div class="source-links" aria-label="Skill Blitz 공개 자료"><a href="https://www.youtube.com/watch?v=yMVUd6CHyZo" target="_blank" rel="noopener noreferrer"><span>BORA · YOUTUBE</span><strong>Skill Blitz 소개 영상 ↗</strong><small>플랫폼과 탑재 게임의 공개 소개 · 새 창</small></a><a href="https://www.prnewswire.com/news-releases/metabora-singapore-commences-global-pre-registration-for-bora-onboarding-project-skill-blitz-301922767.html" target="_blank" rel="noopener noreferrer"><span>METABORA · PR NEWSWIRE</span><strong>Skill Blitz 사전등록 발표 ↗</strong><small>BORA 온보딩 프로젝트의 공개 발표 자료 · 새 창</small></a></div></div></div></article>
+<div class="work-pair aligned-work-list"><article class="work aligned-work" id="merge-block-number" aria-labelledby="merge-title"><div class="work-heading"><span class="work-kicker">NUMBER MERGE PUZZLE</span><h4 id="merge-title">머지 블록 넘버</h4><p class="work-meta"><span>이용·서비스 정보</span><strong>서비스 종료</strong></p><p>같은 숫자 블록을 합쳐 더 큰 숫자를 만드는 퍼즐 게임입니다.</p></div><div class="work-columns"><div class="media-gallery"><figure><img class="project-image" src="../../../assets/employment-works/v1.0.0/merge-number.jpg" alt="머지 블록 넘버의 숫자 블록 보드와 64·128 블록이 보이는 실제 화면" width="1052" height="592" loading="lazy" decoding="async"><figcaption>숫자 블록 병합 플레이</figcaption></figure><p class="media-credit">출처: TapTap · mobirix 공개 게임 소개 화면</p></div><div class="work-copy"><div class="scope"><strong>직접 담당</strong><p>숫자 머지 퍼즐의 기획 전반을 담당했습니다. 핵심 플레이와 스테이지 구성, 인게임·아웃게임 시스템을 기획했습니다.</p></div><p class="boundary">참여 범위는 출시 전 QA 단계까지이며, 출시 전 퇴사했습니다.</p><div class="source-links"><a href="https://www.taptap.io/app/33576791" target="_blank" rel="noopener noreferrer"><span>TAPTAP · 게임 소개</span><strong>Merge Block Number ↗</strong><small>숫자 블록 합치기 퍼즐의 공개 게임 소개 · 새 창</small></a></div></div></div></article>
+<article class="work aligned-work" id="match-puzzle-house" aria-labelledby="match-title"><div class="work-heading"><span class="work-kicker">MATCH-3 &amp; HOME DECORATION</span><h4 id="match-title">매치 퍼즐 하우스</h4><p class="work-meta"><span>이용·서비스 정보</span><strong>Google Play 소개</strong></p><p>3매치 퍼즐을 풀고 집을 꾸미는 게임입니다.</p></div><div class="work-columns"><div class="media-gallery"><figure><img class="project-image" src="../../../assets/employment-works/v1.0.0/match-puzzle.jpg" alt="매치 퍼즐 하우스의 색깔 타일과 부스터가 보이는 3매치 퍼즐 화면" width="1052" height="592" loading="lazy" decoding="async"><figcaption>3매치 퍼즐</figcaption></figure><figure><img class="project-image" src="../../../assets/employment-works/v1.0.0/match-home.jpg" alt="매치 퍼즐 하우스의 주방 인테리어와 공간 꾸미기 화면" width="1052" height="592" loading="lazy" decoding="async"><figcaption>집 꾸미기</figcaption></figure><p class="media-credit">출처: Google Play · mobirix 공개 홍보 화면</p></div><div class="work-copy"><div class="scope"><strong>직접 담당</strong><p>투입 당시 레벨 에디터는 이미 구축돼 있었습니다. 맵 난이도 설정의 자동화를 위해 게임 로직을 담당한 클라이언트 개발자와 몬테카를로 트리 탐색(MCTS) 기반 테스트 Bot의 행동 설정을 협업했습니다.</p><p>행동 우선순위 테이블을 설계하고 테스트로 값을 조정했습니다. 실제 맵 데이터를 생성해 Bot의 소모 이동 횟수를 수집하고 팀원들의 내부 플레이 결과와 비교했으며, 우선순위 로직 변경은 클라이언트 개발자에게 요청했습니다.</p><p>Bot은 아이템을 사용하지 않아 사람 테스트에는 사용한 아이템의 종류와 수량을 기록하도록 미리 요청했습니다. 당시 비교에서 Bot이 사람보다 이동 횟수를 약 5~10회 더 소모하는 수준으로 보정했습니다. 아이템 사용 조건이 다른 비교이며 동일 조건의 오차율·정확도 지표는 아닙니다.</p></div><div class="source-links"><a href="https://play.google.com/store/apps/details?hl=ko&amp;id=com.mobirix.tmh" target="_blank" rel="noopener noreferrer"><span>GOOGLE PLAY · MOBIRIX</span><strong>매치 퍼즐 하우스 ↗</strong><small>퍼즐과 집 꾸미기의 게임 소개 · 새 창</small></a><a href="https://www.youtube.com/watch?v=JTskYf6MNlU" target="_blank" rel="noopener noreferrer"><span>MOBIRIX · YOUTUBE</span><strong>매치 퍼즐 하우스 소개 영상 ↗</strong><small>공개된 게임 화면과 플레이 소개 · 새 창</small></a></div></div></div></article></div></section>
+<section aria-labelledby="bridge"><div class="company-heading"><h3 id="bridge">브릿지게임즈 <small>(구 아이오넷)</small></h3><p>재직기간 2020.06 ~ 2021.08</p></div><p class="boundary">사명 변경된 동일 회사의 연속 경력입니다.</p>
+<article class="work aligned-work" id="puzzle-audition" aria-labelledby="puzzle-title"><div class="work-heading"><span class="work-kicker">MATCH-3 · AVATAR · PVP</span><h4 id="puzzle-title">퍼즐 오디션</h4><p class="work-meta"><span>이용·서비스 정보</span><strong>서비스 종료</strong></p><p>3매치 퍼즐에 아바타와 PvP 요소를 결합한 게임입니다.</p></div><div class="work-columns"><div class="media-gallery audition-gallery"><figure><img class="project-image" src="../../../assets/employment-works/v1.0.0/audition-puzzle.jpg" alt="퍼즐 오디션에서 아바타와 색깔 타일의 3매치 대결 화면" width="439" height="264" loading="lazy" decoding="async"><figcaption>3매치 퍼즐 대결</figcaption></figure><figure><img class="project-image" src="../../../assets/employment-works/v1.0.0/audition-avatar.jpg" alt="퍼즐 오디션의 의상을 입은 아바타와 게임 로비 화면" width="457" height="264" loading="lazy" decoding="async"><figcaption>아바타·로비</figcaption></figure><p class="media-credit">출처: 한빛소프트 공식 회사소개서 13쪽 · 게임 화면 부분 발췌</p></div><div class="work-copy"><div class="scope"><strong>직접 담당</strong><p>기존 퍼즐 레벨과 기믹의 작동 방식을 분석한 뒤 신규 레벨을 설계했습니다. 유사 게임을 직접 플레이하며 비슷한 기믹의 사용 방식을 참고했습니다.</p><p>기존에 설정돼 있던 이동 횟수를 기준으로, 신규 레벨에서는 30~35회 수준까지 점진적으로 늘렸습니다. 난이도와 추가 이동 기회를 함께 설계해 플레이타임과 기존 이어하기·아이템 유도 화면의 이용을 늘리고자 했습니다. 이는 설계 의도이며 측정된 이용 증가 성과는 아닙니다.</p></div><p class="boundary">개발 아이오넷 · 배급 한빛소프트. 입사 전 출시된 작품으로, 최초 출시 기여를 주장하지 않습니다.</p><div class="source-links"><a href="https://www.hanbitsoft.co.kr/images/HBS_Introduction%28Kor%29.pdf#page=13" target="_blank" rel="noopener noreferrer"><span>한빛소프트 · 공식 회사소개서</span><strong>퍼즐 오디션 소개 · 13쪽 ↗</strong><small>개발 아이오넷 · 배급 한빛소프트로 소개된 작품 · 새 창</small></a></div></div></div></article>
+<article class="work work-compact" id="project-st" aria-labelledby="st-title"><span class="work-kicker">UNRELEASED</span><h4 id="st-title">Project-ST</h4><p class="work-meta"><span>이용·서비스 정보</span><strong>미출시</strong></p><p>시스템·콘텐츠 기획을 담당했습니다.</p></article></section>
+</section><nav class="page-nav" aria-label="다음 읽을 페이지"><a href="../../../index.html">← Home</a><a href="../../profile/v1.5.0/index.html">Profile 보기 →</a></nav></main>
+<footer><p>아이디어에서 작업물까지, 프로젝트의 흐름을 기록합니다.</p><div class="signature">SELECTED WORK · PROJECT &amp; PROFILE</div></footer></div><script>(() => {
+  'use strict';
+  const list = document.querySelector('#project-list');
+  const cards = [...list.querySelectorAll('.project-card')];
+  const filters = document.querySelector('.project-filters');
+  const buttons = [...filters.querySelectorAll('[data-project-filter]')];
+  const result = document.querySelector('#project-result-status');
+  const empty = document.querySelector('.project-empty');
+  const controls = document.querySelector('.project-paging');
+  const previous = controls.querySelector('[data-page-previous]');
+  const next = controls.querySelector('[data-page-next]');
+  const status = controls.querySelector('.project-page-status');
+  const labels = {all:'전체', production:'제작물', proposal:'기능 제안'};
+  let pages = [], shown = [], category = 'all', selected = 0, frame = 0, enabled = false;
+
+  function recover() {
+    enabled = false;
+    cancelAnimationFrame(frame);
+    list.replaceChildren(...cards);
+    list.classList.remove('project-browser');
+    list.classList.add('project-grid');
+    list.removeAttribute('tabindex');
+    list.removeAttribute('aria-describedby');
+    filters.hidden = true;
+    controls.hidden = true;
+    result.hidden = true;
+    empty.hidden = true;
+    status.textContent = '';
+    if (filters.contains(document.activeElement) || controls.contains(document.activeElement)) {
+      list.tabIndex = -1;
+      list.focus({preventScroll:true});
+    }
+  }
+  function safely(action) {
+    try { action(); } catch (_) { recover(); }
+  }
+  function mark(index) {
+    selected = pages.length ? Math.max(0, Math.min(pages.length - 1, index)) : 0;
+    previous.disabled = !pages.length || selected === 0;
+    next.disabled = !pages.length || selected === pages.length - 1;
+    status.textContent = pages.length > 1
+      ? (selected + 1) + ' / ' + pages.length + ' · ' + (selected * 6 + 1) + '–' + Math.min((selected + 1) * 6, shown.length) + ' / ' + shown.length
+      : '';
+  }
+  function go(index) {
+    if (!enabled || !pages.length) return;
+    mark(index);
+    list.scrollTo({left:pages[selected].offsetLeft - pages[0].offsetLeft, behavior:'instant'});
+  }
+  function render(type, announce) {
+    cancelAnimationFrame(frame);
+    shown = cards.filter(card => type === 'all' || card.dataset.projectType === type);
+    const fragment = document.createDocumentFragment();
+    const rebuilt = [];
+    for (let i = 0; i < shown.length; i += 6) {
+      const page = document.createElement('div');
+      page.className = 'project-page project-grid';
+      shown.slice(i, i + 6).forEach(card => page.append(card));
+      fragment.append(page);
+      rebuilt.push(page);
+    }
+    cards.forEach(card => {
+      card.querySelector('details').open = false;
+      card.classList.remove('is-dismissed');
+    });
+    list.replaceChildren(fragment);
+    pages = rebuilt;
+    category = type;
+    list.classList.remove('project-grid');
+    list.classList.add('project-browser');
+    list.scrollLeft = 0;
+    controls.hidden = pages.length <= 1;
+    empty.hidden = shown.length !== 0;
+    if (pages.length > 1) list.tabIndex = 0;
+    else list.removeAttribute('tabindex');
+    buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.projectFilter === type)));
+    mark(0);
+    if (announce) result.textContent = labels[type] + ' ' + shown.length + '개';
+  }
+
+  try {
+    if (cards.some(card => !['production','proposal'].includes(card.dataset.projectType))) throw new Error('Missing project category');
+    buttons.forEach(button => {
+      const type = button.dataset.projectFilter;
+      if (!(type in labels)) throw new Error('Unknown filter');
+      button.querySelector('[data-filter-count]').textContent = '(' + cards.filter(card => type === 'all' || card.dataset.projectType === type).length + ')';
+      button.addEventListener('click', () => {
+        if (enabled && category !== type) safely(() => render(type, true));
+      });
+    });
+    render('all', false);
+    previous.addEventListener('click', () => safely(() => { go(selected - 1); if (previous.disabled && enabled) list.focus({preventScroll:true}); }));
+    next.addEventListener('click', () => safely(() => { go(selected + 1); if (next.disabled && enabled) list.focus({preventScroll:true}); }));
+    function key(event) {
+      if (!enabled || (event.target !== list && event.target !== previous && event.target !== next)) return;
+      if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
+      event.preventDefault();
+      safely(() => {
+        go(event.key === 'Home' ? 0 : event.key === 'End' ? pages.length - 1 : selected + (event.key === 'ArrowRight' ? 1 : -1));
+        if (event.target.disabled) list.focus({preventScroll:true});
+      });
+    }
+    list.addEventListener('keydown', key);
+    controls.addEventListener('keydown', key);
+    list.addEventListener('focusin', event => {
+      if (!enabled) return;
+      const page = event.target.closest('.project-page');
+      if (page) safely(() => go(pages.indexOf(page)));
+    });
+    list.addEventListener('scroll', () => {
+      if (!enabled || !pages.length) return;
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        if (!enabled || !pages.length) return;
+        safely(() => mark(pages.reduce((best,page,i) => Math.abs(page.offsetLeft - pages[0].offsetLeft - list.scrollLeft) < Math.abs(pages[best].offsetLeft - pages[0].offsetLeft - list.scrollLeft) ? i : best, 0)));
+      });
+    }, {passive:true});
+    window.addEventListener('resize', () => safely(() => go(selected)));
+    // Card UI handlers are inserted here from the existing reviewed local page.
+  document.querySelectorAll('.project-card').forEach(card => {
+    const details = card.querySelector('details');
+    const summary = card.querySelector('summary');
+    const image = card.querySelector('img');
+    if (image) {
+      const frame = image.closest('.card-media');
+      const show = () => frame.classList.toggle('is-loaded', image.complete && image.naturalWidth > 0);
+      image.addEventListener('load', show);
+      image.addEventListener('error', () => frame.classList.remove('is-loaded'));
+      show();
+    }
+    summary.addEventListener('click', event => {
+      card.classList.remove('is-dismissed');
+      if (event.pointerType === 'mouse' && matchMedia('(hover:hover)').matches) event.preventDefault();
+    });
+    card.addEventListener('pointerenter', () => card.classList.remove('is-dismissed'));
+    card.addEventListener('pointerleave', event => {
+      card.classList.remove('is-dismissed');
+      if (event.pointerType === 'mouse') details.open = false;
+    });
+    card.addEventListener('focusin', () => card.classList.remove('is-dismissed'));
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        details.open = false;
+        card.classList.add('is-dismissed');
+      }
+    });
+  });
+
+    enabled = true;
+    filters.hidden = false;
+    result.hidden = false;
+    list.setAttribute('aria-describedby', 'project-result-status');
+  } catch (_) { recover(); }
+})();
+</script></body></html>
